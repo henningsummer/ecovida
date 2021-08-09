@@ -564,7 +564,7 @@ DEPENDENCIES
   workless
 
 RUBY VERSION
-   ruby 2.6.8
+   ruby 2.6.5p114
 
 BUNDLED WITH
    1.17.3
