@@ -1,0 +1,20 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - <%= link_to 'Listando unidades de produção', group_production_unities_path(@group) %> - <%= link_to @production_unity.name, [@group, @production_unity] %> - <%= link_to  "Escopo: #{@production_unity_scope.scope.acronym}", [@group, @production_unity, @production_unity_scope] %> - Adicionar produto
+
+
+<h1>Adicionando produto para escopo <%= @production_unity_scope.scope.name %></h1>
+
+<% if @production_unity.scope_type == 1 %>
+  <%= render 'form_production_unity' %>
+<% else %>
+  <%= render 'form_agribusiness' %>
+<% end %>
+<br>
+<%= link_to 'Voltar', [@group, @production_unity, @production_unity_scope] %>
+
+<script type = "text/javascript">
+  $(document).ready(function(){
+    $('#category').on('change', function(){
+      window.location.replace("<%= new_group_production_unity_production_unity_scope_scope_product_path(@group, @production_unity, @production_unity_scope) %>?category=" + this.value );
+    });
+  });
+</script>

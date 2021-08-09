@@ -1,0 +1,9 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - <%= link_to 'Agricultores', group_farmers_path(@group) %> - Novo agricultor
+
+<h1>Novo membro para <%= @group.name %></h1>
+<div class = "col-md-8">
+<%= render 'form' %>
+<br>
+<%= link_to 'Voltar', group_farmers_path %>
+
+</div>

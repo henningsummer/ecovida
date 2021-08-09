@@ -1,0 +1,23 @@
+<p>
+  <strong>Chave de acesso:</strong>
+  <i id='access-key'><%= @document_visualization.access_key %></i>
+  <button class="clipboard-btn btn btn-default" data-clipboard-action="copy" data-clipboard-target="#access-key">
+      <span class="glyphicon glyphicon-copy"></span> Copiar
+  </button>
+</p>
+<p>
+  <strong>Data de validade:</strong>
+  <%= @document_visualization.formated_date %>
+</p>
+
+<p>
+  <strong>Link para acessar a página:</strong>
+  <i id='access-link'><%= new_document_visualization_sessions_url.to_s %></i>
+  <button class="clipboard-btn btn btn-default" data-clipboard-action="copy" data-clipboard-target="#access-link">
+      <span class="glyphicon glyphicon-copy"></span> Copiar
+  </button>
+</p>
+
+<%= link_to 'Editar', edit_document_visualization_path(@document_visualization) %>
+<br>
+<%= link_to 'Voltar', document_visualizations_path %>

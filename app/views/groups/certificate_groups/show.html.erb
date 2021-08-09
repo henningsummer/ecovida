@@ -1,0 +1,67 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos',
+groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %>
+ - <%= link_to "Listando gerações de certificado de #{@group.name}", group_certificate_groups_path(@group) %> - Certificados gerados <%= l @certificate_group.created_at, format: :short %>
+
+<h3>Certificados gerados dia <%= l @certificate_group.created_at, format: :short %> para o grupo <%= @group.name %></h3>
+
+
+<div class = "row">
+  <div class = "col-md-6">
+    <div class = "panel panel-default">
+      <div class = "panel-heading"><h3 class = "panel-title">Informações básicas</h3></div>
+      <div class = "panel-body">
+        <p>
+          <strong>Numero da reunião:</strong>
+          <%= @certificate_group.meeting_number %>
+        </p>
+
+        <p>
+          <strong>Página:</strong>
+          <%= @certificate_group.meeting_page %>
+        </p>
+
+        <p>
+          <strong>Data de emissão do certificado :</strong>
+          <%= l @certificate_group.meeting_date %>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class = "col-md-6">
+    <div class = "panel panel-primary">
+      <div class = "panel-heading"><h3 class = "panel-title">Ações</h3></div>
+        <%= link_to "Gerar PDF com todos certificados", group_certificate_group_certificate_index_path(@group, @certificate_group, format: :pdf), target: :blank, class: "list-group-item" %>
+    </div>
+  </div>
+
+</div>
+
+<h3>Certificados</h3>
+<table class = "table">
+  <tr>
+    <td>
+      Descrição
+    </td>
+    <td>
+      Ações
+    </td>
+  </tr>
+  <% @certificate_group.certificates.each do |certificate| %>
+  <tr>
+    <td><%= certificate.description %></td>
+    <td>
+      <%= link_to "Gerar PDF do certificado", group_certificate_group_certificate_path(@group, @certificate_group, certificate, format: :pdf), target: :blank, class: "btn btn-xs btn-success" %>
+      <%= link_to "Ver referente", certificate.referent_model, class: "btn btn-default btn-xs" if certificate.referent_model %>
+      <%= "Referente Excluído" unless certificate.referent_model %>
+    </td>
+  </tr>
+  <% end %>
+</table>
+
+
+
+
+
+<%= link_to 'Voltar para listagem de certificados', group_certificate_groups_path(@group) %>

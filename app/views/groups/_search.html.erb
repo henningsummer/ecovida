@@ -1,0 +1,30 @@
+<div class = "row">
+	<div class = "col-md-4">
+
+
+	<a href = "#" class = "showhide btn btn-default">Pesquisar grupos</a>
+
+	<div class = "search">
+			<br>
+	<%= bootstrap_form_tag  method: :get do |f| %>
+		<%= f.search_field :q, hide_label: true, placeholder: "Digite sua busca aqui" %>
+		<%= f.select :state, State.to_select, label: 'Estado:' %>
+		<% if user_type >= 2 %>
+			<% can = true %>
+			<% if user_type == 3 %>
+				<% Core.find(current_user).sig_org_access != true ? can = false : can = true %>	
+			<% end %>
+			<% if can == true %>
+				<%= f.check_box :only_not_updateds, label: "Apenas grupos com algum status no SigOrg desatualizado" %>
+			<% end %>
+		<% end %>
+		<%= f.submit :buscar %>
+	<% end %>
+	</div>
+
+
+<% if query = query_message(@state, @query, @not_updated) %>
+	<h4><%= query %></h4>
+<% end %>
+</div>
+</div>

@@ -1,0 +1,87 @@
+<% if @group_analysis.has_document %>
+  <%= bootstrap_form_for([@group, @certificate_group]) do |f| %>
+    <%= show_errors(@certificate_group) %>
+    <% agribusiness_to_certificate = @group_analysis.agribusiness.select { |agribusiness_analysis| agribusiness_analysis.can_receive_certificate } %>
+    <% farmers_to_certificate = @group_analysis.farmers.select { |farmer_analysis| farmer_analysis.can_receive_certificate } %>
+    <% if farmers_to_certificate.any? || agribusiness_to_certificate.any? %>
+
+    <%= f.text_field :meeting_number %>
+    <%= f.text_field :meeting_page %>
+    <%= f.text_field :meeting_date, help: 'Esta também será a data de referencia para a validade do certificado', class: "form-control form_date" %>
+    <%= f.select :city_id, @group.core.state.cities.collect { |c| [c.name, c.id]}, label: "Munípio onde aconteceu a reunião" %>
+
+    <% else %>
+      <h4>Infelizmente, não há agroindústrias nem membros que possam ser certificados no grupo.</h4>
+    <% end %>
+    <% if farmers_to_certificate.any? %>
+      <fieldset>
+        <h3>Unidades de produção \ Produtores</h3>
+        <table class = "table">
+          <tr>
+            <td>Agricultor</td>
+            <td width="30%">Opções para gerar</td>
+            <td>2º titular</td>
+            <td>Unidades de produção para serem certificadas</td>
+            <td>Unidades de produção que não entrarão na certificação</td>
+          </tr>
+
+        <% farmers_to_certificate.each do |farmer| %>
+          <tr>
+            <td><%= link_to farmer.subject.name, [@group, farmer.subject] %></td>
+            <td>
+              <%= radio_button_tag "farmers[#{farmer.subject.id}]", "not_generate", true %> Não gerar<br>
+              <%= radio_button_tag "farmers[#{farmer.subject.id}]", "titular_and_suplent_in_same" %> Um certificado para titular <% if farmer.subject.spouse.present? %>e 2º titular no mesmo certificado.<br>
+              <%= radio_button_tag "farmers[#{farmer.subject.id}]", "one_to_titular_and_one_to_suplent" %> 1 Certificado para titular, 1 certificado para 2º titular <br>
+              <% end %>
+            </td>
+            <td><%= farmer.subject.spouse.present? ? farmer.subject.spouse : "Não há" %></td>
+            <td><%= farmer.production_unities.select { |pu| pu.can_receive_certificate }.map { |x| link_to x.subject.name, [@group, x.subject], target: :_blank }
+                                                                                        .join(', ').html_safe %></td>
+            <td><%= farmer.production_unities.select { |pu| !pu.can_receive_certificate }.map { |x| link_to x.subject.name, [@group, x.subject], target: :_blank }
+                                                                                        .join(', ').html_safe %></td>
+          <tr>
+        <% end %>
+      </table>
+      </fieldset>
+    <% end %>
+      <% if agribusiness_to_certificate.any? %>
+        <fieldset>
+          <h3>Agroindustrias</h3>
+            <table class = "table">
+              <tr>
+                <td>Razão Social</td>
+                <td width="30%">Opções para gerar</td>
+                <td>Responsável</td>
+                <td>Membros vinculados com documentos em dia</td>
+                <td>Membros vinculados com pendências</td>
+              </tr>
+              <% agribusiness_to_certificate.each do |agribusiness_analysis| %>
+                <% agribusiness = agribusiness_analysis.subject %>
+                <td><%= link_to agribusiness.name, [@group, agribusiness] %></td>
+                <td>
+                  <%= radio_button_tag "agribusiness[#{agribusiness.id}]", "not_generate", true %> Não gerar<br>
+                  <%= radio_button_tag "agribusiness[#{agribusiness.id}]", "generate_for_agribusiness" %> Gerar certificado com a razão social da agroindustria<br>
+                  <%= radio_button_tag "agribusiness[#{agribusiness.id}]", "to_members" %> Gerar certificado com o nome do(s) membro(s)  <br>
+                </td>
+                <td><%= link_to agribusiness.responsible.name, [@group, agribusiness.responsible ] %></td>
+                <td><%= agribusiness_analysis.farmers.select { |fa| fa.can_generate_agribusiness }.map { |x| link_to x.subject.name, [@group, x.subject], target: :_blank }
+                                                                                                  .join(', ').html_safe %></td>
+                <td><%= agribusiness_analysis.farmers.select { |fa| !fa.can_generate_agribusiness }.map { |x| link_to x.subject.name, [@group, x.subject], target: :_blank }
+                                                                                                   .join(', ').html_safe %></td>
+              </tr>
+              <% end %>
+            </table>
+        </fieldset>
+      <% end %>
+
+      <% if farmers_to_certificate.any? || agribusiness_to_certificate.any? %>
+        <%= f.submit "Gerar certificados", data: {confirm: "Confira bem antes de gerar.  Deseja mesmo gerar?"}, class: 'btn btn-primary'  %>
+      <% end %>
+      <hr>
+      <%= render 'pending' %>
+      <hr>
+  <% end %>
+<% else %>
+  <h3>Infelizmente não é possível certificar os membros e agroindustrias deste grupo.  Por favor, resolva as seguintes pendências:</h3>
+  <%= render partial: 'application/missing_documents/group', locals: { group_analysis: @group_analysis } %>
+<% end %>

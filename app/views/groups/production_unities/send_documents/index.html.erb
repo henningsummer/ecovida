@@ -1,0 +1,15 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Pagina inicial' },
+    { url: core_path(@production_unity.group.core), text: @production_unity.group.core.name, hide: !is_admin? },
+    { url: groups_path, text: 'Listando grupos' },
+    { url: group_path(@production_unity.group), text: @production_unity.group.name },
+    { url: group_production_unities_path(@group), text: 'Listando Listando unidades de produção' },
+    { url: group_production_unity_path(@group, @production_unity), text: @production_unity.name },
+    { url: nil, text: 'Visualizar ou enviar documentos' }
+  ])
+%>
+
+<h2>Enviar Documentos para <%= @production_unity.name %></h2>
+
+<%= render 'application/send_documents/index' %>

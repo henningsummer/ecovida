@@ -1,0 +1,11 @@
+pt:
+  modules:
+    farmer_families:
+      manege_when_1: "Gerenciar membros da família"
+      manege_when_2: "Gerenciar Sócios"
+      without_when_1: "Não há membros da familia cadastrados."
+      without_when_2: "Não há sócios cadastrados."
+      new_when_1: "Adicionar integrante da família"
+      new_when_2: "Adicionar sócio"
+      index_when_1: "Integrates da familia"
+      index_when_2: "Sócios"

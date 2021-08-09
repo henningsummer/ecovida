@@ -1,0 +1,38 @@
+<%= link_to 'Pagina ínicial', root_path %> - Listando grupos
+
+<h1>Listando grupos</h1>
+<%= render 'search' %>
+
+<% if @groups.count != 0 or (not @query.nil? or not @state.nil?)%>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <% if user_type == 4 %><th>Núcleo</th><% end %>
+      <th>Login</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @groups.each do |group| %>
+      <tr>
+        <td><%= link_to group.name, group %></td>
+        <% if user_type == 4 %><td><%= link_to group.core.name, group.core %></td><% end %>
+        <td><%= group.login %></td>
+        <td><%= link_to 'Mostrar', group, class: "btn btn-default btn-sm" %></td>
+        <td><%= link_to 'Editar', edit_group_path(group), class: "btn btn-default btn-sm" %></td>
+
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= paginate @groups %>
+<% else %>
+  <h3>Não há grupos cadastrados</h3>
+<% end %>
+
+<%= link_to 'Novo grupo', new_group_path, {class: "btn btn-default"} %>

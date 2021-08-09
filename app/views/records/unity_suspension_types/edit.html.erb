@@ -1,0 +1,12 @@
+<p><%= link_to 'Ínicio', root_path %> -
+  <%= link_to 'Cadastros', records_path %> -
+  <%= link_to 'Listando tipos de suspensão para unidades de produção', records_unity_suspension_types_path %> - Editando tipo de suspensão
+</p>
+
+
+<h1>Editando tipo de suspensão para unidade de produção</h1>
+
+<%= render 'form' %>
+<br>
+<%= link_to 'Mostrar', [:records, @unity_suspension_type] %> |
+<%= link_to 'Voltar', records_unity_suspension_types_path %>

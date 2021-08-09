@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sistema - Opac</title>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body data-no-turbolink="true">
+  <div class="modal" style="display:none;" title="">
+  </div>
+  <nav role="navigation" class="navbar navbar-default">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+          <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+          </button>
+          <div class="navbar-brand">
+            Ecovida
+          </div>
+      </div>
+      <!-- Collection of nav links, forms, and other content for toggling -->
+      <div id="navbarCollapse" class="collapse navbar-collapse">
+
+
+
+          <ul class="nav navbar-nav navbar-right">
+              <li><%= link_to 'Sair', '/document_visualization_sessions', method: :delete %></li>
+          </ul>
+      </div>
+  </nav>
+  <div class = "container">
+
+<% if notice %>
+<div class = "alert alert-success"><%= notice %></div>
+<% end %>
+<% if alert %>
+<div class = "alert alert-danger"><%= alert %></div>
+<% end %>
+<%= yield %>
+
+</div>
+<hr>
+</body>
+</html>

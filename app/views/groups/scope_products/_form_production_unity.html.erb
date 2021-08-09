@@ -1,0 +1,28 @@
+<%= bootstrap_form_for([@group, @production_unity, @production_unity_scope, @scope_product]) do |f| %>
+
+  <%= show_errors(@scope_product) %>
+
+  <% if @scope_product.id == nil %>
+        <p><strong>Categoria do produto:</strong> </p>
+    <%= select_tag "category", options_for_select(@categories), class: "form-control" %>
+    <%= f.select :product_id, @products.collect {|c| [c.name, c.id]} if not @products.nil?%>
+  <% end %>
+
+    <div class = "row">
+      <div class = "col-md-3">
+    <%= f.number_field :amount, label: "Quantidade por ano", step: "any" %>
+      </div>
+      <div class = "col-md-2">
+    <%= f.select :unity, ScopeProduct.UNITIES, label: "Unidade" %>
+      </div>
+    </div>
+
+    <%= f.number_field :area, label: "Área", help: "Valor em hectares (ha)", step:"any" %>
+
+      <% if @products.present? or @scope_product.id != nil %>
+    <%= f.submit "Salvar produto", data: {"disable-with" => "Salvando..."}, class: "btn btn-primary" %>
+      <% if @scope_product.id == nil %>
+    <%= f.submit "Salvar produto e voltar para listagem",  data: {"disable-with" => "Salvando..."} %>
+      <% end %>
+    <% end %>
+<% end %>

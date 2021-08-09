@@ -1,0 +1,126 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Pagina inicial' },
+    { url: nil, text: 'Documentos pendentes do núcleo'}
+  ])
+%>
+
+<h1>Documentos pendentes</h1>
+
+<a class = 'btn btn-primary' id = "show_complete" style="width: 500px">Esconder items com todos os documentos.</a>
+<a class = 'btn btn-primary' id ="show_only_required" style="width: 500px">Esconder documentos não necessários para certificação.</a>
+<hr>
+<% current_user_instance.groups.each do |group| %>
+  <% missing = DocumentApprovement::Verify.verify_document_for(group) %>
+  <h4>Grupo: <%= link_to(group.name, group_path(group), target: :_blank) %></h4>
+  <% dac_status = dac_status(group) %>
+  <% if missing.empty? && dac_status == :success %>
+    <h5>O grupo está com a documentação em dia.</h5>
+  <% else %>
+    <h5>O grupo possuí os seguintes documentos pendentes:</h5>
+    <ul>
+      <% if dac_status != :success %>
+        <li><%= dac_status %></li>
+      <% end %>
+      <% missing.each do |missing| %>
+        <% required_certificate = missing[:document].required_for_certificate_yes_answer? %>
+        <li class="<%= 'not_required' unless required_certificate %>"><%= missing[:document].name %>: <%= missing[:status] %> <%= "(Não necessário para o certificado)" unless required_certificate %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <%= link_to("Clique aqui para ir para tela de envio de documentos do grupo #{group.name}", group_send_documents_path(group), target: :_blank) %>
+  <br>
+
+  <h5><strong>Documentações dos membros do grupo <%= group.name %>:</strong></h5>
+  <% group.farmers.each do |farmer| %>
+    <% next if farmer.is_suspended? %>
+    <% farmer_missing = DocumentApprovement::Verify.verify_document_for(farmer) %>
+    <% if farmer_missing.empty? %>
+      <h5 class = "all_documents"><strong><%= link_to(farmer.name, group_farmer_path(group, farmer), target: :_blank) %></strong> possuí todos os documentos enviados.</h5>
+    <% else %>
+      <h5><strong><%= link_to(farmer.name, group_farmer_path(group, farmer), target: :_blank) %></strong> possuí os seguintes documentos pendentes: (<%= link_to('Ir para pagina de envio', group_farmer_send_documents_path(group, farmer), target: :_blank) %>)</h5>
+      <ul>
+        <% farmer_missing.each do |farmer_missing| %>
+          <% required_certificate = farmer_missing[:document].required_for_certificate_yes_answer? %>
+          <li class="<%= 'not_required' unless required_certificate %>"><%= farmer_missing[:document].name %>: <%= farmer_missing[:status] %> <%= "(Não necessário para o certificado)" unless required_certificate %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+  <br>
+
+  <% if group.production_unities.where(scope_type: 1).count > 0 %>
+    <h5><strong>Documentações das unidades de produção do grupo <%= group.name %>:</strong></h5>
+    <% group.production_unities.where(scope_type: 1).each do |production_unity| %>
+    <% next if production_unity.is_suspended? %>
+
+      <% production_unity_missing = DocumentApprovement::Verify.verify_document_for(production_unity) %>
+      <% if production_unity_missing.empty? %>
+        <h5 class = "all_documents"><strong><%= link_to(production_unity.name, group_production_unity_path(group, production_unity), target: :_blank) %></strong> possuí todos os documentos enviados.</h5>
+      <% else %>
+        <h5><strong><%= link_to(production_unity.name, group_production_unity_path(group, production_unity), target: :_blank) %></strong> possuí os seguintes documentos pendentes: (<%= link_to('Ir para pagina de envio', group_production_unity_send_documents_path(group, production_unity), target: :_blank) %>)</h5>
+        <ul>
+          <% production_unity_missing.each do |production_unity_missing| %>
+            <% required_certificate = production_unity_missing[:document].required_for_certificate_yes_answer? %>
+            <li class="<%= 'not_required' unless required_certificate %>"><%= production_unity_missing[:document].name %>: <%= production_unity_missing[:status] %> <%= "(Não necessário para o certificado)" unless required_certificate%></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+    <br>
+  <% end %>
+
+  <% if group.production_unities.where(scope_type: 2).count > 0 %>
+    <h5><strong>Documentações das agroindustrias do grupo <%= group.name %>:</strong></h5>
+    <% group.production_unities.where(scope_type: 2).each do |production_unity| %>
+    <% next if production_unity.is_suspended? %>
+
+      <% production_unity_missing = DocumentApprovement::Verify.verify_document_for(production_unity) %>
+      <% if production_unity_missing.empty? %>
+        <h5 class = "all_documents"><strong><%= link_to(production_unity.name, group_production_unity_path(group, production_unity), target: :_blank) %></strong> possuí todos os documentos enviados.</h5>
+      <% else %>
+        <h5><strong><%= link_to(production_unity.name, group_production_unity_path(group, production_unity), target: :_blank) %></strong> possuí os seguintes documentos pendentes: (<%= link_to('Ir para pagina de envio', group_production_unity_send_documents_path(group, production_unity), target: :_blank) %>)</h5>
+        <ul>
+          <% production_unity_missing.each do |production_unity_missing| %>
+            <% required_certificate = production_unity_missing[:document].required_for_certificate_yes_answer? %>
+            <li class="<%= 'not_required' unless required_certificate %>"><%= production_unity_missing[:document].name %>: <%= production_unity_missing[:status] %> <%= "(Não necessário para o certificado)" unless required_certificate %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+    <br>
+    <hr>
+
+  <% end %>
+
+
+<% end %>
+
+<script type="text/javascript">
+  var show_complete_toggled = true;
+  var show_only_required_toggled = false;
+
+  $('#show_complete').click(function(){
+    if(show_complete_toggled == true){
+      $('.all_documents').hide();
+      $('#show_complete').html('Mostrar items com todos documentos');
+      show_complete_toggled = false;
+    }else{
+      $('.all_documents').show();
+      $('#show_complete').html('Esconder items com todos documentos');
+      show_complete_toggled = true;
+    }
+  });
+
+  $('#show_only_required').click(function(){
+    if(show_only_required_toggled == true){
+      $('.not_required').hide();
+      $('#show_only_required').html('Mostrar documentos não necessários para certificação.');
+      show_only_required_toggled = false;
+    }else{
+      $('.not_required').show();
+      $('#show_only_required').html('Esconder documentos não necessários para certificação.');
+      show_only_required_toggled = true;
+    }
+  });
+  </script>

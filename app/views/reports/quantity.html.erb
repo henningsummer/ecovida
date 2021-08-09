@@ -1,0 +1,44 @@
+<%= link_to "ìnicio", root_path %> - <%= link_to "Relatórios", reports_index_path %> - Relatório de quantidade
+
+<h1>Relatório de quantidade</h1>
+<fieldset>
+	<legend>Agricultores</legend>
+	<ul>
+	<li>Numero total de agricultores: <%= @total_farmers = Farmer.all.count %> </li>
+	<li>Numero total de agricultores com D.A.P em dia: <%= @with_dap = Report.farmers_with_dap %> (<%= percent_of(@total_farmers, @with_dap) %> do total)</li>
+	<li>Numero total de agricultores com D.A.C em dia: <%= @with_dac = Report.farmers_with_dac %> (<%= percent_of(@total_farmers, @with_dac) %> do total)</li>
+	<li>Numero de familhares cadastrados: <%= FarmerFamily.all.count %></li>
+	<li>Agricultores suspensos: <%= @suspendeds = Report.farmers_suspended %> (<%= percent_of(@total_farmers, @suspendeds) %> do total)</li>
+	<li>Agricultores não suspensos com todos documentos em dia (Inclusive D.A.P): <%= @documents_ok = Report.documents_ok_without_suspension %> (<%= percent_of((@total_farmers - @suspendeds), @documents_ok) %> do total de agricultores não suspensos)</li>
+	<li>Agricultores não adicionados no Sig.Org: <%= @farmer_not_updated =  Report.farmer_with_sig_org_equals 'Não adicionado' %> (<%= percent_of(@total_farmers, @farmer_not_updated) %> do total)</li>
+	<li>Agricultores atualizados no Sig.Org: <%= @farmer_updated =  Report.farmer_with_sig_org_equals 'Atualizado' %> (<%= percent_of(@total_farmers, @farmer_updated) %> do total)</li>
+	<li>Agricultores desatualizados no Sig.Org: <%= @farmer_outdateds =  Report.farmer_with_sig_org_equals 'Desatualizado' %> (<%= percent_of(@total_farmers, @farmer_outdateds) %> do total)</li>
+	<ul>
+</fieldset>
+
+
+<fieldset>
+	<legend>Unidades de produção</legend>
+	<ul>
+		<li>Numero total de unidade de produções e agroindustrias: <%= @total_production_unity_and_agro = ProductionUnity.all.count %></li>
+		<li>Numero total de unidades de produções: <%= @total_production_unity = ProductionUnity.where(scope_type: 1).count %> (<%= percent_of(@total_production_unity_and_agro, @total_production_unity) %> do total)</li>
+		<li>Numero total de agroindustrias: <%= @total_agribusiness = ProductionUnity.where(scope_type: 2).count %> (<%= percent_of(@total_production_unity_and_agro, @total_agribusiness) %> do total)</li>
+		<li>Unidades de produções ou agroindustrias suspensas: <%= @total_suspended = Report.production_unity_suspended %> (<%= percent_of(@total_production_unity, @total_suspended) %> do total)</li>
+		<% Scope.all.each do |scope| %>
+			<% if scope.scope_type == 1 %>
+				<li>Numero de unidades de produção com o escopo <%= scope.name %>(<%= scope.acronym %>): <%= @atual_scope = ProductionUnityScope.where(scope_id: scope.id).count %> (<%= percent_of(@total_production_unity, @atual_scope )%>)</li>
+			<% else %>
+				<li>Numero de agroindustrias com o escopo <%= scope.name %>(<%= scope.acronym %>): <%= @atual_scope = ProductionUnityScope.where(scope_id: scope.id).count %> (<%= percent_of(@total_production_unity, @atual_scope )%>)</li>
+			<% end %>
+		<% end %>
+	</ul>
+
+</fieldset>
+
+<fieldset>
+	<legend>Outros</legend>
+	<ul>
+		<li>Quantidade de produtos cadastrados: <%= Product.all.count %></li>
+		<li>Quantidade de categorias de produtos cadastradas: <%= ProductCategory.all.count %></li>
+	</ul>
+</fieldset>

@@ -1,0 +1,11 @@
+<%= bootstrap_form_for([:records, @product_category]) do |f| %>
+  
+  <%= show_errors(@product_category) %>
+
+    <%= f.text_field :name %>
+
+    <%= f.select :scope_id, Scope.all.collect{|c| ["#{c.name} - #{c.acronym}", c.id]} %>
+
+    <%= f.submit  data: {"disable-with" => "Salvando..."} %>
+
+<% end %>

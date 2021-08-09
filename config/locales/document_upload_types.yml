@@ -1,0 +1,6 @@
+pt:
+  enumerations:
+    document_upload_types:
+      only_pdf: "Apenas PDF"
+      only_video: "Apenas Vídeo"
+      pdf_and_video: "Arquivo PDF ou Vídeo"

@@ -1,0 +1,7 @@
+<%= link_to 'Pagina ínicial', root_path %> - <%= link_to 'Listando grupos',
+groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %>
+ - <%= link_to "Listando unidades de produção", group_production_unities_path(@group) %> - Nova unidade de produção
+
+<h1>Nova unidade de produção para <%= @group.name %></h1>
+
+<%= render "form" %>

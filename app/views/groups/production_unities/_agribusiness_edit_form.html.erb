@@ -1,0 +1,23 @@
+<%= bootstrap_form_for ([@group, @production_unity]) do |f| %>
+
+  <%= f.text_field :name, label: "Razão social" %>
+  <%= f.select :production_type, ProductionUnityForm.SCOPE_TYPES, label: "Tipo" %>
+  <%= f.text_field :address, label: "Endereço" %>
+  <%= f.text_field :neighborhood, label: "Bairro" %>
+  <%= f.text_field :cep, label: "CEP" %>
+  <%= f.select :city_id, City.get_cities_from_state(@group.core.state_id), label: "Cidade" %>
+   <%= f.text_field :fantasy_name, label: "Nome fantasia" %>
+   <%= f.form_group :number_type do %>
+
+      <%= f.radio_button :number_type, 1, label: "CPF", inline: true %>
+      <%= f.radio_button :number_type, 2, label: "CNPJ", inline: true %>
+    <% end %>
+    <%= f.text_field :number, label: "Numero:" %>
+    <%= f.text_field :register_type, label: "Tipo de registro" %>
+    <%= f.text_field :register_number, label: "Numero de registro" %>
+    <%= f.text_field :phone, label: "Numero de contato" %>
+    <%= f.email_field :email %>
+
+    <%= f.submit  data: {"disable-with" => "Salvando..."} %>
+
+<% end %>

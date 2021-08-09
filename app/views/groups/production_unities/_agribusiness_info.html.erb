@@ -1,0 +1,95 @@
+<p>
+  <strong>Razão social:</strong> <%= @production_unity.name %>
+</p>
+<p>
+    <strong>Nome fantasia:</strong> <%= @production_unity.fantasy_name %>
+</p>
+
+<p>
+  <strong>Tipo:</strong> <%= @production_unity.production_type %>
+</p>
+
+<% if require_current_or_admin(@group.core.id, true, true) %>
+<p>
+  <strong>Status:</strong> <%= @production_unity.sig_org_status %><% if @production_unity.sig_org_status != "Atualizado"  %>
+  <%= link_to "Marcar como atualizado no SigOrg", group_production_unity_set_updated_path(@group, @production_unity), method: :post, data: {:confirm => "Realmente deseja marcar como atualizado no SigOrg?"} %>
+  <% end %>
+</p>
+<% end %>
+
+<p>
+  <% if @production_unity.number_type == 1 %>
+    <strong>CPF:</strong> <%= @production_unity.number %>
+  <% else %>
+    <strong>CNPJ:</strong> <%= @production_unity.number %>
+  <% end %>
+</p>
+<p>
+  <strong>Pode receber certificado:</strong> <%= t(@production_unity.can_have_certificate?.to_s) %> <%= link_to('Mostrar Pendências', '#', class: 'btn-pendences') unless @production_unity.can_have_certificate? %>
+</p>
+<div class = "pendences">
+  <%= render partial: 'application/missing_documents/agribusiness', locals: { agribusiness_analysis: @production_unity.document_analysis } %>
+</div>
+<p>
+  <strong>Tipo de registro:</strong> <%= @production_unity.register_type %>
+</p>
+<p>
+  <strong>Numero do registro:</strong> <%= @production_unity.register_number %>
+</p>
+
+<p>
+  <strong>Numero para contato:</strong> <%= @production_unity.phone %>
+</p>
+
+<p>
+  <strong>Email:</strong> <%= link_to @production_unity.email, "mailto:#{@production_unity.email}" %>
+</p>
+
+<p>
+  <strong>Endereço:</strong> <%= @production_unity.address %>
+</p>
+<p>
+  <strong>Bairro:</strong> <%= @production_unity.neighborhood %>
+</p>
+<p>
+  <strong>Cidade:</strong> <%= @production_unity.city.name %>
+</p>
+<p>
+  <strong>CEP:</strong> <%= @production_unity.cep %>
+</p>
+<p>
+  <strong>Responsável:</strong> <%= link_to @production_unity.responsible.name, [@production_unity.responsible.group, @production_unity.responsible] %>
+</p>
+
+<p>
+  <strong>Última modificação:</strong>
+  <%= l @production_unity.updated_at %>
+</p>
+
+<p>
+  <strong>Último certificado gerado em:</strong>
+  <% if @last_certificate %>
+    <%= l @last_certificate.try(:certificate).try(:certificate_group).try(:meeting_date) %>
+  <% else %>
+    Não há.
+  <% end %>
+</p>
+
+<script type = "text/javascript">
+  $('document').ready(function(){
+
+    var showing = false;
+    $('.pendences').hide();
+    $('.btn-pendences').click(function(){
+      if(showing == false){
+        $('.pendences').show();
+        $('.btn-pendences').html('Ocultar Pendências');
+        showing = true;
+      }else{
+        $('.pendences').hide();
+        $('.btn-pendences').html('Mostrar Pendências');
+        showing = false;
+      }
+    });
+  });
+</script>

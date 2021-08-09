@@ -1,0 +1,14 @@
+<%= link_to "Ínicio", root_path %> - Relatórios
+
+<h1>Relatórios</h1>
+<p>Por favor, escolha o tipo de relatório que você deseja</p>
+
+<ul>
+	<li><%= link_to "Relatório de quantidade - Aqui você saberá quantos agricultores, grupos, nucleos, entre outros, que estão cadastrados no sistema", reports_quantity_path %></li>
+	<li><%= link_to "Relatório da situação atual do cadastro", '#', class: 'actual_situation' %></li>
+	<li><%= link_to "Relatório de anuidades", '#', class: 'annuity' %></li>
+	<li><%= link_to "Relatório de membros certificados para ministério da agricultura", reports_certified_members_path %></li>
+</ul>
+
+<%= render partial: 'show_report', locals: {button_name: 'actual_situation', model: Core.new, path: reports_global_reports_actual_situation_path } %>
+<%= render partial: 'show_report', locals: {button_name: 'annuity', model: Core.new, path: reports_global_reports_annuity_path, need_year: true } %>

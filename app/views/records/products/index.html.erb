@@ -1,0 +1,47 @@
+<%= link_to 'Pagina Inícial', root_path %> - <%= link_to 'Cadastros', records_path %> - Listando produtos
+
+<hr>
+
+<%= search_form_for @q, url: records_products_path do |f| %>
+
+  Buscar produto:
+  <%= f.search_field :name_cont %>
+
+  <%= f.submit %>
+<% end %>
+
+
+<% if @records_products.count != 0 %>
+
+<h1>Listando produtos</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Categoria</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @records_products.each do |records_product| %>
+      <tr>
+        <td><%= records_product.name %></td>
+        <td><%= link_to records_product.product_category.name, records_product_category_path(records_product.product_category) %></td>
+        <td><%= link_to 'Mostrar', records_product_path(records_product) %></td>
+        <td><%= link_to 'Editar', edit_records_product_path(records_product) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= paginate @records_products %>
+
+<% else %>
+  <h3>Não há produtos cadastrados ainda.</h3>
+<% end %>
+
+<%= link_to 'Novo produto', new_records_product_path, class: 'btn btn-default' %>

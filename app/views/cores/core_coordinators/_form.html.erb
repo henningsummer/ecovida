@@ -1,0 +1,13 @@
+<%= bootstrap_form_for([@core, @core_coordinator]) do |f| %>
+
+  <%= show_errors(@core_coordinator) %>
+
+    <%= f.text_field :name %>
+
+    <%= f.email_field :email %>
+
+    <%= f.text_field :phone %>
+
+    <%= f.submit  data: {"disable-with" => "Salvando..."} %>
+
+<% end %>

@@ -1,0 +1,67 @@
+<h2><%= @production_unity_scope.scope.name %> de <%= @production_unity.name %>
+
+<div class = "row">
+  <br>
+  <div class = "col-md-6">
+    <div class = "panel panel-default">
+      <div class = "panel-heading">
+        <h3 class = "panel-title">Informações</h3>
+      </div>
+      <div class = "panel-body">
+        <p>
+          <strong>Sigla:</strong> <%= @production_unity_scope.scope.acronym %><br>
+        </p>
+        <p>
+          <strong>Quantidade de produtos:</strong> <%= @production_unity_scope.scope_products.count %><br>
+        </p>
+      </div>
+
+    </div>
+  </div>
+  <div class = "col-md-6">
+    <div class = "panel panel-primary">
+      <div class = "panel-heading">
+        <h3 class = "panel-title">Ações</h3>
+      </div>
+      <%= link_to 'Adicionar produto', new_group_production_unity_production_unity_scope_scope_product_path(@group, @production_unity, @production_unity_scope), class: "list-group-item" %>
+
+    </div>
+  </div>
+</div>
+
+<% if @production_unity_scope.scope_products.count != 0 %>
+<h3>Produtos de <%= @production_unity.name %> no escopo <%= @production_unity_scope.scope.name %></h3>
+<table class = "table">
+  <tr>
+    <th>Produto</th>
+    <th>Tamanho da embalagem</th>
+    <th>Volume por ano</th>
+    <th>Com ingredientes orgânicos?</th>
+    <th>Data da ultima modificação</th>
+    <th colspan="2">Ações</th>
+  </tr>
+  <% @production_unity_scope.scope_products.joins(:product).order('products.name').each do |scope_product| %>
+    <tr>
+      <td><%= scope_product.product.name %></td>
+      <td>
+      <% if scope_product.package_size.present? %><%= scope_product.package_size %> <%= ScopeProduct::UNITIES[scope_product.package_size_unity] %>(s)
+      <% else %>
+        Não informado
+      <% end %></td>
+      <td>
+      <% if scope_product.amount_per_year.present? %>
+      <%= rounded_formated_value(scope_product.amount_per_year) %> <%= ScopeProduct::UNITIES[scope_product.amount_per_year_unity] %>(s)
+      <% else %>
+        Não informado
+      <% end %>
+      </td>
+      <td><%= scope_product.is_processor ? "Sim" : "Não" %></td>
+      <td><%= l(scope_product.updated_at) %></td>
+      <td><%= link_to "Editar", edit_group_production_unity_production_unity_scope_scope_product_path(@group, @production_unity, @production_unity_scope, scope_product), class: "btn btn-default btn-sm" %></td>
+      <td><%= link_to "Remover", [@group, @production_unity, @production_unity_scope, scope_product], method: :delete, class: "btn btn-danger btn-sm" %>
+    </tr>
+  <% end %>
+</table>
+<% else %>
+  <h3 class = "alert alert-warning">Não há produtos vinculados a este escopo ainda !  Por favor, adicione no menu ações no canto superior direito </h3>
+<% end %>

@@ -1,0 +1,30 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %>
+ - <%= link_to "Grupo: #{@group.name}", @group %>
+  - <%= link_to 'Listando unidades de produção', group_production_unities_path(@group) %> - <%= link_to @production_unity.name, [@group, @production_unity] %> - <%= link_to 'Listando suspensões', group_production_unity_unity_suspensions_path(@group, @production_unity) %> - Mostrando suspensão
+
+
+<p>
+  <strong>Descrição:</strong>
+  <%= @unity_suspension.description %>
+</p>
+
+<p>
+  <strong>Data da suspensão:</strong>
+  <%= l @unity_suspension.suspension_date %>
+</p>
+
+<h4>Motivo(s) da suspensão: </h4>
+<ul>
+  <% if @unity_suspension.unity_suspension_reasons.count != 0 %>
+    <% @unity_suspension.unity_suspension_reasons.each do |reason| %>
+      <li><%= reason.unity_suspension_type.name %></li>
+    <% end %>
+  <% else %>
+    <li>Não foi informado nenhum motivo. </li>
+  <% end %>
+</ul>
+
+<% if user_type == 4 %>
+  <%= link_to 'Editar', edit_group_production_unity_unity_suspension_path(@group, @production_unity, @unity_suspension) %> |
+<% end %>
+<%= link_to 'Voltar', group_production_unity_unity_suspensions_path(@group, @production_unity) %>

@@ -1,0 +1,10 @@
+<script>
+<% need_year ||= false %>
+$('.<%= escape_javascript(button_name) %>').click(function(){
+  $('.modal').attr("title", "Enviar relatório");
+
+  $('.modal').html("<%= escape_javascript(render partial: 'application/report', locals: { model: model, path: path, need_year: need_year } ) %>"); //inserts content into your empty div, be aware that the parameter needed to be quoted.
+  $('.modal').dialog(); //jquery ui will open it as a modal popup
+});
+
+</script>

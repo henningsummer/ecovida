@@ -1,0 +1,13 @@
+<p><%= link_to 'Ínicio', root_path %> - 
+  <%= link_to 'Cadastros', records_path %> -
+  <%= link_to 'Listando tipos de grupos', records_group_types_path %> - 
+  Editando <%= @group_type.description %>
+</p>
+
+
+<h1>Editar tipo de grupo</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Mostrar', [:records, @group_type] %> |
+<%= link_to 'Voltar', records_group_types_path %>

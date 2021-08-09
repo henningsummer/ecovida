@@ -1,0 +1,14 @@
+<%= bootstrap_form_for([:records, @scope]) do |f| %>
+
+  <%= show_errors(@scope) %>
+
+
+    <%= f.text_field :name %>
+
+    <%= f.text_field :acronym %>
+
+    <%= f.select :scope_type, Scope.SCOPE_TYPES %>
+
+    <%= f.submit  data: {"disable-with" => "Salvando..."} %>
+
+<% end %>

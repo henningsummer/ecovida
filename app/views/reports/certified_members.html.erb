@@ -1,0 +1,40 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Página inicial' },
+    { url: reports_index_path, text: "Relatórios" },
+    { url: nil, text: "Relatório de membros certificados para o ministério da agricultura" }
+  ])
+%>
+
+<%= simple_form_for :report, url: reports_global_reports_certificate_documents_url do |f| %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :kind, as: :select, label: 'Tipo de Relatório', collection: ['Apenas um núcleo', 'Todos os núcleos'],
+       include_blank: false, input_html: { class: 'JS-certified-members' } %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :core_id, as: :select,  label: 'Núcleo', collection: Core.all %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :use_date, as: :select,  label: 'Entre datas', collection: ['Escolher Data', 'Ano Passado'], include_blank: false %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :email, as: :string, label: 'Seu Email:' %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <%= f.input :from, as: :string, label: 'De:', input_html: { class: 'form_date' } %>
+    </div>
+    <div class="col-md-3">
+      <%= f.input :to, as: :string, label: 'Para:', input_html: { class: 'form_date' } %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <%= f.submit 'Gerar relatório', class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>

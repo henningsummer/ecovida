@@ -1,0 +1,30 @@
+<h3>Este documento já foi aceito!</h3>
+<% if @dac_document.dac_date %>
+<h4>A data de vencimento dessa D.A.C é: <%= (@dac_document.try(:dac_date) + 1.year).try(:strftime, '%d/%m/%Y') %></h4>
+<% end %>
+<p>Para visualizar o documento, clique aqui: <%= link_to @dac_document.file.file.filename, @dac_document.file.url, target: :_blank %></p>
+
+<% if require_current_or_admin(@group.core.id, true, false) %>
+<div class = "resend_accepted">
+  <button class = "resend_btn btn btn-primary">Re-enviar documento</button>
+</div>
+<div class = "resend">
+  <%= render 'groups/send_documents/dac_forms/form' %>
+  <a href="#" class = "cancel_resend_btn">Cancelar re-envio</href>
+</div>
+
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.resend').hide();
+
+    $('.resend_btn').click(function(){
+      $('.resend').show();
+    });
+
+    $('.cancel_resend_btn').click(function(){
+      $('.resend').hide();
+    });
+});
+</script>

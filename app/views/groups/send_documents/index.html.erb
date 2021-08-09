@@ -1,0 +1,44 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Pagina inicial' },
+    { url: core_path(@group.core), text: @group.core.name, hide: !is_admin? },
+    { url: group_path(@group), text: @group.name },
+    { url: nil, text: 'Visualizar ou enviar documentos' }
+  ])
+%>
+
+<h2>Enviar Documentos para o grupo <%= @group.name %></h2>
+
+<div class="panel-group">
+<div class="panel panel-default <%= panel_color_dac(@dac_document) %> panel_dac">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+      <a data-toggle="collapse" href="#collapse-dac">* 9. Termo e documentos de aprovação da conformidade (DAC) - <strong class = "title_status_dac"><%= panel_status_dac(@dac_document) %></strong></a>
+      </h4>
+    </div>
+    <div id="collapse-dac" class="panel-collapse collapse">
+      <div class = "panel-body"%>
+        <p><strong>Documento assinado por todo o grupo e Comité de Ética na reunião de aprovação ou renovação da certificação.</strong></p>
+        <% if @dac_document %>
+          <% if @group.expirated_dac? && @dac_document.status == 'accepted' %>
+            <%= render 'groups/send_documents/dac_forms/manage_no_documents' %>
+          <% else %>
+            <% if @dac_document.status == 'accepted' %>
+              <%= render 'groups/send_documents/dac_forms/manage_accepted_document' %>
+            <% elsif @dac_document.status == 'pending' %>
+              <%= render 'groups/send_documents/dac_forms/manage_pending_document' %>
+            <% elsif @dac_document.status == 'change_request' %>
+              <%= render 'groups/send_documents/dac_forms/manage_change_request_document' %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <%= render 'groups/send_documents/dac_forms/manage_no_documents' %>
+        <% end %>
+        <%= render 'groups/send_documents/dac_forms/show_history' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%= render 'application/send_documents/index' %>

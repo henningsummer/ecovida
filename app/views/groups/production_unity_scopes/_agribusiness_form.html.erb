@@ -1,0 +1,4 @@
+<%= bootstrap_form_for([@group, @production_unity, @production_unity_scope]) do |f| %>
+  <%= f.select :scope_id, Scope.where(scope_type: 2).collect {|c| [c.name, c.id]}, label: "Escopo" %>
+  <%= f.submit "Adicionar escopo",  data: {"disable-with" => "Salvando..."} %>
+<% end %>

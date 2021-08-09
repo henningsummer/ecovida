@@ -1,0 +1,49 @@
+<% pending_agribusiness_to_certificate = @group_analysis.agribusiness.select { |agribusiness_analysis| !agribusiness_analysis.can_receive_certificate } %>
+<% pending_farmers_to_certificate = @group_analysis.farmers.select { |farmer_analysis| !farmer_analysis.can_receive_certificate } %>
+
+<%= link_to 'Mostrar membros e agroindústrias com pendências para certificação', '#pendences', class: 'btn-pendences btn btn-warning' %>
+
+<div class = "pendences">
+  <% if pending_agribusiness_to_certificate.any? || pending_farmers_to_certificate.any? %>
+    <% if pending_farmers_to_certificate.any? %>
+      <h4><strong>Membros pendentes:</strong> </h4>
+      <uL>
+        <% pending_farmers_to_certificate.each do |farmer| %>
+          <li><%= link_to farmer.subject.name, [@group, farmer.subject], target: :_blank  %></li>
+          <%= render partial: 'application/missing_documents/farmer', locals: { farmer_analysis: farmer } %>
+        <% end %>
+      </uL>
+    <% end %>
+
+    <% if pending_agribusiness_to_certificate.any? %>
+      <h4><strong>Agroindústrias pendentes:</strong> </h4>
+      <uL>
+        <% pending_agribusiness_to_certificate.each do |agribusiness| %>
+          <li><%= link_to agribusiness.subject.name, [@group, agribusiness.subject], target: :_blank  %></li>
+          <%= render partial: 'application/missing_documents/agribusiness', locals: { agribusiness_analysis: agribusiness } %>
+        <% end %>
+      </uL>
+    <% end %>
+
+
+  <% end %>
+</div>
+
+<script type = "text/javascript">
+  $('document').ready(function(){
+
+    var showing = false;
+    $('.pendences').hide();
+    $('.btn-pendences').click(function(){
+      if(showing == false){
+        $('.pendences').show();
+        $('.btn-pendences').html('Ocultar Pendências');
+        showing = true;
+      }else{
+        $('.pendences').hide();
+        $('.btn-pendences').html('Mostrar Pendências');
+        showing = false;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,8 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@farmer.group.name}", @farmer.group %> - <%= link_to 'Agricultores', group_farmers_path(@farmer.group) %> - <%= link_to "#{@farmer.name}", [@farmer.group, @farmer] %> - <%= link_to "D.A.C's", group_farmer_dacs_path(@farmer.group, @farmer) %> - Novo D.A.C para <%= @farmer.name %>
+
+
+<h1>Novo D.A.C</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar', group_farmer_dacs_path(@farmer.group, @farmer) %>

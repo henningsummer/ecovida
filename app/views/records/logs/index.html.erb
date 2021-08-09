@@ -1,0 +1,47 @@
+
+<p><%= link_to 'Ínicio', root_path %> - Logs do sistema</p>
+<h2>Listando logs do Sistema </h2>
+
+<div class = "row">
+	<div class = "col-md-6">
+		<%= search_form_for @q, url: records_logs_path do |f| %>
+			<strong>Descrição contém:</strong>
+			<%= f.search_field :description_cont, class: 'form-control' %>
+			<br>
+			<div class = "row">
+				<div class = "col-md-6">
+					<strong>Data maior que:
+					<%= f.date_field :created_at_gteq, class: 'form-control' %>
+				</div>
+				<div class = "col-md-6">
+					<strong>Data menor que:
+					<%= f.date_field :created_at_lteq, class: 'form-control' %>
+				</div>
+			</div>
+      <br>
+      <strong>Nome do autor contém: </strong>
+      <%= f.search_field :author_cont, class: 'form-control' %>
+			<br>
+			<%= f.submit "Buscar", class: 'btn btn-default'%>
+		<% end %>
+	</div>
+</div>
+
+<br>
+
+<table class = "table">
+<tr>
+	<th>Descrição</th>
+	<th>Autor</th>
+	<th>Data</th>
+</tr>
+<% @logs.each do |log| %>
+	<tr>
+		<td><%= log.description %></td>
+		<td><%= log.author %></td>
+		<td><%= l log.created_at %></td>
+	</tr>
+<% end %>
+</table>
+
+<%= paginate @logs %>

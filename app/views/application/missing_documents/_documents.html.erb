@@ -1,0 +1,6 @@
+<li>Documentos Pendentes: </li>
+<ul>
+  <% documents.each do |document| %>
+    <li><%= document[:document].name %>: <%= t(document[:status]) %></li>
+  <% end %>
+</ul>

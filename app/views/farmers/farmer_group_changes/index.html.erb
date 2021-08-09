@@ -1,0 +1,29 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@farmer.group.name}", @farmer.group %> - <%= link_to 'Agricultores', group_farmers_path(@farmer.group) %> - <%= link_to "#{@farmer.name}", [@farmer.group, @farmer] %> - Listando mudanças de grupo
+
+<p>OBS:  Cuidado ao usar está funcionalidade:  Ao mudar um agricultor de grupo, todas as suas unidades de produção são movidas também.  Não é possível mover um agricultor que possua uma unidade de produção com outros agricultores vinculados.  Neste caso, para realizar a mudança, é necessário primeiro desvincular este agricultor, ou o outro, da propriedade, e então mudá-lo de grupo.</p>
+
+<h1>Histórico de mudanças de grupo</h1>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Grupo que foi transferido</th>
+      <th>Data</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @farmer_group_changes.each do |farmer_group_change| %>
+      <tr>
+        <td><%= link_to farmer_group_change.group.name, farmer_group_change.group %></td>
+        <td><%= l farmer_group_change.created_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @farmer_group_changes %>
+
+<br>
+
+<%= link_to "Mudar #{@farmer.name} de grupo", new_group_farmer_farmer_group_change_path(@group, @farmer), class: "btn btn-default" %>

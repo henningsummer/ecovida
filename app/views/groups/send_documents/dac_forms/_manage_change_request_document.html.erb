@@ -1,0 +1,8 @@
+<p>É necessário o re-envio do documento pois ele foi recusado pelo <strong>OPAC</strong>.</p>
+<% if @dac_document.rejection_reason.present? %>
+  <p><strong>Motivo: </strong><%= @dac_document.rejection_reason %></p>
+<% end %>
+<p>Por favor, utilize o formulário abaixo para o re-envio:</p>
+<% if require_current_or_admin(@group.core.id, true, false) %>
+  <%= render 'groups/send_documents/dac_forms/form' %>
+<% end %>

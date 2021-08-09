@@ -1,0 +1,10 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos',
+groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %>
+ - <%= link_to "Listando gerações de certificado de  #{@group.name}", group_certificate_groups_path(@group) %> - Gerar novos certificados
+
+
+<h1>Gerar certificados para <%= @group.name %></h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar para listagem', group_certificate_groups_path(@group) %>

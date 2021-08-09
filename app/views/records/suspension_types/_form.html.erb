@@ -1,0 +1,10 @@
+<%= bootstrap_form_for([:records, @suspension_type]) do |f| %>
+
+  <%= show_errors(@suspension_type) %>
+
+
+    <%= f.text_field :name %>
+
+    <%= f.submit data: {"disable-with" => "Salvando..."} %>
+
+<% end %>

@@ -1,0 +1,42 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@farmer.group.name}", @farmer.group %> - <%= link_to 'Agricultores', group_farmers_path(@farmer.group) %> - <%= link_to "#{@farmer.name}", [@farmer.group, @farmer] %> - D.A.C's
+
+<% if @dacs.count != 0 %>
+
+<h1>Listando D.A.C's</h1>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Data do D.A.C</th>
+      <th>Foi visitado</th>
+      <th>Adicionado por</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @dacs.each do |dac| %>
+      <tr>
+        <td><%= l dac.dac_date %></td>
+        <td><%= dac.sampling ? 'Sim' : 'Não' %></td>
+        <td><%= dac.added_by %></td>
+        <% if  user_type == 4 %>
+          <td><%= link_to 'Mostrar', [@farmer.group, @farmer, dac] %></td>
+          <td><%= link_to 'Deletar', [@farmer.group, @farmer, dac], method: :delete, data: { confirm: 'Você tem certeza disso? Não há como voltar atrás.' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% else %>
+  <h3>Não há dacs para <%= @farmer.name %></h3>
+<% end %>
+
+<%= paginate @dacs %>
+
+<% if user_type == 4 #Admin %>
+<%= link_to "Novo D.A.C para #{@farmer.name}", new_group_farmer_dac_path(@farmer.group, @farmer), class: 'btn btn-default' %>
+<% end %>

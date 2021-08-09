@@ -1,0 +1,19 @@
+<% if @group.farmers.count != 0 %>
+
+<%= bootstrap_form_for([@group, @set_suplente]) do |f| %>
+
+    <%= show_errors(@set_suplente) %>
+
+    <%= f.select :farmer_id, Farmer.get_farmers(@group) %>
+
+    <%= f.select :set_type, SetSuplente::SUPLENTE_TYPES %>
+
+    <%= f.text_area :description %>
+
+    <%= f.submit  data: {"disable-with" => "Salvando..."} %>
+
+<% end %>
+
+<% else %>
+	<h3>Não é possível cadastrar um suplenete ou titular se não houverem agricultores cadastrados.  Cadastre um agora, <%= link_to "Clicando aqui", new_group_farmer_path(@group) %></h3>
+<% end %>

@@ -1,0 +1,35 @@
+<%= link_to 'Pagina Inícial', root_path %> - <%= link_to 'Cadastros', records_path %> - <%= link_to "Listando categorias de produtos", records_product_categories_path  %> - Mostrando categoria
+<hr>
+
+<br>
+ <p> <strong>Nome:</strong>
+  <%= @product_category.name %>
+</p>
+
+ <p> <strong>Escopo:</strong>
+  <%= link_to @product_category.scope.name, [:records, @product_category.scope] %>
+</p>
+
+<%= link_to 'Editar', edit_records_product_category_path(@product_category) %> |
+<%= link_to 'Voltar', records_product_categories_path %>
+
+<h1>Listando produtos da categoria</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_category.products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= link_to 'Editar', edit_records_product_path(product) %></td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>

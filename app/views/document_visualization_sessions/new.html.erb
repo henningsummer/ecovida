@@ -1,0 +1,26 @@
+<div class="container">
+       <div class = "login-image">
+         <%= image_tag("logo.png") %>
+       </div>
+ <div class="login-container">
+           <div id="output"></div>
+           <% if alert %>
+            <div class = "alert alert-danger"><%= alert %></div>
+           <% end %>
+           <% if notice %>
+            <div class = "alert alert-success"><%= notice %></div>
+           <% end %>
+           <div class="form-box">
+             <%= simple_form_for(@document_visualization_session, html: { role: "form" }) do |f| %>
+               <% if @document_visualization_session.errors.has_key? :base %>
+                 <p class="alert alert-danger" align="center">Chave inválida</p>
+               <% end %>
+               <div class="form-group">
+                 <%= f.text_field :access_key, autofocus: true, placeholder: 'Chave' %>
+               </div>
+                <%= f.button :submit, class: 'button_login' %>
+             <% end %>
+           </div>
+       </div>
+
+</div>

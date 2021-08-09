@@ -1,0 +1,49 @@
+<p><%= link_to 'Ínicio', root_path %> - <%= link_to 'Dados excluídos', excluded_data_path %> - Busca de propriedades excluídas</p>
+
+<div class="row">
+  <div class="col-md-3">
+    <%= simple_form_for @q, url: excluded_data_production_unities_path, html: {method: :get} do |f| %>
+    <%= f.input :name_cont, label: 'Nome' %>
+
+    <%= f.input :updated_at_gteq, as: :date_picker, label: 'A partir de', input_html: { value: params[:q].try(:[], :updated_at_gteq) } %>
+
+    <%= f.input :updated_at_lteq, as: :date_picker, label: 'Até', input_html: { value: params[:q].try(:[], :updated_at_lteq) } %>
+
+    <%= f.submit 'Buscar', class: 'btn btn-default' %>
+    <% end %>
+  </div>
+</div>
+
+<% if @production_unities.empty? %>
+  <br>
+  <p>Não foram encontrados resultados para a pesquisa</p>
+<% else %>
+  <h2>Número de itens encontrados na busca: <%= @count %></h2>
+
+  <br>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Tipo</th>
+        <th>Grupo</th>
+        <th>Núcleo</th>
+        <th>Data de exclusão</th>
+      </tr>
+    </thead>
+    <% @production_unities.each do |production_unity| %>
+    <tbody>
+      <tr>
+        <td><%= production_unity.name %></td>
+        <td><%= production_unity.scope_name %></td>
+        <td><%= production_unity.group_unscoped.name %></td>
+        <td><%= production_unity.group_unscoped.core.name %></td>
+        <td><%= formated_date(production_unity.updated_at) %></td>
+      </tr>
+    </tbody>
+    <% end %>
+  </table>
+
+  <%= paginate @production_unities %>
+<% end %>

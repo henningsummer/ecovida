@@ -1,0 +1,15 @@
+<%= bootstrap_form_for([@farmer.group, @farmer, @dap]) do |f| %>
+  
+  <%= show_errors(@farmer) %>
+
+  	<%= f.text_field :dap_number %>
+
+  	<%= f.date_select :emission_date %>
+
+    <%= f.date_select :validity %>
+
+    
+
+    <%= f.submit  data: {"disable-with" => "Salvando..."} %>
+
+<% end %>

@@ -1,0 +1,6 @@
+<ul>
+  <% if group_analysis.dac != 'accepted' %><li>D.A.C: <%= t(group_analysis.dac) %></li><% end %>
+  <% if group_analysis.missing.any? %>
+    <%= render partial: 'application/missing_documents/documents', locals: { documents: group_analysis.missing } %>
+  <% end %>
+</ul>

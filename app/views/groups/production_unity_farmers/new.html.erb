@@ -1,0 +1,19 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %>
+ - <%= link_to "Grupo: #{@group.name}", @group %>
+  - <%= link_to 'Listando unidades de produção', group_production_unities_path(@group) %>
+   - <%= link_to @production_unity.name, [@group, @production_unity] %> - Vincular novo agricultor
+
+<% farmers =  @group.farmers.where.not(id: @production_unity.production_unity_farmers.map(&:farmer_id)) %>
+
+<% if  farmers.count != 0%>
+
+  <h1>Vinculador novo agricultor em <%= @production_unity.name %></h1>
+
+  <%= bootstrap_form_for([@group, @production_unity, @production_unity_farmer]) do |f| %>
+    <%= f.select :farmer_id,
+     farmers.collect{|c| [c.name, c.id]} %>
+    <%= f.submit "Vincular agricultor" %>
+  <% end %>
+<% else %>
+  <h3>Não há agricultores para serem vinculados</h3>
+<% end %>

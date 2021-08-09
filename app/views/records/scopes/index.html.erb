@@ -1,0 +1,41 @@
+<p><%= link_to 'Ínicio', root_path %> -
+  <%= link_to 'Cadastros', records_path %> -
+  Listando escops
+</p>
+
+<% if @scopes.count != 0 %>
+
+<h1>Listando escopos</h1>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Sigla</th>
+      <th>Tipo de escopo</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @scopes.each do |scope| %>
+      <tr>
+        <td><%= scope.name %></td>
+        <td><%= scope.acronym %></td>
+        <td><%= scope.scope_type == 1 ? "Unidade de produção" : "Agroindustria" %></td>
+        <td><%= link_to 'Mostrar', [:records, scope] %></td>
+        <td><%= link_to 'Editar', edit_records_scope_path(scope) %></td>
+
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= paginate @scopes %>
+
+<% else %>
+  <h3>Nenhum escopo cadastrado</h3>
+<% end %>
+
+<%= link_to 'Novo escopo', new_records_scope_path, class: 'btn btn-default' %>

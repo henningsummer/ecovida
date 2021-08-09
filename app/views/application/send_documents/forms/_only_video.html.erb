@@ -1,0 +1,29 @@
+<div class = "container_<%= id %>">
+<div class = "resend_<%= id %>"></div>
+<div class = "resend_<%= id %>_accepted"></div>
+
+<h3>Por favor, cole abaixo a URL para o vídeo: </h3>
+
+<%= simple_form_for DocumentSended.new, url: 'send_documents', remote: true, authenticity_token: true,
+                                                               html: { multipart: true, class: "form_#{id}" } do |f| %>
+  <%= f.input :url, required: true %>
+  <%= f.input :document_id, as: :hidden, input_html: { value: id } %>
+  <%= f.input :observations %>
+  <h4 class= "status_<%= id %>" style="color:red"></h4>
+  <%= f.submit 'Enviar Documento', class: 'btn btn-primary', data: {"disable-with" => "Enviando..."} %>
+<% end %>
+</div>
+
+<script type="text/javascript">
+var x;
+$(document).on('ajax:success', '.form_<%= id %>', function(e, data, response) {
+  $('.container_<%= id %>').html('<h4>Documento enviado com sucesso. Só aguardar a aprovação do administrador :)</h4>');
+  $('.panel_<%= id %>').attr('class', 'panel panel-default panel-warning');
+  $('.title_status_<%= id %>').html('Documento enviado, porém, aguardando a aprovação de um administrador');
+  $('.resend_<%= id %>').html('')
+  $('.resend_<%= id %>_accepted').html('<h3>Documento re-enviado com sucesso!</h3>')
+});
+$(document).on('ajax:error', '.form_<%= id %>', function(e, data, response) {
+  $('.status_<%= id %>').html('Não foi possível criar o documento.  Verifique os dados enviados.');
+});
+</script>

@@ -1,0 +1,5 @@
+pt:
+  enumerations:
+    genders:
+      male: "Masculino"
+      female: "Feminino"

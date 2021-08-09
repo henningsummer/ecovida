@@ -1,0 +1,60 @@
+= link_to 'Pagina ínicial - ', root_path
+= link_to "Núcleo: #{@core.name} - ", @core if user_type == 4
+| Gerenciando Pagamentos
+
+.pull-right
+  = search_form_for @q, :html => {:class => "form-inline"} do |f|
+    .form-group
+      = f.label 'Ano Vigente:'
+      =< f.select(:in_force_year_eq,
+        options_for_select((Date.today.year-20)..Date.today.year, params[:q][:in_force_year_eq]),
+        {:include_blank => true},
+        {class: "form-control"})
+      =< f.submit 'Pesquisar', class: 'btn btn-primary'
+
+- if @to_pay
+  br
+  h3 = "Resumo do ano de #{@year}"
+  table.table.table-hover
+    theader
+      tr
+        td Agricultores sem propriedade
+        td Agricultores com propriedade
+        td Agro-indústrias
+        td Total pago
+        td Total a pagar
+    tbody
+      tr
+        td = @summarized[:unproductive]
+        td = @summarized[:productive]
+        td = @summarized[:agribusiness]
+        td = number_to_currency(@payed)
+        td = number_to_currency(@to_pay < 0 ? 0 : @to_pay)
+
+table.table.table-hover
+  thead
+    tr
+      th = sort_link(@q, :description, "Descrição")
+      th = sort_link(@q, :amount, "Valor")
+      th = sort_link(@q, :payment_date, "Data de Pagamento")
+      th = sort_link(@q, :in_force_year, "Ano vigente")
+      th = link_to 'Novo Pagamento',
+          new_core_payment_path(core_id: @core.id),
+          { class: 'btn btn-default' }
+  tbody
+    - @payments.each do |payment|
+      tr
+        td
+          = link_to payment.description,
+            edit_core_payment_path(@core, payment)
+        td = number_to_currency(payment.amount, unit: "R$")
+        td = l payment.payment_date
+        td = payment.in_force_year
+        td
+          = link_to core_payment_path(@core, payment),
+            class: "btn btn-danger",
+            method: :delete,
+            data: { confirm: 'Você tem certeza disso? Não há como voltar atrás.' } do
+              span Deletar
+
+= paginate @payments

@@ -1,0 +1,41 @@
+<h3>Este documento já foi aceito!</h3>
+<% if sended.file.file %>
+<p>Para visualizar o documento, clique aqui: <%= link_to sended.file.file.filename, sended.file.url %></p>
+<% end %>
+
+<% if sended.url.present? %>
+  <p>URL Enviada: <%= link_to sended.url, sended.url, target: :_blank %></p>
+<% end %>
+
+<div class = "resend_<%= document.id %>_accepted">
+  <button class = "resend_btn_<%= document.id %> btn btn-primary">Re-enviar documento</button>
+</div>
+
+<div class = "resend_<%= document.id %>">
+  <% if !sended.url.present? && !sended.file.file %>
+    <p>Este documento foi criado automaticamente para não atrapalhar o processo de certificação dos membros que já possuíam a ata e Termo de Compromisso enviados por Correio à OPAC.  Porém, ainda é necessário o envio do documento.  Por favor, utilize o formulário abaixo:</p>
+  <% end %>
+  <% if document.only_video? %>
+    <%= render 'application/send_documents/forms/only_video', id: document.id %>
+  <% elsif document.only_pdf? %>
+    <%= render 'application/send_documents/forms/only_pdf', id: document.id %>
+  <% else %>
+    <%= render 'application/send_documents/forms/pdf_or_video', id: document.id %>
+  <% end %>
+
+</div>
+<%= render 'application/send_documents/forms/show_history', sended: sended %>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.resend_<%= document.id %>').hide();
+
+    $('.resend_btn_<%= document.id %>').click(function(){
+      $('.resend_<%= document.id %>').show();
+    });
+
+    $('.cancel_resend_btn_<%= document.id %>').click(function(){
+      $('.resend_<%= document.id %>').hide();
+    });
+});
+</script>

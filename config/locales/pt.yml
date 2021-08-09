@@ -1,0 +1,185 @@
+---
+pt:
+  "false": Não
+  "true": Sim
+
+  accepted: Aceito
+  pending: Enviado para aprovação
+  missing: Necessário o envio
+  change_request: Recusado pelo OPAC, necessário o re-envio
+  expirated: Expirada, necessário o envio de uma nova
+
+  views:
+    pagination:
+      first: "&laquo; Primeira"
+      last: "Última &raquo"
+      previous: "&lsquo; Anterior"
+      next: "Próxima &rsaquo;"
+      truncate: "..."
+
+  user_sessions:
+    new:
+      title: 'Login'
+      sign_up: 'Cadastre-se'
+  links:
+    back: Voltar
+    edit: Editar
+  users:
+    new:
+      title: Cadastro
+      edit: Editar cadastro
+    show:
+      title: "Perfil: %{user_nae}"
+      edit: "Editar Perfil"
+      location: "Localização: %{location}"
+      bio: "Bio: %{bio}"
+  rooms:
+    new:
+      title: Novo Quarto
+      edit: Editar quarto
+    show:
+      edit: 'Editar'
+      back: 'Voltar'
+
+  activerecord:
+    models:
+      document: Documento
+      certificate_group: Certificados para grupo
+      farmer_group_change:  Troca de grupo para agricultor
+      unity_suspension_type: Tipo de suspensão para unidade de produção
+      suspension_type: Tipo de suspensão para agricultor
+      production_unity_farmer: Vinculo de agricultor em unidade de producao
+      core: Núcleo
+      core_coordinator: "Coordenador da comissão do núcleo"
+      room: Quarto
+      farmer: Agricultor
+      user_session: Sessão
+      group_type: Tipo de grupo
+      farmer_family: Membro da familia
+      set_suplente: Alteração
+      dac: D.A.C
+      dap: D.A.P
+      product_category: Categoria de produto
+      product: Produto
+      scope: Escopo
+      farmer_suspension:  Suspensão
+      unity_suspension:  Suspensão
+      production_unity:  Unidade
+    errors:
+      messages:
+        invalid_login: 'Usuário ou senha inválidos'
+    attributes:
+      document:
+        name: Nome
+        upload_type: Tipo de envio
+        subject: Vinculado ao
+        description: Descrição
+        required_for_certificate: Necessário para gerar certificado?
+
+      certificate_group:
+        meeting_number: Numero da reunião
+        meeting_page: Pagina do livro ata
+        meeting_date: Data de emissão do certificado
+        group_id: Grupo
+      farmer_group_change:
+        group_id: Grupo
+      unity_suspension:
+        description:  Descrição*
+        suspension_date:  Data da suspensão*
+      unity_suspension_type:
+        name: Nome*
+      farmer_suspension:
+        description: Descrição
+        suspension_date:  Data da suspensão
+      suspension_type:
+        name: Nome
+      production_unity_farmer:
+        farmer_id: Agricultor a ser vinculado
+      scope:
+        name: Nome
+        acronym: Sigla
+        scope_type: Tipo de escopo
+      acronym:
+        sign: Sigla
+        full_name: Nome completo
+      product:
+        name: Nome
+        product_category_id: Categoria do produto
+      core_coordinator:
+        name: Nome
+        phone: Telefone
+        email: E-mail
+      dap:
+        validity: Validade
+        emission_date: Data de emissão
+        dap_number: Número do D.A.P
+      dac:
+        dac_date: Data
+        sampling: Visitado #Mudou.  Os que não estão marcados, agora é por amostragem
+        farmer: Agricultor
+      set_suplente:
+        farmer_id: agricultor
+        set_type: Tipo
+        description: Descrição
+      farmer_family:
+        name: Nome
+        gender: Gênero
+        birthday: Data de nascimento
+      scope_product:
+        product_id: "Produto:"
+      core:
+        password: Senha
+        password_confirmation: 'Confirmação da senha'
+        name: Nome
+        total_power: Poder Total
+        state_id: Estado
+        email: E-mail
+        phone: Telefone
+        sig_org_access:  Acesso ao sig org?
+        inactive_certificate: Inativar geração de certificado para esse núcleo
+      group:
+        email: E-mail
+        phone: Telefone
+        password: Senha
+        password_confirmation: Confirmação da senha
+        name: Nome
+        core_id: Núcleo
+        group_type_id: Tipo de grupo
+      group_type:
+        description: 'Descrição'
+      farmer:
+        spouse: Cônjuge ou 2º membro titular
+        spouse_gender: Gênero do Cônjuge
+        spouse_birthday: Data de aniversário do Cônjuge
+        spouse_cpf: CPF do Cônjuge ou 2º membro titular
+        name: Nome do titular*
+        number: 'CPF ou CNPJ*'
+        has_documents: "Tem os documentos"
+        address: "Logradouro*"
+        neighborhood: "Bairro*"
+        city_id: "Município*"
+        phone_number: "Telefone"
+        cell_phone: "Celular"
+        email: "E-mail"
+        suspended: "Suspenso"
+        farmer_type: "Tipo de agricultor*"
+        number_type: "Tipo de pessoa*"
+        gender: Gênero
+        birthday: Data de nascimento
+        contract_of_adhesion: 'Termo de adesão físico'
+      product_category:
+        name: Nome
+        scope_id: Escopo
+        lat_type: Latitude
+      document_visualization:
+        expire_at: Data de validade
+
+  helpers:
+    submit:
+      user_session:
+        create: 'Entrar'
+      document_visualization_session:
+        create: 'Entrar'
+  flash:
+    notice:
+      signed_in: 'Logado com sucesso'

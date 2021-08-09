@@ -1,0 +1,4 @@
+<%= simple_form_for @group, url: group_change_core_index_path(@group), method: :post do |f| %>
+  <%= f.association :core, label: 'Novo Núcleo', collection: Core.where(state: @group.core.state).where.not(id: @group.core.id), include_blank: false %>
+  <%= f.submit 'Mudar Núcleo', class: 'button', data: {"disable-with" => "Salvando..."} %>
+<% end %>

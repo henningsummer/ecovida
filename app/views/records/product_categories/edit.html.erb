@@ -1,0 +1,8 @@
+<%= link_to 'Pagina Inícial', root_path %> - <%= link_to 'Cadastros', records_path %> - <%= link_to "Listando categorias de produtos", records_product_categories_path  %> - Editando <%= @product_category.name %>
+
+<h1>Editando categoria de produto</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Mostrar', records_product_category_path(@product_category) %> |
+<%= link_to 'Voltar', records_product_categories_path %>

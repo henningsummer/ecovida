@@ -1,0 +1,19 @@
+<%=
+  create_breadcumbs([
+    { url: document_access_visualizations_core_url, text: 'Núcleos' },
+    { url: nil, text: 'Grupos' }
+  ])
+%>
+<h1>Grupos do núcleo <%= "#{@core.name} - #{@core.state.uf}" %></h1>
+<br>
+<div class="row">
+<% @groups.each do |group| %>
+      <div class="thumbnail col-md-7">
+        <i class="glyphicon glyphicon-folder-close"></i>
+        <%= link_to "#{group.name}", {controller: 'document_access_visualizations', action: 'documents_farmers_and_production_unities', group_id: group.id} %>
+      </div>
+<% end %>
+</div>
+<br>
+
+<%= link_to 'Voltar', document_access_visualizations_core_url %>

@@ -1,0 +1,28 @@
+<h3>Este documento já foi enviado, e depende da aprovação da <strong>OPAC</strong></h3>
+<p>Para visualizar o documento, clique aqui: <%= link_to @dac_document.file.file.filename, @dac_document.file.url %></p>
+
+
+<% if require_current_or_admin(@group.core.id, true, false) %>
+<div class = "resend_<%= @dac_document.try(:id) %>_accepted">
+  <button class = "resend_btn_<%= @dac_document.id %> btn btn-primary">Re-enviar documento</button>
+</div>
+<div class = "resend_<%= @dac_document.try(:id) %>">
+  <%= render 'groups/send_documents/dac_forms/form' %>
+  <a href="#" class = "cancel_resend_btn_<%= @dac_document.id %>">Cancelar re-envio</href>
+</div>
+
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.resend_<%= @dac_document.id %>').hide();
+
+    $('.resend_btn_<%= @dac_document.id %>').click(function(){
+      $('.resend_<%= @dac_document.id %>').show();
+    });
+
+    $('.cancel_resend_btn_<%= @dac_document.id %>').click(function(){
+      $('.resend_<%= @dac_document.id %>').hide();
+    });
+});
+</script>

@@ -1,0 +1,20 @@
+<ul>
+  <% if farmer_analysis.suspended %><li>Membro suspenso</li> <% end %>
+  <% unless farmer_analysis.dac_valid %><li>Pendências com a D.A.C</li><% end %>
+  <% if farmer_analysis.missing.any? %>
+    <%= render partial: 'application/missing_documents/documents', locals: { documents: farmer_analysis.missing } %>
+  <% end %>
+  <% if farmer_analysis.production_unities.count == 0 %>
+    <li>Não há unidades de produção para serem certificadas</li>
+  <% else %>
+    <% unless farmer_analysis.production_unities.select { |pu| pu.can_receive_certificate }.any? %>
+      <li>Pendências nas unidade de produção:</li>
+      <ul>
+        <% farmer_analysis.production_unities.select { |pu| !pu.can_receive_certificate }.each do |production_unity_analysis| %>
+        <li>Pendência na <%= production_unity_analysis.subject.name %></li>
+        <%= render partial: 'application/missing_documents/production_unity', locals: { production_unity_analysis: production_unity_analysis } %>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+</ul>

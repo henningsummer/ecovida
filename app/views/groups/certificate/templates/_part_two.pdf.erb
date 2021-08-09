@@ -1,0 +1,55 @@
+<p style = "font-size: 20px" align = "left"><b>&nbsp &nbsp &nbsp Validade deste certificado: UM ANO.</b></p>
+<p style = "font-size: 20px" align = "left">&nbsp &nbsp &nbsp <%= "#{certificate.certificate_group.city.name} - #{certificate.certificate_group.city.state.uf}, " %><%= l certificate.certificate_group.meeting_date, format: :long %></p>.
+<br>
+<p>__________________________________________________________________________</p>
+<p><i><%= certificate.certificate_group.coordinate_name %></i></p>
+<p><b>Coordenador(a) da Comissão de Ética do Núcleo</b></p>
+</div>
+
+</div>
+</div>
+<div class = "page">
+<div class = "page_two page_border">
+<div align = "center">
+  <div class="logo">
+    <%= wicked_pdf_image_tag 'logo.png' %>
+  </div>
+  <div class = "logo_title">
+    <br><br>
+    <h1>ASSOCIAÇÃO ECOVIDA DE CERTIFICAÇÃO PARTICIPATIVA</h1>
+    <h4>OPAC cadastrada no MAPA sob o Nº 05</h4>
+    <h5>CNPJ: 04.371.122/0001-45</h5>
+  </div>
+  <div class = "clearfix"></div>
+  <p align = "left" class = "certificate_text_2"><b>Certificado Nº:</b> <%= certificate.certificate_id %>/<%= certificate.certificate_group.meeting_date.year %></p>
+        <p align = "left" class = "certificate_text_2"><b>Data da ultima avaliação de conformidade pelo núcleo:</b> Visita à <%= certificate.certificate_subject_name %> <u><%= certificate.dac_date.strftime("%d/%m/%Y") %></u></p>
+        <% if certificate.certificate_type != "4" %>
+        <p align = "left" class = "certificate_text_2"><b>Outros(as) integrantes da família vinculados(as) a essa unidade de produção:</b> <% if certificate.certificate_families.count > 0 %><% certificate.certificate_families.each do |family| %> <%= "#{family.name}; "%> <% end %> <% else %> Não há <% end %></p>
+        <% end %>
+        <% if certificate.certificate_addresses.any? %>
+           <%= certificate.addresses_text %>
+        <% end %>
+        <% if certificate.scopes.any? %>
+          <p align = "left" class = "certificate_text_2"><b><%= pluralize_without_count(certificate.scopes.count, 'Escopo', 'Escopos') %>:</b> <%= certificate.scopes.join('; ') %></p>
+        <% end %>
+        <h3 align="left" class = "certificate_text_2">Relação de produtos:</h3>
+        <% organic_count = certificate.certificate_products.where(contain_organic: true).order(:name).count %>
+        <% if organic_count > 0 %>
+          <h5 align="Left" class = "obs_text">* <%= pluralize_without_count(organic_count, 'Produto', 'Produtos') %> com ingredientes orgânicos</h5>
+        <% end %>
+      </div>
+      <table style ="width:100%; ">
+        <% product_number = 1 %>
+        <tr style="font-size: 10px;">
+          <td>
+            <ul class = "container">
+              <% certificate.certificate_products.order(:name).each do |product| %>
+                <li><%= "#{product_number}) #{ "*" if product.contain_organic} #{product.name}" %></li>
+                <% product_number+=1 %>
+              <% end %>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>

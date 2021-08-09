@@ -1,0 +1,9 @@
+<%= link_to 'Pagina ínicial', root_path %> - <%= link_to 'Listando grupos',
+groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - Alterar núcleo
+
+<h2>Trocando o grupo <%= @group.name %> do núcleo <%= @group.core.name %> para outro núcleo</h2>
+<p>Você está prestes à alterar o grupo de núcleo, está é uma ação administrativa sem volta.</p>
+<p>Os códigos de todos agricultores irão mudar para se adequar ao novo núcleo.</p>
+<p>Os códigos anteriores não serão mais usados.  Os certificados gerados antes da mudança de núcleo ainda terão o código antigo.</p>
+
+<%= render "form" %>

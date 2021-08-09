@@ -1,0 +1,13 @@
+<%= simple_form_for([:records, @document]) do |f| %>
+  <%= show_errors(@document) %>
+
+  <%= f.input :name %>
+  <%= f.input :description %>
+  <%= f.input :upload_type, collection: DocumentUploadTypes.to_a, include_blank: false %>
+  <%= f.input :subject, collection: DocumentSubjects.to_a, include_blank: false %>
+  <%= f.input :status, collection: Status.to_a, include_blank: false %>
+  <%= f.input :required_for_certificate, collection: SimpleQuestion.to_a, as: :radio_buttons %>
+  <%= f.submit  data: {"disable-with" => "Salvando..."}, class: 'btn btn-primary' %>
+
+<% end %>
+<br>

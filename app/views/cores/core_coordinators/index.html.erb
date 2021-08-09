@@ -1,0 +1,45 @@
+<%= link_to 'Pagina ínicial - ', root_path %> <%= link_to "Núcleo: #{@core.name} - ", @core if user_type == 4 %> Listando coordenadores
+
+
+<% if @core_coordinators.count != 0 %>
+
+<h1>Listando coordenadores da comissão de Ética de <%= @core.name %></h1>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>E-mail</th>
+      <th>Telefone</th>
+      <th>Criado à</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @core_coordinators.each do |core_coordinator| %>
+      <tr>
+        <td><%= core_coordinator.name %></td>
+        <td><%= core_coordinator.email %></td>
+        <td><%= core_coordinator.phone %></td>
+        <td><%= l core_coordinator.created_at %></td>
+        <% if !core_coordinator.current %>
+          <td><%= link_to 'Tornar Atual', update_current_core_core_coordinator_path(@core, core_coordinator),
+                                          method: :patch,
+                                          data: { confirm: "Você realmente deseja tornar #{core_coordinator.name} o novo coordenador do núcleo?" } %></td>
+        <% end %>
+        <td><%= link_to 'Editar', edit_core_core_coordinator_path(@core, core_coordinator) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @core_coordinators %>
+
+<% else %>
+  <h3>Não há coordenadores para <%= @core.name %></h3>
+<% end %>
+
+<br>
+
+<%= link_to 'Novo coordenador', new_core_core_coordinator_path(@core), class: 'btn btn-default' %>

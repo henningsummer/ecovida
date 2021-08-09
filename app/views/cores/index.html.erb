@@ -1,0 +1,45 @@
+<%= link_to 'Pagina ínicial', root_path %> - Listando núcleos
+
+
+
+<% if @cores.count != 0 or (not @query.nil? or not @state.nil?) %>
+
+<h1>Listando núcleos</h1>
+
+  <%= render 'search' %>
+
+  <br>
+
+  <table class = "table ">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Login</th>
+        <th>Poder total</th>
+        <th colspan="2">Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @cores.each do |core| %>
+        <tr>
+          <td><%= link_to "#{core.name} - #{core.state.uf}", core %></td>
+          <td><%= core.login %></td>
+          <td><%= core.total_power ? 'Sim' : 'Não' %></td>
+          <td><%= link_to 'Ver mais', core, class: "btn btn-default btn-sm" %></td>
+          <td><%= link_to 'Editar', edit_core_path(core), class: "btn btn-default btn-sm" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <br>
+
+  <%= paginate @cores %>
+
+<% else %>
+  <h3>Não há nucléos cadastrados ainda.</h3>
+<% end %>
+
+<br>
+<%= link_to 'Novo núcleo', new_core_path, class: 'btn btn-default new_core' %>

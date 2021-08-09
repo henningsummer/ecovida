@@ -1,0 +1,37 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="documents-modal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+        <h4 class="modal-title">Histórico do documento</h4>
+      </div>
+      <div class="modal-body">
+        <div class="panel-body">
+
+          <table class = "table ">
+            <thead>
+              <tr>
+                <th>Arquivo ou url</th>
+                <th>Data de criação</th>
+                <th>Data de aprovação</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% document.document_sended_histories.each do |document_history| %>
+              <tr>
+                <td><%= document_history.file.file ? link_to(document_history.file.filename, document_history.file.url, target: :_blank) : link_to(document_history.url, document_history.url, target: :_blank) %></td>
+                <td><%= formated_datetime(document_history.created_at) %></td>
+                <td><%= formated_datetime(document_history.approved_at) %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Página inicial' },
+    { url: view_reports_view_reports_path, text: 'Relatórios Dinâmicos' },
+    { url: nil, text: 'Relatórios de produtos' }
+  ])
+%>
+
+
+<h2>Relatório de produtos</h2>
+
+<fieldset>
+  <legend>Filtros</legend>
+
+  <%= form_for :report, url: view_reports_product_reports_path, method: :get do |f| %>
+    <div class = 'form-group'>
+      <%= f.select :product_id, Product.all.order(:name).map { |product| [product.name, product.id] }, { include_blank: 'Todos os produtos.', selected: params[:report].try(:[], :product_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.select :scope_id, Scope.all.order(:name).map { |product| [product.name, product.id] }, { include_blank: 'Todos os escopos.', selected: params[:report].try(:[], :scope_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.select :state_id, State.all.order(:uf).map { |state| [state.uf, state.id] }, { include_blank: 'Todos os estados.', selected: params[:report].try(:[], :state_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.select :city_id, City.all.order(:name).map { |city| [city.name, city.id] }, { include_blank: 'Todas as cidades.', selected: params[:report].try(:[], :city_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.select :core_id, Core.all.order(:name).map { |core| [core.name, core.id] }, { include_blank: 'Todos os núcleos.', selected: params[:report].try(:[], :core_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.select :group_id, Group.all.order(:name).map { |group| [group.name, group.id] }, { include_blank: 'Todos os grupos.', selected: params[:report].try(:[], :group_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = "row">
+      <div class = "col-md-3">
+        <p>Criado a partir de: </p>
+        <%= f.text_field :created_at_gte, class: "form-control form_date", value: params[:report].try(:[], :created_at_gte) %>
+      </div>
+
+      <div class = "col-md-3">
+        <p>Criado até: </p>
+        <%= f.text_field :created_at_lte, class: "form-control form_date", value: params[:report].try(:[], :created_at_lte) %>
+      </div>
+    </div>
+    <br />
+    <br />
+    <%= f.submit :pesquisar, class: 'btn btn-default' %>
+  <% end %>
+  <br />
+</fieldset>
+
+
+<% if @products[:count] > 0 %>
+  <h2><%= @products[:count] %> produtos encontrados na sua busca.</h2>
+  <%= paginate @products[:products] %>
+
+  <table class = "table">
+    <tr>
+      <th>Produto</th>
+      <th>Escopo</th>
+      <th>Propriedades</th>
+    </tr>
+      <% @products[:products].each do |product| %>
+        <tr>
+          <td><%= product.name %></td>
+          <td><%= product.product_category.scope.name %></td>
+          <td>
+            <% @products[:production_unities][product.id][0].each do |pu| %>
+              <%= link_to pu.name, [pu.group, pu] %>;
+            <% end %>
+          </td>
+        </tr>
+    <% end %>
+    </table>
+<% else %>
+  Não há produtos a serem exibidos.
+<% end %>

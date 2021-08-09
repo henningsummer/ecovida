@@ -1,0 +1,36 @@
+<p><%= link_to 'Ínicio', root_path %> -
+  <%= link_to 'Cadastros', records_path %> -
+  Listando tipos de suspensão
+</p>
+
+<% if @suspension_types.count != 0 %>
+<h1>Listando tipos de suspensão para agricultores</h1>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @suspension_types.each do |suspension_type| %>
+      <tr>
+        <td><%= suspension_type.name %></td>
+        <td><%= link_to 'Mostrar', [:records, suspension_type], class: 'btn btn-default btn-sm' %></td>
+        <td><%= link_to 'Editar', edit_records_suspension_type_path(suspension_type), class: 'btn btn-default btn-sm' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= paginate @suspension_types %>
+
+<% else %>
+  <h3>Nenhum tipo de suspensão cadastrado ainda</h3>
+<% end %>
+
+<%= link_to 'Novo tipo de suspensão', new_records_suspension_type_path, class: 'btn btn-default' %>

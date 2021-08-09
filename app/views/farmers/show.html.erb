@@ -1,0 +1,249 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - <%= link_to 'Agricultores', group_farmers_path %> - <%= @farmer.name %>
+
+<% if @farmer.is_suspended? %>
+  <div class = "alert alert-danger">
+    <h3>Atenção.</h3>
+    <p>Este agricultor está suspenso.  Para conferir os motivos, <%= link_to "Clique aqui", group_farmer_farmer_suspension_path(@group, @farmer, @farmer.farmer_suspensions.last) %></h3></p>
+    <p>Cuide antes de adicionar, editar ou remover qualquer informação deste agricultor.</p>
+  </div>
+<% end %>
+
+<h2><%= @farmer.name %></h2>
+<div class = "row">
+  <div class = "col-md-6">
+    <div class = "panel panel-default">
+      <div class = "panel-heading"><h3 class = "panel-title">Informações básicas</h3></div>
+      <div class = "panel-body">
+        <p>
+          <strong>Código do agricultor:</strong>
+          <%= @farmer.farmer_code %>
+        </p>
+
+        <p><strong>Documentos em dia:</strong> <%= @farmer.documents_ok? ? "Sim" : "Não" %></p>
+        <% can_have_certificate = @farmer.can_have_certificate? %>
+        <p><strong>Pode ter certificado de unidade de produção:</strong> <%= t(can_have_certificate.to_s) %> <%= link_to('Mostrar Pendências', '#', class: 'btn-pendences') unless can_have_certificate  %></p>
+        <div class = "pendences">
+          <%= render partial: 'application/missing_documents/farmer', locals: { farmer_analysis: @farmer.farmer_document_analysis } %>
+        </div>
+        <% if @farmer.agribusiness.count > 0 %>
+          <p><strong>Pode ter certificado de agroindustria: </strong> <%= t(@farmer.farmer_document_analysis.can_generate_agribusiness.to_s) %></p>
+        <% end %>
+        <% if require_current_or_admin(@group.core.id, true, true) %>
+          <p>
+            <strong> Status no sig.org: </strong>
+            <%= raw(@farmer.sig_org_status) %> <% if @farmer.sig_org_status != "Atualizado" %>
+              <%= link_to "Marcar como atualizado no SigOrg", group_farmer_set_updated_path(@group, @farmer), method: :post, data: {:confirm => "Realmente deseja marcar como atualizado no SigOrg?"} %>
+
+            <% end %>
+          </p>
+        <% end %>
+        <p>
+          <strong>D.A.C: </strong>
+          <% if @farmer.dac_due_date %>
+            <%= @farmer.dac_due_date < Time.now() + 365 ? "Vencido (Venceu #{l @farmer.dac_due_date}" : "Em dia (Vence: #{l @farmer.dac_due_date}" %>)
+          <% else %>
+            Nenhum D.A.C cadastrado ainda.
+            <% if require_current_or_admin(@group.core.id, true) and user_type >= 3 #Admin, dono e poder total %>
+              Para cadastrar, <%= link_to 'Clique aqui', new_group_farmer_dac_path(@group, @farmer) %>
+            <% end %>
+          <% end %>
+        </p>
+
+        <p>
+          <strong>D.A.P: </strong>
+          <% if @farmer.dap_due_date %>
+            <%= @farmer.dap_due_date < Time.now() ? "Vencido (Venceu #{l @farmer.dap_due_date}" : "Em dia (Vence: #{l @farmer.dap_due_date}" %>)
+          <% else %>
+            Nenhum D.A.P cadastrado ainda.
+            <% if require_current_or_admin(@group.core.id, true) and user_type >= 3 #Admin, dono e poder total %>
+              Para cadastrar, <%= link_to 'Clique aqui', new_group_farmer_dap_path(@group, @farmer) %>
+            <% end %>
+          <% end %>
+        </p>
+
+        <div class = "infos">
+          <% if @farmer.has_spouse? %>
+            <p>
+              <strong>Cônjuge \ 2º titular:</strong>
+              <%= @farmer.spouse %>
+            </p>
+            <p>
+              <strong>CPF do Cônjuge:</strong>
+              <%= @farmer.spouse_cpf %>
+            </p>
+            <% if @farmer.spouse_gender %>
+              <p>
+                <strong>Gênero do Cônjuge:</strong>
+                <%= @farmer.spouse_gender_humanize %>
+              </p>
+            <% end %>
+
+            <% if @farmer.spouse_birthday %>
+              <p>
+                <strong>Data de nascimento do Cônjuge:</strong>
+                <%= l @farmer.spouse_birthday %>
+              </p>
+            <% end %>
+          <% end %>
+          <p>
+            <strong>Gênero:</strong>
+            <%= @farmer.gender_humanize %>
+          </p>
+          <p>
+            <strong>Data de nascimento:</strong>
+            <%= l @farmer.birthday if @farmer.birthday %>
+          </p>
+          <p>
+            <strong>RG:</strong>
+            <%= @farmer.rg %>
+          </p>
+          <p>
+            <strong>Termo de adesão físico:</strong>
+            <%= t @farmer.contract_of_adhesion %>
+          </p>
+          <p>
+            <strong><%= @farmer.number_type == 1 ? "CPF" : "CNPJ" %>:</strong>
+            <%= @farmer.number %>
+          </p>
+
+          <p>
+            <strong>Endereço:</strong>
+            <%= @farmer.address %>
+          </p>
+
+          <p>
+            <strong>Bairro:</strong>
+            <%= @farmer.neighborhood %>
+          </p>
+
+          <p>
+            <strong>Município:</strong>
+            <%= @farmer.city.name %>
+          </p>
+
+          <p>
+            <strong>Telefone:</strong>
+            <%= @farmer.phone_number %>
+          </p>
+
+          <p>
+            <strong>Celular:</strong>
+            <%= @farmer.cell_phone %>
+          </p>
+
+          <p>
+            <strong>Email:</strong>
+            <%= link_to @farmer.email, "mailto:#{@farmer.email}" %>
+          </p>
+
+          <p>
+            <strong>Grupo:</strong>
+            <%= link_to @farmer.group.name, @farmer.group %>
+          </p>
+
+          <p>
+            <strong>Suspenso:</strong>
+            <%= @farmer.is_suspended? ? 'Sim' : 'Não' %>
+          </p>
+
+          <p>
+            <strong>Lembrete:</strong>
+            <%= @farmer.lembrete %>
+          </p>
+
+          <p>
+            <strong>Última modificação:</strong>
+            <%= l @farmer.updated_at %>
+          </p>
+
+          <p>
+            <strong>Último certificado gerado em:</strong>
+            <% if @last_certificate %>
+              <%= l @last_certificate.try(:certificate).try(:certificate_group).try(:meeting_date) %>
+            <% else %>
+              Não há.
+            <% end %>
+          </p>
+
+        </div>
+
+        <a href = "#" class = "showhide btn btn-default">Mostrar todas informações</a>
+        <%= link_to 'Editar', edit_group_farmer_path(@group, @farmer), class: "btn btn-default" if require_current_or_admin(@group.core.id, true)
+        %>
+      </div>
+    </div>
+  </div> <!-- fim col-->
+  <div class = "col-md-6">
+    <div class = "panel panel-primary">
+      <div class = "panel-heading"><h3 class = "panel-title">Ações</h3></div>
+
+      <%= link_to t("modules.farmer_families.manege_when_#{@farmer.number_type}"), group_farmer_farmer_families_path(@group, @farmer), class: "list-group-item"%>
+      <%= link_to "Gerenciar D.A.Cs", group_farmer_dacs_path(@group, @farmer), class: "list-group-item" %>
+      <%= link_to 'Gerenciar D.A.Ps', group_farmer_daps_path(@group, @farmer), class: "list-group-item" %>
+      <%= link_to 'Gerenciar suspensões', group_farmer_farmer_suspensions_path(@group, @farmer), class: "list-group-item" if require_current_or_admin(@group.core.id, true) %>
+      <%= link_to 'Mudanças de grupo', group_farmer_farmer_group_changes_path(@group, @farmer), class: 'list-group-item' if require_current_or_admin(@group.core.id, true) %>
+      <%= link_to 'Ver certificados', group_farmer_certificates_path(@group, @farmer), class: 'list-group-item' if require_current_or_admin(@group.core.id, true) %>
+      <%= link_to 'Visualizar ou enviar documentos', group_farmer_send_documents_path(@group, @farmer), class: 'list-group-item' %>
+
+      <% if user_type == 4 %>
+        <% if not @farmer.is_suspended? %>
+          <%= link_to 'Suspender', new_group_farmer_farmer_suspension_path(@group, @farmer), class: "list-group-item list-group-item-danger" %>
+        <% else %>
+          <%= link_to 'Remover suspensão', group_farmer_remove_suspension_path(@group, @farmer), class: "list-group-item list-group-item-success", method: :post, data: {:confirm => "Deseja remover mesmo a suspensão?"} %>
+        <% end %>
+        <%= link_to 'Excluir', group_farmer_path(@group, @farmer), class: 'list-group-item list-group-item-danger', method: :delete, data: {confirm: 'Deseja mesmo deletar o Agricultor?  Todas as suas propriedades serão excluídas também.'} %>
+      <% end %>
+    </div>
+  </div>
+</div> <!-- row -->
+
+
+<% can_see = (require_current_or_admin(@group.core.id, true) or user_type == 1) %>
+
+<% if @farmer.production_unity_farmers.count != 0 %>
+  <% if can_see %>
+
+    <h3>Unidades de produção e agroindustrias</h3>
+    <table class = "table">
+      <tr>
+        <th>Nome</th>
+        <th>É o Responsável? <th>
+      </tr>
+      <% @farmer.production_unity_farmers.each do |production_unity_farmer| %>
+        <td><%= link_to production_unity_farmer.production_unity.name, [@group, production_unity_farmer.production_unity]  %> <%= "(Suspenso !!!)" if production_unity_farmer.production_unity.is_suspended? %></td>
+
+        <td><%= production_unity_farmer.production_unity.responsible.id == @farmer.id ? "Sim" : "Não" %></td>
+        <tr>
+      <% end %>
+    </table>
+  <% end #Fim precisa ser admin ou core ou ser o grupo %>
+<% else %>
+  <h3>Este agricultor não está vinculado a nenhuma unidade de produção</h3>
+<% end %>
+<% if can_see %>
+  <%= link_to "Nova unidade de produção para #{@farmer.name}" ,new_group_production_unity_path(@group, farmer_id: @farmer.id), class: "btn btn-default" %><br>
+
+  <br>
+  <p>Para vincular este agricultor há uma outra unidade de produção, vá até a pagina de listar unidades de produção do grupo, escolha a unidade de produção que você deseja vinculá-lo e clique em "Vincular outro agricultor".  Você pode ir para listagem de unidades de produção <%= link_to "Clicando aqui", group_production_unities_path(@group) %>.</p>
+  <br>
+<% end %>
+<%= link_to 'Voltar', group_farmers_path %>
+
+<script type = "text/javascript">
+ $('document').ready(function(){
+
+     var showing = false;
+     $('.pendences').hide();
+     $('.btn-pendences').click(function(){
+         if(showing == false){
+             $('.pendences').show();
+             $('.btn-pendences').html('Ocultar Pendências');
+             showing = true;
+         }else{
+             $('.pendences').hide();
+             $('.btn-pendences').html('Mostrar Pendências');
+             showing = false;
+         }
+     });
+ });
+</script>

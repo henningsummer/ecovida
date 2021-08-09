@@ -1,0 +1,316 @@
+== 20150408113358 CreateAdmins: migrating =====================================
+-- create_table(:admins)
+   -> 0.0262s
+== 20150408113358 CreateAdmins: migrated (0.0263s) ============================
+
+== 20150408124539 CreateStates: migrating =====================================
+-- create_table(:states)
+   -> 0.0092s
+== 20150408124539 CreateStates: migrated (0.0093s) ============================
+
+== 20150408124550 CreateCities: migrating =====================================
+-- create_table(:cities)
+   -> 0.0273s
+== 20150408124550 CreateCities: migrated (0.0273s) ============================
+
+== 20150408124706 CreateCores: migrating ======================================
+-- create_table(:cores)
+   -> 0.0146s
+== 20150408124706 CreateCores: migrated (0.0147s) =============================
+
+== 20150408125431 CreateGroups: migrating =====================================
+-- create_table(:groups)
+   -> 0.0160s
+== 20150408125431 CreateGroups: migrated (0.0160s) ============================
+
+== 20150408131254 AddStateToCore: migrating ===================================
+-- add_reference(:cores, :state, {:index=>true, :foreign_key=>true})
+   -> 0.0078s
+== 20150408131254 AddStateToCore: migrated (0.0079s) ==========================
+
+== 20150417121528 CreateFarmers: migrating ====================================
+-- create_table(:farmers)
+   -> 0.0221s
+== 20150417121528 CreateFarmers: migrated (0.0222s) ===========================
+
+== 20150501182059 AddFarmerCodeToFarmer: migrating ============================
+-- add_column(:farmers, :farmer_code, :string)
+   -> 0.0007s
+== 20150501182059 AddFarmerCodeToFarmer: migrated (0.0008s) ===================
+
+== 20150502194918 AddColumnsToFarmer: migrating ===============================
+-- add_column(:farmers, :em_ata, :boolean)
+   -> 0.0007s
+-- add_column(:farmers, :termo_compromisso, :boolean)
+   -> 0.0004s
+== 20150502194918 AddColumnsToFarmer: migrated (0.0012s) ======================
+
+== 20150503001833 RemoveHasDocumentsFromFarmer: migrating =====================
+-- remove_column(:farmers, :has_documents)
+   -> 0.0006s
+== 20150503001833 RemoveHasDocumentsFromFarmer: migrated (0.0007s) ============
+
+== 20150503171917 AddTitularESuplenteToGroup: migrating =======================
+-- add_column(:groups, :titular_id, :integer)
+   -> 0.0007s
+-- add_column(:groups, :suplente_id, :integer)
+   -> 0.0004s
+== 20150503171917 AddTitularESuplenteToGroup: migrated (0.0012s) ==============
+
+== 20150504024334 AddLembreteToFarmer: migrating ==============================
+-- add_column(:farmers, :lembrete, :text)
+   -> 0.0005s
+== 20150504024334 AddLembreteToFarmer: migrated (0.0006s) =====================
+
+== 20150504221356 CreateGroupTypes: migrating =================================
+-- create_table(:group_types)
+   -> 0.0131s
+== 20150504221356 CreateGroupTypes: migrated (0.0132s) ========================
+
+== 20150504221416 AddGroupTypeToGroup: migrating ==============================
+-- add_reference(:groups, :group_type, {:index=>true, :foreign_key=>true})
+   -> 0.0087s
+== 20150504221416 AddGroupTypeToGroup: migrated (0.0088s) =====================
+
+== 20150505191815 CreateFarmerFamilies: migrating =============================
+-- create_table(:farmer_families)
+   -> 0.0098s
+== 20150505191815 CreateFarmerFamilies: migrated (0.0098s) ====================
+
+== 20150505192354 AddFarmerToFarmerFamily: migrating ==========================
+-- add_reference(:farmer_families, :farmer, {:index=>true, :foreign_key=>true})
+   -> 0.0091s
+== 20150505192354 AddFarmerToFarmerFamily: migrated (0.0092s) =================
+
+== 20150527203439 CreateSetSuplentes: migrating ===============================
+-- create_table(:set_suplentes)
+   -> 0.0399s
+== 20150527203439 CreateSetSuplentes: migrated (0.0400s) ======================
+
+== 20150527222411 AddUserTypeAndCurrentUserToSetSuplente: migrating ===========
+-- add_column(:set_suplentes, :current_user, :integer)
+   -> 0.0007s
+-- add_column(:set_suplentes, :user_type, :integer)
+   -> 0.0004s
+== 20150527222411 AddUserTypeAndCurrentUserToSetSuplente: migrated (0.0013s) ==
+
+== 20150528195150 CreateDacs: migrating =======================================
+-- create_table(:dacs)
+   -> 0.2643s
+== 20150528195150 CreateDacs: migrated (0.2644s) ==============================
+
+== 20150528202108 RemoveColumnsFromSetSuplentes: migrating ====================
+-- remove_column(:set_suplentes, :current_user)
+   -> 0.0004s
+-- remove_column(:set_suplentes, :user_type)
+   -> 0.0003s
+== 20150528202108 RemoveColumnsFromSetSuplentes: migrated (0.0008s) ===========
+
+== 20150529164705 CreateDaps: migrating =======================================
+-- create_table(:daps)
+   -> 0.0374s
+== 20150529164705 CreateDaps: migrated (0.0375s) ==============================
+
+== 20150603115834 AddInfosToCore: migrating ===================================
+-- add_column(:cores, :email, :string)
+   -> 0.0007s
+-- add_column(:cores, :phone, :string)
+   -> 0.0005s
+== 20150603115834 AddInfosToCore: migrated (0.0013s) ==========================
+
+== 20150603115845 AddInfosToGroup: migrating ==================================
+-- add_column(:groups, :email, :string)
+   -> 0.0006s
+-- add_column(:groups, :phone, :string)
+   -> 0.0005s
+== 20150603115845 AddInfosToGroup: migrated (0.0011s) =========================
+
+== 20150603122530 AddCordenadorToCore: migrating ==============================
+-- add_column(:cores, :coordinator_name, :string)
+   -> 0.0005s
+-- add_column(:cores, :coordinator_email, :string)
+   -> 0.0004s
+-- add_column(:cores, :coordinator_phone, :string)
+   -> 0.0004s
+== 20150603122530 AddCordenadorToCore: migrated (0.0014s) =====================
+
+== 20150603223043 CreateCoreCoordinators: migrating ===========================
+-- create_table(:core_coordinators)
+   -> 0.0519s
+== 20150603223043 CreateCoreCoordinators: migrated (0.0520s) ==================
+
+== 20150609170702 CreateProductCategories: migrating ==========================
+-- create_table(:product_categories)
+   -> 0.0130s
+== 20150609170702 CreateProductCategories: migrated (0.0131s) =================
+
+== 20150609220626 CreateRecordsProducts: migrating ============================
+-- create_table(:products)
+   -> 0.0423s
+== 20150609220626 CreateRecordsProducts: migrated (0.0424s) ===================
+
+== 20150610225031 CreateAcronyms: migrating ===================================
+-- create_table(:acronyms)
+   -> 0.0252s
+== 20150610225031 CreateAcronyms: migrated (0.0253s) ==========================
+
+== 20150610225340 CreateScopes: migrating =====================================
+-- create_table(:scopes)
+   -> 0.0197s
+== 20150610225340 CreateScopes: migrated (0.0198s) ============================
+
+== 20150709170713 CreateProductionUnities: migrating ==========================
+-- create_table(:production_unities)
+   -> 0.0308s
+== 20150709170713 CreateProductionUnities: migrated (0.0308s) =================
+
+== 20150709233345 AddGroupToProductionUnity: migrating ========================
+-- add_reference(:production_unities, :group, {:index=>true, :foreign_key=>true})
+   -> 0.0151s
+== 20150709233345 AddGroupToProductionUnity: migrated (0.0152s) ===============
+
+== 20150710175626 CreateProductionUnityFarmers: migrating =====================
+-- create_table(:production_unity_farmers)
+   -> 0.0661s
+== 20150710175626 CreateProductionUnityFarmers: migrated (0.0662s) ============
+
+== 20150715000556 RemoveAcronymFromScope: migrating ===========================
+-- remove_column(:scopes, :acronym_id)
+   -> 0.0255s
+== 20150715000556 RemoveAcronymFromScope: migrated (0.0256s) ==================
+
+== 20150715000807 DropAcronym: migrating ======================================
+-- drop_table(:acronyms)
+   -> 0.0009s
+== 20150715000807 DropAcronym: migrated (0.0010s) =============================
+
+== 20150715001306 AddAcronymToScope: migrating ================================
+-- add_column(:scopes, :acronym, :string)
+   -> 0.0005s
+== 20150715001306 AddAcronymToScope: migrated (0.0006s) =======================
+
+== 20150717021251 AddNumberFromStateToCore: migrating =========================
+-- add_column(:cores, :number_from_state, :integer)
+   -> 0.0005s
+== 20150717021251 AddNumberFromStateToCore: migrated (0.0006s) ================
+
+== 20150717210151 AddScopeTypeToScope: migrating ==============================
+-- add_column(:scopes, :scope_type, :integer)
+   -> 0.0005s
+== 20150717210151 AddScopeTypeToScope: migrated (0.0006s) =====================
+
+== 20150717211212 AddTypeToProductionUnity: migrating =========================
+-- add_column(:production_unities, :scope_type, :integer)
+   -> 0.0005s
+== 20150717211212 AddTypeToProductionUnity: migrated (0.0006s) ================
+
+== 20150727010956 CreateProductScopes: migrating ==============================
+-- create_table(:product_scopes)
+   -> 0.0270s
+== 20150727010956 CreateProductScopes: migrated (0.0271s) =====================
+
+== 20150729131804 CreateProductionUnityScopes: migrating ======================
+-- create_table(:production_unity_scopes)
+   -> 0.0171s
+== 20150729131804 CreateProductionUnityScopes: migrated (0.0171s) =============
+
+== 20150804234529 CreateScopeProducts: migrating ==============================
+-- create_table(:scope_products)
+   -> 0.0290s
+== 20150804234529 CreateScopeProducts: migrated (0.0290s) =====================
+
+== 20150805001447 AddAreaToScopeProduct: migrating ============================
+-- add_column(:scope_products, :area, :float)
+   -> 0.0006s
+== 20150805001447 AddAreaToScopeProduct: migrated (0.0007s) ===================
+
+== 20150812235849 AddNewColumnsToProductionUnity: migrating ===================
+-- add_column(:production_unities, :geographic_coordinates, :string)
+   -> 0.0006s
+-- add_column(:production_unities, :total_area, :string)
+   -> 0.0004s
+-- add_column(:production_unities, :total_organic_area, :string)
+   -> 0.0003s
+-- add_column(:production_unities, :total_native_area, :string)
+   -> 0.0003s
+== 20150812235849 AddNewColumnsToProductionUnity: migrated (0.0018s) ==========
+
+== 20150814002430 AddPhoneAndEmailToProductionUnity: migrating ================
+-- add_column(:production_unities, :phone, :string)
+   -> 0.0006s
+-- add_column(:production_unities, :email, :string)
+   -> 0.0004s
+-- add_column(:production_unities, :production_type, :string)
+   -> 0.0004s
+== 20150814002430 AddPhoneAndEmailToProductionUnity: migrated (0.0016s) =======
+
+== 20150817141201 CreateSuspensionTypes: migrating ============================
+-- create_table(:suspension_types)
+   -> 0.0155s
+== 20150817141201 CreateSuspensionTypes: migrated (0.0156s) ===================
+
+== 20150818140511 CreateFarmerSuspensions: migrating ==========================
+-- create_table(:farmer_suspensions)
+   -> 0.0140s
+== 20150818140511 CreateFarmerSuspensions: migrated (0.0141s) =================
+
+== 20150818140706 CreateFarmerSuspensionReasons: migrating ====================
+-- create_table(:farmer_suspension_reasons)
+   -> 0.0177s
+== 20150818140706 CreateFarmerSuspensionReasons: migrated (0.0178s) ===========
+
+== 20150818144704 AddFarmerToFarmerSuspension: migrating ======================
+-- add_reference(:farmer_suspensions, :farmer, {:index=>true, :foreign_key=>true})
+   -> 0.0131s
+== 20150818144704 AddFarmerToFarmerSuspension: migrated (0.0132s) =============
+
+== 20150820162719 CreateUnitySuspensionTypes: migrating =======================
+-- create_table(:unity_suspension_types)
+   -> 0.0105s
+== 20150820162719 CreateUnitySuspensionTypes: migrated (0.0106s) ==============
+
+== 20150824164415 CreateUnitySuspensions: migrating ===========================
+-- create_table(:unity_suspensions)
+   -> 0.0145s
+== 20150824164415 CreateUnitySuspensions: migrated (0.0146s) ==================
+
+== 20150824193954 CreateUnitySuspensionReasons: migrating =====================
+-- create_table(:unity_suspension_reasons)
+   -> 0.0358s
+== 20150824193954 CreateUnitySuspensionReasons: migrated (0.0359s) ============
+
+== 20150824202050 AddSuspensionTypeToUnitySuspension: migrating ===============
+-- add_column(:unity_suspensions, :suspension_type, :string)
+   -> 0.0007s
+== 20150824202050 AddSuspensionTypeToUnitySuspension: migrated (0.0008s) ======
+
+== 20150831181838 CreateSigorgs: migrating ====================================
+-- create_table(:sigorgs)
+   -> 0.0225s
+== 20150831181838 CreateSigorgs: migrated (0.0225s) ===========================
+
+== 20150831182028 CreateSigorgChanges: migrating ==============================
+-- create_table(:sigorg_changes)
+   -> 0.0175s
+== 20150831182028 CreateSigorgChanges: migrated (0.0175s) =====================
+
+== 20150905165545 AddSigOrgAccessToCore: migrating ============================
+-- add_column(:cores, :sig_org_access, :boolean)
+   -> 0.0006s
+== 20150905165545 AddSigOrgAccessToCore: migrated (0.0007s) ===================
+
+== 20150905194147 AddIsProcessorToScopeProduct: migrating =====================
+-- add_column(:scope_products, :is_processor, :boolean)
+   -> 0.0017s
+== 20150905194147 AddIsProcessorToScopeProduct: migrated (0.0018s) ============
+
+== 20150919195222 AddNumberTypeToProductionUnity: migrating ===================
+-- add_column(:production_unities, :number_type, :integer)
+   -> 0.0005s
+== 20150919195222 AddNumberTypeToProductionUnity: migrated (0.0005s) ==========
+
+== 20150921020214 AddRgToFarmer: migrating ====================================
+-- add_column(:farmers, :rg, :string)
+   -> 0.0006s
+== 20150921020214 AddRgToFarmer: migrated (0.0007s) ===========================
+

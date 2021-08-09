@@ -1,0 +1,34 @@
+<%= link_to 'Pagina ínicial', root_path %> - <%= link_to 'Listando grupos',
+groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %>
+ - Listando unidades de produção
+
+<% if @production_unities.count != 0 %>
+  <h1>Listando unidades de produção de <%= @group.name %></h1>
+    <br>
+  <table class = "table">
+    <tr>
+      <th>Razão social</th>
+      <th>Nome fantasia</th>
+      <th>Responsável</th>
+    </tr>
+    <% @production_unities.each do |production_unity| %>
+    <tr>
+      <td><%=link_to production_unity.name, [@group, production_unity]%> <%= "(Suspenso !!!)" if production_unity.is_suspended? %></td>
+      <td><%=production_unity.fantasy_name%></td>
+      <td><%= link_to production_unity.responsible.name, [@group, production_unity.responsible] %></td>
+      <td></td
+
+    </tr>
+    <% end %>
+  </table>
+
+  <%= paginate @production_unities %>
+
+  <% if require_current_or_admin(@group.core.id, false) %>
+    <%= link_to "Nova unidade de produçao", new_group_production_unity_path(@group), class: "btn btn-default", data: {confirm: "É recomendável que você utilize a pagina do agricultor para criar uma unidade de produção ou agro-indústria.  Realmente deseja criar por aqui?"} %>
+  <% end %>
+
+
+<% else %>
+  <h3>Não há unidades de produção cadastradas para este grupo.</h3>
+<% end %>

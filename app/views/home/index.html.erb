@@ -1,0 +1,9 @@
+<h1>Pagina inicial</h1>
+
+<% if user_type == 4 %>
+  <%= render 'menu_adm' %>
+<% elsif user_type == 3 or user_type == 2 %>
+  <%= render 'menu_core' %>
+<% else user_type == 1 %>
+  <%= render 'menu_group' %>
+<% end %>

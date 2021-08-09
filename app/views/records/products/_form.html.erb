@@ -1,0 +1,17 @@
+<%= bootstrap_form_for([:records, @records_product]) do |f| %>
+
+    <%= show_errors(@records_product) %>
+
+    <%= f.text_field :name, autofocus: :true %>
+
+    <%= f.select :product_category_id, ProductCategory.all_products %>
+
+
+    
+    <% if @records_product.id.nil? %>
+    <%= f.submit  data: {"disable-with" => "Salvando e se preparando para retornar...."}, class: "btn btn-primary" %>
+    <% end %>
+    <%= f.submit "Salvar e voltar", data: {"disable-with" => "Salvando..."} %>
+
+<% end %>
+<br>

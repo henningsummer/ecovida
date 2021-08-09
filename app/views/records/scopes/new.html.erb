@@ -1,0 +1,11 @@
+<p><%= link_to 'Ínicio', root_path %> - 
+  <%= link_to 'Cadastros', records_path %> -
+  <%= link_to 'Listando escopos', records_scopes_path %> - 
+  Novo escopo
+</p>
+
+<h1>Novo escopo</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar', records_scopes_path %>

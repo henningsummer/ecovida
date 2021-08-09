@@ -1,0 +1,56 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@farmer.group.name}", @farmer.group %> - <%= link_to 'Agricultores', group_farmers_path(@farmer.group) %> - <%= link_to "#{@farmer.name}", [@farmer.group, @farmer] %> - Suspensões
+
+
+<% if @farmer_suspensions.count != 0 %>
+<h1>Listando suspensões e ativações de <%= @farmer.name %></h1>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Descrição</th>
+      <th>Data da suspensão \ Ativação</th>
+      <th>Tipo</th>
+      <th>Motivos da suspensão</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @farmer_suspensions.each do |farmer_suspension| %>
+      <tr>
+        <td><%= farmer_suspension.description %></td>
+        <td><%= l farmer_suspension.suspension_date %></td>
+        <td><%= farmer_suspension.suspension_type%></td>
+        <td>
+          <% if farmer_suspension.suspension_type == 'Suspensão' %>
+            <% if farmer_suspension.farmer_suspension_reasons.count != 0 %>
+              <% farmer_suspension.farmer_suspension_reasons.each do |reason| %>
+                <%= reason.suspension_type.name %> ;
+              <% end %>
+            <% else %>
+              Não foram informados motivos
+            <% end %>
+          <% end %>
+        </td>
+        <% if farmer_suspension.suspension_type == 'Suspensão' and user_type == 4 %>
+          <td><%= link_to 'Mostrar', [@group, @farmer, farmer_suspension] %></td>
+          <td><%= link_to 'Editar', edit_group_farmer_farmer_suspension_path(@group, @farmer, farmer_suspension) %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @farmer_suspensions %>
+<% else %>
+  <h3>Não há nenhuma suspensão para <%= @farmer.name %></h3>
+<% end %>
+
+<br>
+
+<% if user_type == 4 %>
+  <% if not @farmer.is_suspended? %>
+      <%= link_to "Suspender #{@farmer.name}", new_group_farmer_farmer_suspension_path(@group, @farmer), class: 'btn btn-danger' %>
+  <% else %>
+      <%= link_to "Remover Suspensão de #{@farmer.name}", group_farmer_remove_suspension_path(@group, @farmer), class: 'btn btn-success', method: :post%>
+  <% end %>
+<% end %>

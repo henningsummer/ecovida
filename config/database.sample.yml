@@ -1,0 +1,15 @@
+default: &default
+  adapter: <%= ENV["DATABASE_ADAPTER"] %>
+  encoding: <%= ENV["DATABASE_ENCODING"] %>
+  host: <%= ENV["DATABASE_HOST"] %>
+  username: <%= ENV["DATABASE_USERNAME"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
+  pool: <%= ENV["DATABASE_POOL"] %>
+
+development:
+  <<: *default
+  database: opac_development
+
+test:
+  <<: *default
+  database: opac_test

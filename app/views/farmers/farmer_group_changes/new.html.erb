@@ -1,0 +1,14 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@farmer.group.name}", @farmer.group %> - <%= link_to 'Agricultores', group_farmers_path(@farmer.group) %> - <%= link_to "#{@farmer.name}", [@farmer.group, @farmer] %> - <%= link_to 'Listando mudanças de grupo', group_farmer_farmer_group_changes_path(@group, @farmer) %> - Nova mudança
+
+
+<% if @farmer.can_receive_group_change %>
+
+<h1>Mudando o agricultor <%= @farmer.name %> de grupo</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar', group_farmer_farmer_group_changes_path(@group, @farmer) %>
+
+<% else %>
+	<p>Desculpe, mas este agricultor está vinculado a uma unidade de produção que já possuí outro agricultor.  Remove o vinculo do outro agricultor da unidade de produção, para que este agricultor possa ser trocado de grupo </p>
+<% end %>

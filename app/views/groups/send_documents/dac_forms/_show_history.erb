@@ -1,0 +1,42 @@
+<br>
+<% if @group.dac_documents.any? %>
+  <% if @group.dac_documents.where.not(id: @dac_document.try(:id) ).count >= 1 %>
+    <a href="#history-dac" class = "show_history_btn_dac">Clique aqui</a><span class = "history_status_dac"> Para mostrar o histórico.</span>
+    <div class = "show_history_dac">
+      <h4>Histórico de D.A.Cs aprovadas anteriormente: </h4>
+      <table class = "table">
+        <tr>
+          <td>Documento</td>
+          <td>Data de aprovação</td>
+          <td>Data da D.A.C</td>
+        </tr>
+
+        <% @group.dac_documents.where.not(id: @dac_document.id ).order(approved_at: :desc).each do |dh| %>
+          <tr>
+            <td><%= link_to dh.file.file.filename, dh.file.file.url, target: :_blank %></td>
+            <td><%= l(dh.approved_at, format: :long) if dh.approved_at.present? %></td>
+            <td><%= l(dh.dac_date, format: :long) %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+
+    <script type="text/javascript">
+     $(document).ready(function () {
+       $('.show_history_dac').hide();
+
+       var showing = false;
+
+       $('.show_history_btn_dac').click(function(){
+         if(showing == false){
+           showing = true;
+           $('.show_history_dac').show();
+         } else {
+           showing = false;
+           $('.show_history_dac').hide();
+         }
+       });
+     });
+    </script>
+  <% end %>
+<% end %>

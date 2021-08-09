@@ -1,0 +1,7 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - <%= link_to 'Agricultores', group_farmers_path %> - <%= link_to @farmer.name, [@group, @farmer] %> - <%= link_to "Listando membros da familia", group_farmer_farmer_families_path %> - Novo
+<h1><%= t "modules.farmer_families.new_when_#{@farmer.number_type}" %></h1>
+
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar', group_farmer_farmer_families_path %>

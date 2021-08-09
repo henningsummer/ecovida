@@ -1,0 +1,79 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - Adicionar D.A.C's para o grupo inteiro
+
+<hr>
+
+
+<%= bootstrap_form_for @group_dac, url: [@group, "group_dacs"]  do |f| %>
+  <% last_dac = @group.dac_documents.last%>
+  <% if last_dac && last_dac.dac_date%>
+    <% @group_dac.data_dac = last_dac.try(:dac_date) if last_dac.try(:dac_date) %>
+    <%= f.date_select :data_dac, label: "Data do DAC", value_method: last_dac.try(:dac_date) || Time.now.utc %>
+    <% unless @group.expirated_dac? %>
+      <p>Data retirada do ultimo documento enviado pelo grupo</p>
+      <p>Para visualizar o arquivo do documento, clique aqui: </p>
+      <%= link_to "Visualizar Arquivo: #{last_dac.file.file.filename}", last_dac.file.url, target: :_blank, class: 'btn btn-primary' %>
+      <br>
+      <br>
+    <% end %>
+  <% else %>
+  <%= f.date_select :data_dac, label: "Data do DAC" %>
+  <% end %>
+  <table class = "table">
+    <tr>
+      <th>
+        Nome do agricultor
+      </th>
+      <th>
+        Cadastrar D.A.C (<%= link_to "?", "#", data: {confirm:"Para todos agricultores que tiverem está opção marcada, será criada uma nova D.A.C com a data informada acima."} %>) -  <%= link_to "Selecionar todos", "#", class: "select-all"  %>
+      </th>
+
+      <th>
+        Visitados
+      </th>
+      <th>
+        Termo de adesão (Físico)
+      </th>
+      <th>
+        Vencimento da ultima D.A.C
+      </th>
+    </tr>
+
+    <% @group.farmers.order(:name).each do |farmer| %>
+          <%= hidden_field_tag "farmers[#{farmer.id}][here]" %>
+        <tr>
+          <td><%= link_to farmer.name, [@group, farmer] %></td>
+          <td><%= check_box_tag "farmers[#{farmer.id}][cadastrar]" %></td>
+          <td><%= check_box_tag "farmers[#{farmer.id}][amostragem]" %></td>
+          <td><%= check_box_tag "farmers[#{farmer.id}][contract_of_adhesion]", {}, farmer.contract_of_adhesion %></td>
+
+          <td><%= farmer.dac_due_date ? l( farmer.dac_due_date ): "Não há D.A.C" %></td>
+        </tr>
+
+    <% end %>
+
+  </table>
+  <%= f.submit "Cadastrar D.A.C's",  data: {"disable-with" => "Salvando..."} %>
+<% end %>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    var x = "non_selected";
+    $('.select-all').click(function(event) {
+
+          $("input[name*='cadastrar']").each(function() {
+            if(x == "non_selected"){
+              this.checked = true;
+
+            }else{
+
+              this.checked = false;
+            }
+
+
+          });
+        x == "non_selected" ? x = "selected" : x = "non_selected";
+
+});
+  });
+</script>

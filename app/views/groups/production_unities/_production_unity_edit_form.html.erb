@@ -1,0 +1,36 @@
+<%= bootstrap_form_for([@group, @production_unity]) do |f| %>
+
+    <%= f.text_field :name, label: "Nome da propriedade ou sítio" %>
+  <%= f.select :production_type, ProductionUnityForm.SCOPE_TYPES, label: "Tipo" %>
+  <%= f.text_field :address, label: "Endereço" %>
+  <%= f.text_field :neighborhood, label: "Bairro" %>
+  <%= f.text_field :cep, label: "CEP" %>
+  <%= f.select :city_id, City.get_cities_from_state(@group.core.state_id), label: "Cidade" %>
+
+
+    <fieldset>
+      <legend>Coordenadas geográficas</legend>
+        <h4>Latitude</h4>
+        <div class = "row">
+          <div class = "col-md-2"><%= f.number_field :lat_hour, step: "any", label: "Graus" %></div>
+          <div class = "col-md-2"><%= f.number_field :lat_minute, step: "any", label: "Minutos" %></div>
+          <div class = "col-md-2"><%= f.number_field :lat_second, step: "any" , label: "Segundos"%></div>
+          <div class = "col-md-3"><%= f.form_group :lat_type do %><%= f.radio_button :lat_type, "N", label: "Norte" %><%= f.radio_button :lat_type, "S", label: "Sul" %><% end %></div>
+        </div>
+        <h4>Longitude</h4>
+        <div class = "row">
+          <div class = "col-md-2"><%= f.number_field :lon_hour, step: "any", label: "Graus" %></div>
+          <div class = "col-md-2"><%= f.number_field :lon_minute, step: "any", label: "Minutos" %></div>
+          <div class = "col-md-2"><%= f.number_field :lon_second, step: "any" , label: "Segundos"%></div>
+          <div class = "col-md-3"><%= f.form_group :lon_type do %><%= f.radio_button :lon_type, "L", label: "Leste" %><%= f.radio_button :lon_type, "O", label: "Oeste" %><% end %></div>
+        </div>
+        <hr>
+      </fieldset>
+
+
+
+   <%= f.number_field :total_area, label: "Área total (ha)", step: "any" %>
+   <%= f.number_field :total_organic_area, label: "Área orgânica total (ha)", step: "any" %>
+   <%= f.number_field :total_native_area, label: "Área da mata nativa total (ha)", step: "any" %>
+   <%= f.submit  data: {"disable-with" => "Salvando..."} %>
+<% end %>

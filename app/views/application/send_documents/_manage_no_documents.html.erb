@@ -1,0 +1,9 @@
+<% if require_current_or_admin(@group.core.id, true, false) %>
+  <% if document.only_video? %>
+    <%= render 'application/send_documents/forms/only_video', id: document.id %>
+  <% elsif document.only_pdf? %>
+    <%= render 'application/send_documents/forms/only_pdf', id: document.id %>
+  <% else %>
+    <%= render 'application/send_documents/forms/pdf_or_video', id: document.id %>
+  <% end %>
+<% end %>

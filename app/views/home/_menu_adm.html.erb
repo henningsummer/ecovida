@@ -1,0 +1,98 @@
+  <div class="row">
+
+    <div class="col-md-4">
+      <h2>Gerenciar Núcleos</h2>
+      <p>Nesta sessão, é possível gerenciar todos os núcleos do sistema.  Em seus sub-menus, é possível adicionar grupos, alterar coordenadores dos grupos, e muito mais. </p>
+      <p>
+        <%= link_to 'Gerenciar núcleos', cores_path, class: "btn btn-default" %>
+      </p>
+    </div>
+
+    <div class="col-md-4">
+      <h2>Gerenciar Grupos</h2>
+      <p>Nesta sessão, é possível gerenciar os grupos, procurar grupos.  Quando um grupo é selecionado, é possível gerenciar seus agricultores, gerar relatórios, alterar informações, etc. </p>
+      <p>
+        <%= link_to "Gerenciar grupos", groups_path, class: "btn btn-default" %>
+      </p>
+    </div>
+
+    <div class="col-md-4">
+      <h2>Cadastros</h2>
+      <p>Nesta sessão é possível gerenciar os cadastros gerais do sistema, como siglas, tipos de grupos, produtos, caregorias de produtos e escopos.</p>
+      <p>
+        <%= link_to "Ver cadastros", records_path, class: "btn btn-default"%>
+      </p>
+    </div>
+
+  </div>
+  <div class="row">
+
+    <div class = "col-md-4">
+      <h2>Logs</h2>
+      <p>Nesta sessão, é possível saber tudo que acontece no sistema.  Toda alteração no sistema aparece aqui, até a mais simples</p>
+      <p>
+        <%= link_to "Ver logs", records_logs_path, class: "btn btn-default" %>
+      </p>
+    </div>
+
+    <div class = "col-md-4">
+      <h2>Relatórios</h2>
+      <p>Nesta sessão, saber algumas informações no sistema.  Estas informações podem ser usadas para tomar decisões importantes.</p>
+      <p>
+        <%= link_to "Ver relatórios", reports_index_path, class: "btn btn-default" %>
+      </p>
+    </div>
+
+    <div class = "col-md-4">
+      <h2>Configurações do Sistema</h2>
+      <p>Nesta sessão, é possível realizar a atualização das configurações do sistema.</p>
+      <p>
+        <%= link_to "Ver configurações", system_settings_path, class: "btn btn-default" %>
+      </p>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Gerenciar minha senha</h2>
+      <p>Nesta sessão, é possível atualizar a sua senha sempre que necessário. </p>
+      <p>
+        <%= link_to 'Gerenciar senha', new_admin_password_updater_path, class: "btn btn-default" %>
+      </p>
+    <% if @document_count > 0 || @dac_count > 0%>
+    </div>
+      <div class="col-md-4">
+      <h2>Gerenciar envio de documentos</h2>
+      <p>Há <%= @document_count + @dac_count %> documento(s) para serem analisados. </p>
+      <p>
+        <%= link_to 'Analisar Documentos Enviados', document_approvment_index_path, class: "btn btn-default" %>
+      </p>
+    </div>
+    <% end %>
+    <div class = "col-md-4">
+      <h2>Gerenciar acesso de visualização de documentos</h2>
+      <p>Nesta sessão, é possível gerar um link e uma chave para visualizar os documentos.</p>
+      <p>
+        <%= link_to "Gerenciar acessos", document_visualizations_path, class: "btn btn-default" %>
+      </p>
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Dados excluídos</h2>
+        <p>Nesta sessão é possível visualizar os membros, grupos e propriedades que foram excluídas</p>
+        <p>
+          <%= link_to 'Ver informações excluídas', excluded_data_path, class: 'btn btn-default' %>
+        </p>
+      </div>
+      <div class = 'col-md-4'>
+        <h2>Relatórios Dinâmicos</h2>
+        <p>Neste sessão é possível fazer relatórios em tempo real</p>
+        <p>
+          <%= link_to "Ir para relatórios dinâmicos", view_reports_view_reports_path, class: "btn btn-default" %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

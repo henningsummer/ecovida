@@ -1,0 +1,13 @@
+<p><%= link_to 'Ínicio', root_path %> - 
+  <%= link_to 'Cadastros', records_path %> -
+  <%= link_to 'Listando escopos', records_scopes_path %> - 
+  Editando escopo
+</p>
+
+
+<h1>Editando escopo</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Mostrar', [:records, @scope] %> |
+<%= link_to 'Voltar', records_scopes_path %>

@@ -1,0 +1,24 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@farmer.group.name}", @farmer.group %> - <%= link_to 'Agricultores', group_farmers_path(@farmer.group) %> - <%= link_to "#{@farmer.name}", [@farmer.group, @farmer] %> - <%= link_to "D.A.P's", group_farmer_daps_path(@farmer.group, @farmer) %> - D.A.P nº <%= @dap.dap_number %>	
+
+<br><br>
+<p>
+  <strong>Numero:</strong>
+  <%= @dap.dap_number %>
+</p>
+
+<p>
+  <strong>Data de emissão:</strong>
+  <%= l @dap.emission_date %>
+</p>
+
+<p>
+  <strong>Data de validade:</strong>
+  <%= l @dap.validity %>
+</p>
+
+<p>
+  <strong>Adicionado por:</strong>
+  <%= @dap.added_by %>
+</p>
+
+<%= link_to 'Voltar', group_farmer_daps_path(@farmer.group, @farmer) %>

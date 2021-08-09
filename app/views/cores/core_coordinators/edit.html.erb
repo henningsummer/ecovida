@@ -1,0 +1,7 @@
+<%= link_to 'Pagina ínicial', root_path %> - <%= link_to "Núcleo: #{@core.name}", @core %> - <%= link_to "Listando coordenadores", core_core_coordinators_path(@core) %> - Editando coordenador
+
+<h1>Editando coordenador</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar', core_core_coordinators_path(@core) %>

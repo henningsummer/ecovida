@@ -1,0 +1,29 @@
+box: ruby:2.6.5
+
+services:
+  - postgres
+
+build:
+  steps:
+    - bundle-install
+    - rails-database-yml
+
+    - install-packages:
+        package: nodejs
+
+    # - script:
+    #     name: migration
+    #     code: bundle exec rake db:migrate RAILS_ENV=test
+
+    # - script:
+    #     name: rspec
+    #     code: bundle exec rspec
+
+
+deploy-production:
+  steps:
+    - heroku-deploy:
+      app-name: $HEROKU_APP_NAME
+      key: $HEROKU_KEY
+      user: $HEROKU_USER
+      run: rake db:migrate

@@ -1,0 +1,9 @@
+<ul>
+  <% if agribusiness_analysis.suspended %><li>Agroindústria suspensa</li> <% end %>
+  <% if agribusiness_analysis.in_transaction %><li>Agroindústria em transição</li> <% end %>
+  <% if !agribusiness_analysis.has_products %><li>Agroindústria não possuí produtos</li> <% end %>
+  <% if !agribusiness_analysis.farmer_with_documents %><li>Nenhum dos membros vinculados possuí documentação em dia.</li><% end %>
+  <% if agribusiness_analysis.missing.any? %>
+    <%= render partial: 'application/missing_documents/documents', locals: { documents: agribusiness_analysis.missing } %>
+  <% end %>
+</ul>

@@ -1,0 +1,24 @@
+.row
+
+  h1.text-center System Settings
+
+  .col-sm-8.col-sm-offset-2
+    = bootstrap_form_for(@system_settings, layout: :horizontal, label_col: "col-sm-6", control_col: "col-sm-6")do |f|
+
+      = f.text_field :basic_annuity_rate,
+        label: "Taxa Básica da Anuidade",
+        control_class: 'money form-control'
+      = f.text_field :single_agribusiness_rate,
+        label: "Taxa Única para Agroindústrias",
+        control_class: 'money form-control'
+      = f.text_field :basic_propertyless_member_rate,
+        label: "Taxa Básico para Membros sem Propriedades",
+        control_class: 'money form-control'
+
+      = f.form_group do
+        = f.submit "Atualizar Configurações do Sistema"
+
+= link_to 'Voltar', root_path, {class: 'btn btn-default'}
+
+script[type="text/javascript"]
+  |  $(document).ready(function(){ $('.money').mask('000.000.000.000.000,0', {reverse: true}); }); 

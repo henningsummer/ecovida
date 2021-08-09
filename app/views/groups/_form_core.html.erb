@@ -1,0 +1,29 @@
+<%= bootstrap_form_for(@group) do |f| %>
+        <%= show_errors(@group) %>
+
+    <%= f.text_field :name %>
+
+    <% cores = [''] %>
+    <% cores +=  Core.all.collect {|c| ["#{c.name} - #{c.state.uf}", c.id]} %>
+   
+    <%= f.select :core_id, cores , {class: 'select-picker'}%>
+
+    <%= f.text_field :login %>
+
+
+    <%= f.password_field :password %>
+
+    <%= f.password_field :password_confirmation %>
+
+    <%= f.email_field :email %>
+
+    <%= f.text_field :phone %>
+
+    <%= f.select :group_type_id, GroupType.all.collect {|c| [c.description, c.id]} %>
+   
+    <%= f.submit 'Salvar grupo',  data: {"disable-with" => "Salvando..."} %>
+
+    
+    
+
+<% end %>

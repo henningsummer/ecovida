@@ -1,0 +1,124 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - Grupo: <%= @group.name %>
+<h1><%= @group.name %></h1>
+<div class = "row">
+
+<div class = "col-md-6">
+  <div class = "panel panel-default">
+    <div class = "panel-heading">
+      <h3 class = "panel-title">Informações básicas</h3>
+    </div>
+    <div class = "panel-body">
+      <% if user_type == 4 %>
+      <p>
+        <strong>Núcleo:</strong>
+        <%= link_to @group.core.name, @group.core %>
+      </p>
+      <% end %>
+
+      <p>
+        <strong>Login:</strong>
+        <%= @group.login %>
+      </p>
+
+      <p>
+        <strong>Tipo de grupo:</strong>
+        <%= @group.group_type.description %>
+      </p>
+
+      <p>
+        <strong>Suplente:</strong>
+        <%= @group.suplente_id ? @group.suplente.name : 'Não há suplente.' %>
+        (<%= link_to 'Alterar suplente', new_group_set_suplente_path(@group, set_type:1) if require_current_or_admin(@group.core.id, true) %>)
+      </p>
+
+      <p>
+        <strong>Títular:</strong>
+        <%= @group.titular_id ? @group.titular.name : 'Não há titular.' %>
+        (<%= link_to 'Alterar titular', new_group_set_suplente_path(@group, set_type:2) if require_current_or_admin(@group.core.id, true) %>)
+      </p>
+
+      <p>
+        <strong>E-mail para contato:</strong>
+        <% if  @group.email.present? %>
+        <%= link_to @group.email, "mailto:#{@group.email}" %>
+        <% else %>
+          Não informado
+        <% end %>
+      </p>
+
+      <p>
+        <strong>Telefone para contato:</strong>
+        <%= @group.phone.present? ? @group.phone : "Não informado" %>
+      </p>
+
+      <p>
+        <strong>Numero de agricultores:</strong>
+        <%= @group.farmers.count %>
+      </p>
+
+      <p>
+       <strong>Agricultores suspensos: </strong>
+       <%= @group.farmers_suspended.count %>
+      </p>
+
+      <p>
+      <strong>Membros com a documentação em dia para certificação: </strong>
+        <%= @group.farmers_that_can_have_a_certificade.count %>
+      </p>
+
+      <% if require_current_or_admin(@group.core.id, true) %>
+      <%= link_to 'Editar informações', edit_group_path(@group), {class: 'btn btn-default'} %>
+      <% end %>
+    </div>
+    </div>
+</div> <!-- fim col -->
+
+<div class = "col-md-6">
+<div class = "panel panel-primary">
+  <div class = "panel-heading">
+    <h3 class = "panel-title">Ações</h3>
+  </div>
+
+
+    <%= link_to 'Gerenciar alterações de suplentes e titulares', group_set_suplentes_path(@group), class: "list-group-item" %>
+    <% if require_current_or_admin(@group.core.id, true) #Precisa ser o dono %>
+      <%= link_to 'Gerenciar certificados', group_certificate_groups_path(@group), class: 'list-group-item' if can_generate_certificate? %>
+    <%= link_to 'Gerenciar unidades de produção e agroindústrias', group_production_unities_path(@group), class: "list-group-item" %>
+    <% if user_type == 4 #only admin %>
+      <%= link_to "Cadastrar D.A.C's para o grupo inteiro", group_group_dacs_path(@group), class: "list-group-item" %>
+    <% end %>
+
+    <%= link_to 'Visualizar ou enviar documentos', group_send_documents_path(@group), class: 'list-group-item' %>
+
+    <% if require_current_or_admin(@group.core.id, true, true) %>
+      <%= link_to 'Atualizações pendentes para Sig.Org', group_outdateds_path(@group), class: 'list-group-item' %>
+    <% end %>
+    <% if current_user_admin? %>
+      <%= link_to 'Alterar Núcleo', new_group_change_core_path(@group), class: 'list-group-item' %>
+      <%= link_to 'Excluir', group_path(@group), method: :delete, class: 'list-group-item list-group-item-danger', data: {confirm: "Tem certeza que deseja excluir o grupo? Você perderá acesso aos membros também."} %>
+    <% end %>
+    <% end %>
+    <%= link_to 'Relatório de produtos', '#', class: 'list-group-item products_report' %>
+
+  </div>
+</div>
+
+</div> <!-- fim row -->
+
+<% if @group.farmers.count != 0 %>
+  <h3>Ultimos agricultores <%= @group.name %></h3>
+
+  <%= render 'farmers/list_table' %>
+
+  <%= link_to "Ver agricultores de #{@group.name}", group_farmers_path(@group) , {class: 'btn btn-default'}%>
+
+<% else %>
+  <h3>Não há agricultores cadastrados.</h3>
+<% end %>
+
+<%= render 'farmers/new_farmer_button' %>
+
+<br><br>
+<%= link_to 'Voltar', groups_path %>
+
+<%= render partial: 'show_report', locals: {button_name: 'products_report', model: @group, path: reports_group_reports_products_path } %>

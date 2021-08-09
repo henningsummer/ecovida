@@ -1,0 +1,139 @@
+<%=
+  create_breadcumbs([
+    { url: document_access_visualizations_core_url, text: 'Núcleos' },
+    { url: document_access_visualizations_group_url(core_id: @group.core_id), text: "Grupos do núcleo #{@group.core.name} - #{@group.core.state.uf}" },
+    { url: nil, text: "Grupo #{@group.name}" }
+  ])
+%>
+
+<h1>Grupo <%= @group.name %></h1>
+
+<div class="panel-group" id="accordion1">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion1" href="#collapse1"><span class="glyphicon glyphicon-folder-close"></span> Membros</a>
+      </h4>
+    </div>
+    <div id="collapse1" class="panel-collapse collapse">
+      <div class="panel-body">
+        <% @farmers.each do |farmer| %>
+          <p>
+            <span class="glyphicon glyphicon-user"></span>
+            <%= link_to(farmer.name, {controller: 'document_access_visualizations', action: 'farmer', farmer_id: farmer.id}) %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel-group" id="accordion2">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion2" href="#collapse2"><span class="glyphicon glyphicon-folder-close"></span> Unidades de produção e agroindústrias</a>
+      </h4>
+    </div>
+    <div id="collapse2" class="panel-collapse collapse">
+      <div class="panel-body">
+        <% @production_unities.each do |production_unity| %>
+          <p>
+            <span class="glyphicon glyphicon-home"></span>
+            <%= link_to(production_unity.name, {controller: 'document_access_visualizations', action: 'production_unity', production_unity_id: production_unity.id}) %> (<%= production_unity.responsible&.name %>)
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="panel-group" id="accordion3">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion3" href="#collapse3"><span class="glyphicon glyphicon-folder-close"></span> Documentos do grupo</a>
+      </h4>
+    </div>
+    <div id="collapse3" class="panel-collapse collapse">
+      <div class="panel-body">
+        <% if @dacs.empty? %>
+        Não existe DAC a ser apresentada
+        <% else %>
+        <h2>DAC's</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome do documento</th>
+              <th>Arquivo ou url</th>
+              <th>Data de criação</th>
+              <th>Data de aprovação</th>
+              <th>Data de vencimento</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @dacs.each do |dac| %>
+            <tr>
+              <td>9. Termo e documentos de aprovação da conformidade (DAC)</td>
+              <td><%= dac.file.file ? link_to(dac.file.filename, dac.file.url, target: :_blank) : link_to(dac.url, dac.url, target: :_blank) %></td>
+              <td><%= formated_date(dac.created_at) %></td>
+              <td><%= formated_date(dac.approved_at) %></td>
+              <td><%= dac.expire_at %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% end %>
+      </div>
+      <div class="panel-body">
+        <% if @documents.empty? %>
+        Não existem documentos a serem apresentados
+        <% else %>
+        <h2>Outros documentos</h2>
+        <table class = "table ">
+          <thead>
+            <tr>
+              <th>Nome do documento</th>
+              <th>Arquivo ou url</th>
+              <th>Data de criação</th>
+              <th>Data de aprovação</th>
+              <th>Possui versões anteriores?</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @documents.each do |document| %>
+            <tr>
+              <% if document.accepted? %>
+                <td><%= document.document.name %></td>
+                <td><%= document.file.file ? link_to(document.file.filename, document.file.url, target: :_blank) : link_to(document.url, document.url, target: :_blank) %></td>
+                <td><%= formated_datetime(document.created_at) %></td>
+                <td><%= formated_datetime(document.approved_at) %></td>
+                <% else %>
+                <td><%= document.document.name %></td>
+                <td> - </td>
+                <td><%= formated_datetime(document.created_at) %></td>
+                <td>Não foi aprovado</td>
+              <% end %>
+              <% if document.has_document_history? %>
+                <td><%= link_to 'Sim, clique aqui', '#', id: "document#{document.id}"%></td>
+                <% else %>
+                <td>Não</td>
+              <% end %>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<%= link_to 'Voltar', {controller: 'document_access_visualizations', action: 'group', core_id: @group.core_id} %>
+
+<% @documents.select { |d| d.has_document_history? }.each do |document| %>
+  <%= render partial: 'show_document_history', locals: {button_name: "document#{document.id}", document: document } %>
+<% end%>

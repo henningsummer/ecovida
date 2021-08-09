@@ -1,0 +1,49 @@
+<p><%= link_to 'Ínicio', root_path %> - <%= link_to 'Dados excluídos', excluded_data_path %> - Busca de membros excluídos</p>
+
+<div class="row">
+  <div class="col-md-3">
+    <%= simple_form_for @q, url: excluded_data_farmers_path, html: {method: :get} do |f| %>
+    <%= f.input :name_cont, label: 'Nome' %>
+
+    <%= f.input :updated_at_gteq, as: :date_picker, label: 'A partir de', input_html: { value: params[:q].try(:[], :updated_at_gteq) } %>
+
+    <%= f.input :updated_at_lteq, as: :date_picker, label: 'Até', input_html: { value: params[:q].try(:[], :updated_at_lteq) } %>
+
+    <%= f.submit 'Buscar', class: 'btn btn-default' %>
+    <% end %>
+  </div>
+</div>
+
+<% if @farmers.empty? %>
+  <br>
+  <p>Não foram encontrados resultados para a pesquisa</p>
+<% else %>
+
+  <h2>Número de itens encontrados na busca: <%= @count %></h2>
+
+  <br>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Núcleo</th>
+        <th>Grupo</th>
+        <th>Data de exclusão</th>
+      </tr>
+    </thead>
+    <% @farmers.each do |farmer| %>
+    <tbody>
+      <tr>
+        <td><%= farmer.name %></td>
+        <td><%= farmer.number %></td>
+        <td><%= farmer.group_unscoped.core.name %></td>
+        <td><%= farmer.group_unscoped.name %></td>
+        <td><%= formated_date(farmer.updated_at) %></td>
+      </tr>
+    </tbody>
+    <% end %>
+  </table>
+
+  <%= paginate @farmers %>
+<% end %>

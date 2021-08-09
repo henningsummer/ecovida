@@ -1,0 +1,97 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Página inicial' },
+    { url: view_reports_view_reports_path, text: 'Relatórios Dinâmicos' },
+    { url: nil, text: 'Relatórios de membros' }
+  ])
+%>
+
+<h2>Relatórios de Membros</h2>
+
+<fieldset>
+  <legend>Filtros</legend>
+
+  <%= form_for :report, url: view_reports_farmer_reports_path, method: :get do |f| %>
+    <%= f.text_field :name, placeholder: 'Nome', value: params[:report].try(:[], :name) %><br>
+    <br/>
+    <div class = 'form-group'>
+      <%= f.select :state_id, State.all.order(:uf).map { |state| [state.uf, state.id] }, { include_blank: 'Todos os estados.', selected: params[:report].try(:[], :state_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.select :city_id, City.all.order(:name).map { |city| [city.name, city.id] }, { include_blank: 'Todas as cidades.', selected: params[:report].try(:[], :city_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+    <%= f.select :core_id, Core.all.order(:name).map { |core| [core.name, core.id] }, { include_blank: 'Todos os núcleos.', selected: params[:report].try(:[], :core_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.select :group_id, Group.all.order(:name).map { |group| [group.name, group.id] }, { include_blank: 'Todos os grupos.', selected: params[:report].try(:[], :group_id) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.select :has_certificate, [[' membros com a certificação OK', true], ['membros sem certificação OK', false]], { include_blank: 'Ignorar certificação', selected: params[:report].try(:[], :has_certificate) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.select :all_documents, [['Membros com documentos em dia', true], ['Membros sem documentos em dia', false]], { include_blank: 'Ignorar documentação', selected: params[:report].try(:[], :all_documents) }, { class: 'chosen-select' } %>
+    </div>
+    <div class = "row">
+      <div class = "col-md-3">
+        <p>Criado a partir de: </p>
+        <%= f.text_field :created_at_gte, class: "form-control form_date", value: params[:report].try(:[], :created_at_gte) %>
+      </div>
+
+      <div class = "col-md-3">
+        <p>Criado até: </p>
+        <%= f.text_field :created_at_lte, class: "form-control form_date", value: params[:report].try(:[], :created_at_lte) %>
+      </div>
+    </div>
+    <br />
+    <br />
+    <%= f.submit :pesquisar, class: 'btn btn-default' %>
+  <% end %>
+  <br />
+</fieldset>
+
+<% if @farmers.any? %>
+  <%= paginate @farmers %>
+
+  <h2><%= @count %> Resultados encontrados</h2>
+  <table class = "table">
+    <tr>
+      <th>Nome</th>
+      <th>Certificado em dia</th>
+      <th>Documentação em dia</th>
+      <th>Cidade</th>
+      <th>Estado</th>
+      <th>Grupo</th>
+      <th>Núcleo</th>
+      <th>Propriedades \ Agroindustrias</th>
+      <th>Data de criação</th>
+    </tr>
+    <% @farmers.each do |farmer| %>
+      <tr>
+        <td><%= link_to farmer.name, [farmer.group, farmer] %></td>
+        <td>
+          <% if farmer.certificate_names.any?%>
+            <%= farmer.certificate_names.last.certificate.certificate_group.meeting_date + 1.year > Time.now ? 'Sim' : 'Não' %>
+          <% else %>
+            Não.
+          <% end %>
+        </td>
+        <td><%= t farmer.can_have_certificate? %></td>
+        <td><%= farmer.city.name %></td>
+        <td><%= farmer.city.state.uf %></td>
+        <td><%= link_to farmer.group.name, group_path(farmer.group) %></td>
+        <td><%= link_to farmer.group.core.name, core_path(farmer.group.core) %></td>
+        <td>
+          <% farmer.production_unity_farmers.each do |puf| %>
+            <%= link_to puf.production_unity.suspended_name, [farmer.group, puf.production_unity] %>
+          <% end %>
+        </td>
+        <td><%= l farmer.created_at %></td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <% if params[:commit].present? %>
+    <h3>Nenhum resultado a ser exibido.</h3>
+  <% end %>
+<% end %>

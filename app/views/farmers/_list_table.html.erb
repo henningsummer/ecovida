@@ -1,0 +1,28 @@
+
+
+<table class="table">
+	  <thead>
+	    <tr>
+	      <th>Nome</th>
+	      <th>Documentos em dia</th>
+	      <th>Pode ter certificado</th>
+	      <th colspan="3"></th>
+	    </tr>
+	  </thead>
+	  <% to_paginate = @farmers.present? ? @farmers : @group.farmers.order(created_at: :desc).page(params[:page]).per(5) %>
+  <% to_paginate.each do |farmer| %>
+	<tbody>
+		 <tr>
+	        <td><%= link_to farmer.name, group_farmer_path(@group, farmer) %><%= " (Suspenso(a))" if farmer.is_suspended? %></td>
+	        <td><%= farmer.documents_ok? ? 'Sim' : 'Não' %></td>
+	        <td><%= farmer.can_have_certificate? ? 'Sim' : 'Não' %></td>
+	        <td><%= link_to 'Mostrar', group_farmer_path(@group, farmer), class: "btn btn-default btn-sm" %></td>
+	        <% if require_current_or_admin(@group.core.id, true, false) %>
+	        	<td><%= link_to 'Editar', edit_group_farmer_path(@group,farmer), class: "btn btn-default btn-sm" %></td>
+	        <% end %>
+	      </tr>
+      </tbody>
+   <% end %>
+</table>
+
+<%= paginate to_paginate %>

@@ -1,0 +1,11 @@
+<p><%= link_to 'Ínicio', root_path %> - 
+  <%= link_to 'Cadastros', records_path %> -
+  <%= link_to 'Listando documentos', records_documents_path %> - 
+  Novo Documento
+</p>
+
+<h1>Novo Documento</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar', records_documents_path %>

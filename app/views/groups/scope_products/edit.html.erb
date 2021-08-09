@@ -1,0 +1,12 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - <%= link_to 'Listando unidades de produção', group_production_unities_path(@group) %> - <%= link_to @production_unity.name, [@group, @production_unity] %> - <%= link_to  "Escopo: #{@production_unity_scope.scope.acronym}", [@group, @production_unity, @production_unity_scope] %> - Editando produto
+
+
+<h1>Editando produto: <%= @scope_product.product.name %></h1>
+
+<% if @production_unity.scope_type == 1 #Se for unidade de produção %>
+  <%= render 'form_production_unity' %>
+<% else %>
+  <%= render 'form_agribusiness' %>
+<% end %>
+<br>
+<%= link_to 'voltar', [@group, @production_unity, @production_unity_scope]%>

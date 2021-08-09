@@ -1,0 +1,35 @@
+<%= bootstrap_form_for([@group, @production_unity, @production_unity_scope, @scope_product]) do |f| %>
+
+  <%= show_errors(@scope_product) %>
+  <% if @scope_product.id == nil %>
+    <p><strong>Categoria do produto:</strong> </p>
+    <%= select_tag "category", options_for_select(@categories), class: "form-control" %>
+    <%= f.select :product_id, @products.collect {|c| [c.name, c.id]} if not @products.nil?%>
+  <% end %>
+
+    <div class = "row">
+      <div class = "col-md-3">
+      <%= f.number_field :package_size, label: "Tamanho da embalagem", step: "any" %>
+      </div>
+      <div class = "col-md-2">
+        <%= f.select :package_size_unity, ScopeProduct.UNITIES, label: "Unidade", step: "any" %>
+      </div>
+    </div>
+    <div class = "row">
+      <div class = "col-md-3">
+      <%= f.number_field :amount_per_year, label: "Quantidade por ano", step: "any"%>
+      </div>
+      <div class = "col-md-2">
+        <%= f.select :amount_per_year_unity , ScopeProduct.UNITIES, label: "Unidade" %>
+      </div>
+    </div>
+    <%= f.check_box :is_processor, label: "É um produto processado com ingredientes orgânicos (de 75% a 95%)" %>
+    <br>
+      <% if @products.present? or @scope_product.id != nil %>
+      <%= f.submit "Salvar produto", data: {"disable-with" => "Salvando..."}, class: "btn btn-primary" %>
+        <% if @scope_product.id == nil %>
+      <%= f.submit "Adicionar produto e voltar para listagem",  data: {"disable-with" => "Salvando..."} %>
+        <% end %>
+    <% end %>
+<% end %>
+

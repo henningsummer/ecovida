@@ -1,0 +1,6 @@
+en:
+  enumerations:
+    document_status:
+      pending: "Aguardando ser aceito"
+      accepted: "Aceito"
+      change_request: "Mudanças requisitadas pelo administrador"

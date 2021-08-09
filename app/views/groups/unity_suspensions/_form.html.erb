@@ -1,0 +1,20 @@
+<%= bootstrap_form_for([@group, @production_unity, @unity_suspension]) do |f| %>
+
+  <%= show_errors(@unity_suspension) %>
+
+
+    <%= f.text_field :description %>
+
+    <%= f.date_select :suspension_date %>
+
+    <% UnitySuspensionType.all.each do |suspension_type| %>
+    <%  checked = false %>
+      <% checked = true if @unity_suspension.unity_suspension_reasons.where(unity_suspension_type_id: suspension_type.id).present? %>
+      <%= check_box_tag "suspension_types[#{suspension_type.id}]", "true", checked %> - <%= suspension_type.name %><br>
+    <% end %>
+
+    <%= f.submit  data: {"disable-with" => "Salvando..."} %>
+
+<% end %>
+
+<br>

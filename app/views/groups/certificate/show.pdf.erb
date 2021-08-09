@@ -1,0 +1,4 @@
+<%= render 'groups/certificate/css' %>
+
+<% partial = Certificate::CERTIFICATE_TYPES.key(@certificate.certificate_type.to_i) %>
+<%= render partial: "groups/certificate/#{partial}", locals: { certificate: @certificate } %>

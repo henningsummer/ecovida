@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@rails/webpacker": "3.5",
+    "axios": "^0.18.0",
+    "uiv": "^0.31.3",
+    "vue": "^2.6.8",
+    "vue-loader": "14.2.2",
+    "vue-template-compiler": "^2.6.8",
+    "vue2-animate": "^2.1.0",
+    "vuejs-datepicker": "^1.5.4"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "2.11.2"
+  }
+}

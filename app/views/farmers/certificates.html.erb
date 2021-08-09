@@ -1,0 +1,62 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - <%= link_to 'Agricultores', group_farmers_path %> - Certificados de <%= @farmer.name %>
+
+<% if @certificates.count > 0 %>
+<h3>Certificados de <%= @farmer.name %></h3>
+
+<table class = "table">
+  <tr>
+    <th>
+      Data da inserção no sistema
+    </th>
+    <th>
+      Data de emissão do certificado
+    </th>
+    <th>
+      Data da D.A.C
+    </th>
+    <th>
+      Tipo
+    </th>
+    <th colspan="2">
+      Ações
+    </th>
+  </tr>
+  <% @certificates.each do |certificate_name| %>
+    <tr>
+      <td>
+        <%= l certificate_name.certificate.certificate_group.created_at %>
+      </td>
+      <td>
+        <%= l certificate_name.certificate.certificate_group.meeting_date %>
+      </td>
+      <td>
+        <% if certificate_name.name_type == "1" %>
+          Certificado do Titular
+        <% elsif certificate_name.name_type == "2" %>
+          Certificado do segundo titular
+        <% elsif certificate_name.name_type == "4" %>
+          Certificado do membro para agroindustria
+        <% end %>
+      </td>
+      <td>
+        <%= l certificate_name.certificate.dac_date %>
+      </td>
+      <td>
+        <% Group.unscoped do %>
+          <%= link_to "Ir para grupo de certificados que pertence", [certificate_name.certificate.certificate_group.group, certificate_name.certificate.certificate_group], class: "btn btn-default btn-xs" %>
+          <%= link_to "Gerar PDF", group_certificate_group_certificate_path(certificate_name.certificate.certificate_group.group,
+                                                                            certificate_name.certificate.certificate_group,
+                                                                            certificate_name.certificate,
+                                                                            format: :pdf), target: :blank, class: "btn btn-success btn-xs" %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= paginate @certificates %>
+<% else %>
+  <h2>Não foram gerados certificados para este membro</h2>
+<% end %>
+<br>
+<%= link_to "Voltar", group_farmer_path(@group, @farmer) %>

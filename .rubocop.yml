@@ -1,0 +1,194 @@
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+    - 'bin/**/*'
+    - 'config/**/*'
+    - 'db/**/*'
+    - 'doc/**/*'
+    - 'log/**/*'
+    - 'script/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'lib/tasks/auto_annotate_models.rake'
+    - !ruby/regexp /old_and_unused\.rb$/
+    - Guardfile
+
+require:
+  - rubocop-rspec
+  - rubocop-rails
+
+FactoryBot/AttributeDefinedStatically:
+  Enabled: true
+
+Layout/ClassStructure:
+  Enabled: true
+
+Layout/FirstMethodParameterLineBreak:
+  Enabled: true
+
+Layout/MultilineMethodCallIndentation:
+  Exclude:
+    - 'spec/**/*'
+
+Layout/LineLength:
+  Max: 125
+  Exclude:
+    - 'spec/**/*.rb'
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'spec/**/*'
+
+Lint/EmptyWhen:
+  Enabled: false
+
+Lint/InheritException:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Max: 10
+  Enabled: true
+
+Metrics/BlockLength:
+  Max: 50
+  ExcludedMethods:
+    - aasm
+  Exclude:
+    - 'app/admin/**/*'
+    - 'spec/**/*.rb'
+    - 'features/**/*.rb'
+    - 'lib/tasks/**/*'
+
+Metrics/MethodLength:
+  CountComments: false
+  Max: 50
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'features/**/*.rb'
+
+Metrics/ClassLength:
+  Exclude:
+    - 'app/admin/**/*'
+    - 'app/models/**/*'
+    - 'app/imports/**/*'
+    - 'app/controllers/**/*'
+    - 'spec/**/*.rb'
+    - 'features/**/*.rb'
+
+Rails:
+  Enabled: true
+
+# TODO enable when fixed
+Rails/ActiveRecordOverride:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/SaveBang:
+  AllowImplicitReturn: true
+
+Rails/SkipsModelValidations:
+  Whitelist:
+    - touch
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'app/admin/charging_bank_account.rb'
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/ExpectChange:
+  EnforcedStyle: block
+
+RSpec/EmptyExampleGroup:
+  Enabled: false
+
+RSpec/EmptyLineAfterSubject:
+  Exclude:
+    - 'spec/factories/**/*'
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/AutoResourceCleanup:
+  Enabled: true
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/CollectionMethods:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Style/EachWithObject:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/MethodCallWithArgsParentheses:
+  Enabled: true
+  IgnoredMethods:
+    - require
+    - redirect_to
+    - raise
+  Include:
+    - "app/**/*.rb"
+  Exclude:
+    - "app/admin/**/*.rb"
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: false
+
+Style/SpecialGlobalVars:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: true
+  EnforcedStyle: brackets
+
+Style/WordArray:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false

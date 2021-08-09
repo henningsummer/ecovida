@@ -1,0 +1,36 @@
+<%= link_to 'Pagina Inícial', root_path %> - <%= link_to 'Cadastros', records_path %> - Listando categorias de produtos
+
+
+<% if @product_categories.count != 0 %>
+<h1>Listando categorias de produtos</h1>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Escopo</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_categories.each do |product_category| %>
+      <tr>
+        <td><%= product_category.name %></td>
+        <td><%= link_to product_category.scope.name, [:records, product_category.scope] %></td>
+        <td><%= link_to 'Mostrar', records_product_category_path(product_category) %></td>
+        <td><%= link_to 'Editar', edit_records_product_category_path(product_category) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= paginate @product_categories %>
+
+<% else %>
+  <h3>Não há categorias de produtos cadastradas.</h3>
+<% end %>
+
+<%= link_to 'Nova categoria de produto', new_records_product_category_path, class: 'btn btn-default' %>

@@ -1,0 +1,2 @@
+module ScopeProductsHelper
+end

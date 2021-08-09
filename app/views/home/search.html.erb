@@ -1,0 +1,64 @@
+<h3><%= link_to "Voltar para página inicial", root_path %></h3>
+
+<h3>Resultados da pesquisa de: <%= @query %> </h3>
+
+<% if @groups.count != 0 %>
+  <fieldset>
+    <legend>Grupos encontrados.</legend>
+    <ul>
+      <% @groups.each do |group| %>
+        <li><%= link_to group.name, group %> que pertence ao núcleo <%= group.core.name %></li>
+      <% end %>
+    </ul>
+    <%= paginate @groups, param_name: :group_page %>
+  </fieldset>
+<% else %>
+  <h4>Não foram encontrados grupos</h4>
+<% end %>
+<hr>
+
+<% if @farmers.count != 0 %>
+  <fieldset>
+    <legend>Agricultores encontrados.</legend>
+    <ul>
+      <% @farmers.each do |farmer| %>
+        <li><%= link_to farmer.name, [farmer.group, farmer] %> que pertence ao grupo <%= link_to farmer.group.name, farmer.group %></li>
+      <% end %>
+    </ul>
+    <%= paginate @farmers, param_name: :farm_page %>
+  </fieldset>
+<% else %>
+  <h4>Não foram encontrados agricultores</h4>
+<% end %>
+<hr>
+
+<% if @farmer_families.count != 0 %>
+  <fieldset>
+    <legend>Familiares de agricultores encontrados.</legend>
+    <ul>
+      <% @farmer_families.each do |farmer_family| %>
+        <li><%= link_to farmer_family.name, [farmer_family.farmer.group, farmer_family.farmer, farmer_family] %>, familiar de <%= link_to farmer_family.farmer.name, [farmer_family.farmer.group, farmer_family.farmer] %>, 
+	  que pertence ao grupo <%= link_to farmer_family.farmer.group.name, farmer_family.farmer.group %></li>
+      <% end %>
+    </ul>
+    <%= paginate @farmer_families, param_name: :farmer_family_page %>
+  </fieldset>
+<% else %>
+  <h4>Não foram encontrados agricultores</h4>
+<% end %>
+<hr>
+
+<% if @production_unities.count != 0 %>
+  <fieldset>
+    <legend>Unidades de produções e agroindustrias encontradas.</legend>
+    <ul>
+      <% @production_unities.each do |pu| %>
+        <li><%= link_to pu.name, [pu.group, pu] %> que pertence ao grupo <%= link_to pu.group.name, pu.group %> .  Está propriedade tem como responsável o <%= link_to pu.responsible.name, [pu.responsible.group, pu.responsible] %></li>
+      <% end %>
+    </ul>
+    <%= paginate @production_unities, param_name: :production_unity_page %>
+  </fieldset>
+<% else %>
+  <h4>Não foram encontradas undades de produções nem agroindustrias</h4>
+<% end %>
+<hr>

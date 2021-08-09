@@ -1,0 +1,16 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - Agricultores
+
+<% if @group.farmers.count != 0 %>
+
+<h1>Listando agricultores de <%= @group.name %></h1>
+
+<%= render 'list_table' %>
+
+<% else %>
+  <h3>Não há agricultores cadastrados para <%= @group.name %></h3>
+<% end %>
+<br>
+
+
+
+<%= render 'new_farmer_button' %>

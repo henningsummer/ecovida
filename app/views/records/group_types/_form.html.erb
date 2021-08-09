@@ -1,0 +1,11 @@
+<%= bootstrap_form_for([:records, @group_type]) do |f| %>
+     <%= show_errors(@group_type) %>
+
+
+
+    <%= f.text_field :description %>
+
+    <%= f.submit  data: {"disable-with" => "Salvando..."} %>
+
+<% end %>
+<br>

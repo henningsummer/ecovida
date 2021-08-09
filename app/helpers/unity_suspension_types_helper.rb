@@ -1,0 +1,2 @@
+module UnitySuspensionTypesHelper
+end

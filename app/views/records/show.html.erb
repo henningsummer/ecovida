@@ -1,0 +1,45 @@
+<p><%= link_to 'Ínicio', root_path %> - Cadastros</p>
+<h2>Cadastros</h2>
+<div class = "row">
+  <div class = "col-md-3">
+    <h2>Cadastros de tipos de grupos</h2>
+    <p>Aqui, é possível cadastrar os tipos de grupos.  Serão utilizados na hora do cadastro do grupo.</p>
+    <p><%= link_to 'Gerenciar tipos de grupos', records_group_types_path, class: "btn btn-default" %></p>
+  </div>
+  <div class = "col-md-3">
+    <h2>Cadastro de categorias de produtos</h2>
+    <p>Aqui serão cadastrados as categorias de produtos.  Cada produto tem sua categoria, e aqui você pode gerenciá-las.</p>
+    <p><%= link_to 'Gerenciar categorias de produtos', records_product_categories_path, class: "btn btn-default"  %></p>
+  </div>
+  <div class = "col-md-3">
+    <h2>Cadastro de produtos</h2>
+    <p>Aqui serão cadastrado os produtos. Os produtos serão usados na parte de gerenciamento de unidades de produção.</p>
+    <p><%= link_to 'Gerenciar produtos', records_products_path, class: "btn btn-default" %></p>
+  </div>
+  <div class = "col-md-3">
+    <h2>Cadastro de escopos</h2>
+    <p>Aqui serão cadastrados os escopos.  Os escopos são vinculados às unidads de produção.</p>
+    <p><%= link_to 'Gerenciar escopos', records_scopes_path, class: "btn btn-default" %></p>
+  </div>
+
+</div>
+<div class + "row">
+  <div class = "col-md-4">
+    <h2>Cadastro de tipos de suspensão de agricultores</h2>
+    <p>Aqui serão cadastrados os motivos de suspensão aplicados aos agricultores.</p>
+    <p><%= link_to 'Gerenciar tipos de suspensão de agricultores', records_suspension_types_path, class: "btn btn-default" %></p>
+  </div>
+
+  <div class = "col-md-4">
+    <h2>Cadastro de tipos de suspensão de unidades de produção</h2>
+    <p>Aqui serão cadastrados os motivos de suspensão aplicados às unidade de produção e agroindustrias.</p>
+    <p><%= link_to 'Gerenciar tipos de suspensão de agroindustrias', records_unity_suspension_types_path, class: "btn btn-default" %></p>
+  </div>
+
+  <div class = "col-md-4">
+    <h2>Cadastro de documentos</h2>
+    <p>Aqui serão cadastrados documentos que serão usados para geração dos certificados.  Você escolhe o nome, a quem é vinculado entre outras informações.</p>
+    <p><%= link_to 'Gerenciar Documentos', records_documents_path, class: "btn btn-default" %></p>
+  </div>
+
+</div>

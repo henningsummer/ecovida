@@ -1,0 +1,18 @@
+= link_to 'Pagina ínicial - ', root_path
+= link_to "Núcleo: #{@core.name} - ", @core if user_type == 4
+= link_to "Gerenciando Pagamentos - ", core_payments_path(@core) if user_type == 4
+| Editar Pagamento
+
+br
+
+.row
+  .col-md-3
+    = simple_form_for @payment, url: core_payment_path(@core, @payment), :method => :PATCH  do |f|
+      = f.input :description, label: 'Descrição:'
+      = f.input :amount, as: :string, label: 'Valor:', input_html: { class: 'currency' }
+      = f.input :in_force_year, collection: Date.today.year-20..Date.today.year, label: 'Ano vigente:'
+      = f.input :payment_date, as: :date_picker, label: 'Data:', input_html: {value: f.object.payment_date.strftime('%d/%m/%Y') || ''}
+      br
+      = f.submit 'Atualizando Pagamento',  data: {"disable-with" => "Salvando..."}
+br
+= link_to 'Voltar', core_payments_path(@core), {class: 'btn btn-default'}

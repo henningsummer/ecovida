@@ -1,0 +1,47 @@
+<div class = "container_<%= id %>">
+<div class = "resend_<%= id %>"></div>
+<div class = "resend_<%= id %>_accepted"></div>
+
+<h3>Por favor, selecione o PDF para envio: </h3>
+
+<%= simple_form_for DocumentSended.new, url: 'send_documents', remote: true, authenticity_token: true,
+                                                               html: { multipart: true, class: "form_#{id}" } do |f| %>
+  <%= f.file_field :file, required: true, accept: 'application/pdf', class: "document_sended_file_#{id}" %>
+  <small id="emailHelp" class="form-text text-muted">Aprenda a diminuir seus documentos PDF <%= link_to 'Clicando aqui', help_reduce_pdf_size_path, target: '_blank', class: 'small' %>.</small><br/><br/>
+  <%= f.input :document_id, as: :hidden, input_html: { value: id } %>
+  <%= f.input :observations %>
+  <div class= "status_<%= id %> alert alert-danger"></div>
+  <div class="alert alert-info help_pdf_<%= id %>" role="alert">
+    <h3>Você pode estar com problema no envio devido ao tamanho do documento.<h3>
+    <%= link_to 'Aprenda a diminuir o PDF', help_reduce_pdf_size_path, class: 'btn btn-info', target: '_blank' %>
+  </div>
+  <%= f.submit 'Enviar Documento', class: "btn btn-primary submit_button submit_button_#{id}", data: {"disable-with" => "Enviando..."}%>
+<% end %>
+</div>
+
+<script type="text/javascript">
+var x;
+
+$('.help_pdf_<%= id %>').hide();
+$('.status_<%= id %>').hide();
+$('.document_sended_file_<%= id %>').bind('change', function() {
+  var fileSize = this.files[0].size/1024/1024
+  if(fileSize > 2.3){
+    alert('Seu arquivo tem mais de 2.3 megabytes.  Por favor, veja o guia de como diminuir o tamanho do seu PDF clicando no link abaixo do campo de enviar arquivo.');
+    $('.document_sended_file_<%= id %>').val('')
+  }
+});
+
+$(document).on('ajax:success', '.form_<%= id %>', function(e, data, response) {
+  $('.container_<%= id %>').html('<h4>Documento enviado com sucesso. Só aguardar a aprovação do administrador :)</h4>');
+  $('.panel_<%= id %>').attr('class', 'panel panel-default panel-warning');
+  $('.title_status_<%= id %>').html('Documento enviado, porém, aguardando a aprovação de um administrador');
+  $('.resend_<%= id %>').html('')
+  $('.resend_<%= id %>_accepted').html('<h3>Documento re-enviado com sucesso!</h3>')
+});
+$(document).on('ajax:error', '.form_<%= id %>', function(e, data, response) {
+  $('.status_<%= id %>').show();
+  $('.help_pdf_<%= id %>').show();
+  $('.status_<%= id %>').html('Não foi possível criar o documento.  Verifique os dados enviados.');
+});
+</script>

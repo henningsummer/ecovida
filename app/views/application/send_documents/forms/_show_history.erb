@@ -1,0 +1,57 @@
+<br>
+<% if sended.document_sended_histories.select { |x| x.approved_at.present? }.any? %>
+  <a href="#history-<%= sended.id %>" class = "show_history_btn_<%= sended.id %>">Clique aqui</a><span class = "history_status_<%= sended.id %>"> Para mostrar o histórico.</span>
+   <div class = "show_history_<%= sended.id %>">
+   <h4>Histórico de documentos aprovados anteriormente: </h4>
+    <table class = "table">
+      <tr>
+        <% document = sended.document%>
+        <% if document.only_pdf? %>
+          <td>Documento</td>
+        <% elsif document.only_video? %>
+          <td>Link para vídeo</td>
+        <% elsif document.pdf_and_video?%>
+          <td cowspan="2">Documento ou Vídeo</td>
+        <% end %>
+        <td>Data de aprovação</td>
+      </tr>
+
+      <% sended.document_sended_histories.order(approved_at: :desc).select { |x| x.approved_at.present? }.each do |dh| %>
+      <tr>
+        <% if document.only_pdf? %>
+          <td><% if dh.file.file %><%= link_to dh.file.file.filename, dh.file.file.url %><% end %></td>
+        <% elsif document.only_video? %>
+          <td><% if dh.url %><%= link_to 'Ir para vídeo', dh.url, target: :_blank %><% end %></td>
+        <% elsif document.pdf_and_video?%>
+          <% if dh.url.present? %>
+            <td><%= link_to 'Ir para vídeo', dh.url, target: :_blank %></td>
+          <% end %>
+          <% if dh.file.file %>
+            <td><%= link_to dh.file.file.filename, dh.file.file.url %></td>
+          <% end %>
+        <% end %>
+        <td><%= l(dh.approved_at, format: :long) if dh.approved_at %></td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <script type="text/javascript">
+  $(document).ready(function () {
+    $('.show_history_<%= sended.id %>').hide();
+
+    var showing = false;
+
+    $('.show_history_btn_<%= sended.id %>').click(function(){
+      if(showing == false){
+        showing = true;
+        $('.show_history_<%= sended.id %>').show();
+      } else {
+        showing = false;
+        $('.show_history_<%= sended.id %>').hide();
+      }
+    });
+  });
+  </script>
+
+<% end %>

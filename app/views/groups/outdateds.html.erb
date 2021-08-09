@@ -1,0 +1,239 @@
+
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo:  #{@group.name}", @group %> - Listando desatualizados no sig.org
+
+<% if (@outdateds.count > 0 or @not_added.count > 0) %>
+
+<h2>Agricultores, unidades de produção de agroindustrias desatualizadas de <%= @group.name %></h2>
+<br>
+<%= bootstrap_form_for @group, :url => [@group, "update_outdateds"], :method => :post do |f|%>
+
+
+<table class = "table">
+<tr>
+  <th>Marcar como atualizado ao terminar</th>
+  <th>Item</th>
+  <th>Tipo</th>
+  <th>Coluna mudada</th>
+  <th>Novo valor</th>
+  <th>Data da modificação</th>
+</tr>
+
+<% @outdateds.each do |outdated| %>
+<% row_count = outdated.sig_org_changes.count + 1 %>
+<% row_count = row_count + 1 if outdated.class.name == "Farmer" %>
+<% class_name = outdated.class.name %>
+<tr>
+  <% if class_name == 'Farmer' %>
+    <td rowspan="<%= row_count %>"><%= check_box_tag "farmer[#{outdated.id}]" %></td>
+  <% else %>
+    <td rowspan="<%= row_count %>"><%= check_box_tag "unity[#{outdated.id}]" %></td>
+  <% end %>
+<td rowspan="<%= row_count %>"><%= link_to outdated.name, [@group, outdated] %></td>
+
+<td rowspan="<%= row_count %>"><%= outdated.class.name == "Farmer" ? "Agricultor" : "Unidade de produção" %> - Desatualizado</td>
+</tr>
+<% outdated.sig_org_changes.each do |change| %>
+<tr>
+  <td><%= change.changed_column %></td>
+  <td><%= raw change.value %> </td>
+  <td><%= l change.change_date %></td>
+</tr>
+<% end %>
+<% if outdated.class.name == "Farmer" %>
+  <tr>
+      <td>Documentos em Dia (D.A.C, termo de compromisso em ata):</td>
+      <td><%= outdated.documents_ok?(false) ? "Tudo ok" : "Falta documentos." %></td>
+  </tr>
+<% end %>
+<% end %>
+
+<% @not_added.each do |not_added| %>
+  <tr>
+
+  <% class_name = not_added.class.name %>
+
+  <!-- ROW COUNT, E AGORA -->
+
+  <% if class_name == "Farmer" %>
+
+    <% row_count = 11 #Fixo. %>
+
+  <% else %>
+
+    <% row_count = 6 + not_added.production_unity_scopes.count #Sempre terá no minimo 4 %>
+    <% row_count = row_count + 3 if not_added.scope_type == 1 %>
+
+  <% end %>
+
+  <!-- FIM ROW COUNT -->
+
+
+  <% if class_name == 'Farmer' %>
+    <td rowspan="<%= row_count %>"><%= check_box_tag "farmer[#{not_added.id}]" %></td>
+  <% else %>
+    <td rowspan="<%= row_count %>"><%= check_box_tag "unity[#{not_added.id}]" %></td>
+  <% end %>
+  <td rowspan="<%= row_count %>"> <%= link_to not_added.name, [@group, not_added] %></td>
+  <td rowspan="<%= row_count %>"><%= not_added.class.name == "Farmer" ? "Agricultor" : not_added.scope_type == 1 ? "Unidade de produção" : "Agroindústria" %> - Não adicionado </td>
+  <% if class_name == "Farmer" %>
+  <!-- Começo farm -->
+    <tr>
+      <td>
+        Data de vencimento do ultimo certificado
+      </td>
+      <td>
+        <% if not_added.certificate_names.count != 0 %>
+          <%= l not_added.certificate_names.last.certificate.certificate_group.meeting_date + 365 %>
+        <% else %>
+          Não há
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>Documentos em Dia (D.A.C, termo de compromisso em ata):</td>
+      <td><%= not_added.documents_ok?(false) ? "Tudo ok" : "Falta documentos." %></td>
+    </tr>
+    <tr>
+      <td>CPF ou CNPJ</td>
+      <td><%= not_added.number %></td>
+    </tr>
+    <tr>
+      <td>Nome</td>
+      <td><%= not_added.name %></td>
+    </tr>
+    <tr>
+    <td>Cônjuge</td>
+    <td><%= not_added.spouse.present? ? "#{not_added.spouse} - CPF: #{not_added.spouse_cpf}" : "Não há" %></td>
+    </tr>
+    <tr>
+      <td>Endereço completo</td>
+      <td><%= not_added.address %>, <%= not_added.neighborhood %>, <%= not_added.city.name %> - <%= not_added.city.state.uf %></td>
+    </tr>
+    <tr>
+      <td>Telefone</td>
+      <td><%= not_added.phone_number == "" ? "Não informado" : not_added.phone_number %></td>
+    </tr>
+    <tr>
+      <td>E-Mail</td>
+      <td><%= not_added.email == "" ? "Não informado" : not_added.email %></td>
+    </tr>
+    <tr>
+      <td>D.A.P</td>
+      <td>
+        <% if not_added.daps.count != 0 %>
+          Numero: <% dap = not_added.daps.order(emission_date: :desc).first %>
+          <%= dap.dap_number  %> - Vencimento: <%= l dap.validity %>
+        <% else %>
+          Não há DAP cadastrada para este agricultor.
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>Suspenso:</td>
+      <td><% if not_added.is_suspended? %>
+        Agricultor suspenso pelos seguintes motivos:
+        <ul>
+          <% not_added.farmer_suspensions.last.farmer_suspension_reasons.each do |reason| %>
+            <li><%= reason.suspension_type.name %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        Não estão suspenso
+      <% end %>
+      </td>
+    </tr>
+  <!-- Fim farm -->
+  <% else %>
+  <!-- Começo Pr. Unity -->
+  <tr>
+    <td>
+      Data de vencimento do ultimo certificado
+    </td>
+    <td>
+      <% if not_added.certificate_names.count != 0 %>
+        <%= l not_added.certificate_names.last.certificate.certificate_group.meeting_date + 365 %>
+      <% else %>
+        Não há
+      <% end %>
+    </td>
+  </tr>
+    <tr>
+      <td>Nome</td>
+      <td><%= not_added.name %></td>
+    </tr>
+    <tr>
+      <td>Endereço completo</td>
+      <td><%= not_added.address %>, <%= not_added.neighborhood %>, <%= not_added.city.name %> - <%= not_added.city.state.uf %> - <%= not_added.cep %></td>
+    </tr>
+    <tr>
+      <td>Agricultores vinculados:</td>
+      <td><% not_added.production_unity_farmers.each do |farmer| %>
+        <%= link_to farmer.farmer.name, [@group, farmer.farmer] %>;
+      <% end %></td>
+    </tr>
+    <% if not_added.scope_type == 1 %>
+      <tr>
+        <td>Área total:</td>
+        <td><%= not_added.total_area %> ha
+      </tr>
+      <tr>
+        <td>Área orgânica:</td>
+        <td><%= not_added.total_organic_area %> ha</td>
+      </tr>
+
+      <tr>
+        <td>Coordenadas geográficas</td>
+        <td><%= not_added.lat_hour.present? ? "Latitude: #{not_added.lat_hour}º #{not_added.lat_minute}' #{not_added.lat_second}'' #{not_added.lat_type}.  Longitude: #{not_added.lon_hour}º #{not_added.lon_minute}' #{not_added.lon_second}'' #{not_added.lon_type}" : "Não informado" %></td>
+      </tr>
+      </tr>
+    <% end %>
+    <tr>
+      <td>Suspenso:</td>
+      <td>
+        <% if not_added.is_suspended? %>
+          Está suspenso pelos seguintes motivos:
+          <ul>
+          <% not_added.unity_suspensions.last.unity_suspension_reasons.each do |reason| %>
+            <li><%= reason.unity_suspension_type.name %></li>
+          <% end %>
+          </ul>
+        <% else %>
+          Não está suspenso.
+        <% end %>
+      </td>
+    </tr>
+    <% not_added.production_unity_scopes.each do |scope| %>
+      <tr >
+        <td ><%= "#{scope.scope.name} - #{scope.scope.acronym}" %></td>
+        <td>
+          <% if not_added.scope_type == 1 %>
+            Área total: <%= scope.total_area.present? ? "#{rounded_formated_value(scope.total_area)} ha" : "Não informado" %>
+          <% end %>
+          <ul>
+
+          <% scope.scope_products.each do |scope_product| %>
+            <% if not_added.scope_type == 1 %>
+              <li><%= scope_product.product.name %> (<%= scope_product.product.product_category.name %>) - QTD por ano: <%= scope_product.amount.present? ? "#{rounded_formated_value(scope_product.amount)} #{scope_product.unity}" : "Não informado" %> - Área: <%= scope_product.area.present? ? "#{rounded_formated_value(scope_product.area)} ha" : "Não informado"%></li>
+            <% else %>
+              <li><%= scope_product.product.name %> - Quantidade por ano: <%= scope_product.amount_per_year.present? ? "#{rounded_formated_value(scope_product.amount_per_year)} #{scope_product.amount_per_year_unity}(s)" : "Não informado." %> - <%= scope_product.is_processor ? "Com ingredientes orgânicos" : "Orgânico" %></li>
+            <% end %>
+
+          <% end %>
+          </ul>
+        </td>
+      </tr>
+
+    <% end %>
+  <% end %>
+
+  </tr>
+<% end %>
+
+</table>
+
+<%= f.submit "Marcar como atualizadas os selecionados", class: "btn btn-success",  data: {"disable-with" => "Salvando..."} %>
+<% end %>
+
+<% else %>
+  <h2>Nenhuma atualização a ser feita. <%= link_to 'Voltar', @group %></h2>
+<% end %>

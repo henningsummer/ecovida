@@ -1,0 +1,113 @@
+
+
+
+<%= bootstrap_form_for([@group, @production_unity_form], url: [@group, ProductionUnity.new]) do |f|%>
+  <%= f.select :farmer_id, Farmer.get_farmers_from_group(@group), label: "Agricultor responsável" %>
+  <%= f.select :scope_type, Scope.SCOPE_TYPES, label: "Tipo de produção" %>
+
+
+  
+  <%= f.text_field :name, class: "big-input", label: "Nome da propriedade ou sítio" %>
+
+  <%= f.select :production_type, ProductionUnityForm.SCOPE_TYPES, label: "Tipo" %>
+  <%= f.text_field :cep, label: "CEP", help: "Use apenas numeros no CEP." %>
+  <%= f.text_field :address, label: "Endereço" %>
+  <%= f.text_field :neighborhood, label: "Bairro" %>
+  <%= f.select :city_id, City.get_cities_from_state(@group.core.state_id), label: "Município" %>
+
+
+
+  <div id = "agroindustria">
+
+
+
+
+
+
+
+    <%= f.text_field :fantasy_name, class: "big-input", label: "Nome fantasia" %>
+    <%= f.form_group :number_type do %>
+      <%= f.radio_button :number_type, 1, label: "CPF", inline: true %>
+      <%= f.radio_button :number_type, 2, label: "CNPJ", inline: true %>
+    <% end %>
+    <%= f.text_field :number, label: "Numero:" %>
+    <%= f.text_field :register_type,label: "Tipo de registro" %>
+    <%= f.text_field :register_number, label: "Numero de registro" %>
+    <%= f.text_field :phone, label: "Numero de contato" %>
+    <%= f.email_field :email %>
+
+    <h4>Escopos</h4>
+
+    <% Scope.where(scope_type: 2).each do |scope| %>
+
+      <%= check_box_tag "scopes[#{scope.id}]", "true", false %> - <%= scope.name %><br>
+    <% end %>
+
+
+  </div>
+  <div id = "unidade_producao">
+
+    <fieldset>
+      <legend>Coordenadas geográficas</legend>
+        <h4>Latitude</h4>
+        <div class = "row">
+          <div class = "col-md-2"><%= f.number_field :lat_hour, step: "any", label: "Graus" %></div>
+          <div class = "col-md-2"><%= f.number_field :lat_minute, step: "any", label: "Minutos" %></div>
+          <div class = "col-md-2"><%= f.number_field :lat_second, step: "any" , label: "Segundos"%></div>
+          <div class = "col-md-3"><%= f.form_group :lat_type do %><%= f.radio_button :lat_type, "N", label: "Norte" %><%= f.radio_button :lat_type, "S", label: "Sul" %><% end %></div>
+        </div>
+        <h4>Longitude</h4>
+        <div class = "row">
+          <div class = "col-md-2"><%= f.number_field :lon_hour, step: "any", label: "Graus" %></div>
+          <div class = "col-md-2"><%= f.number_field :lon_minute, step: "any", label: "Minutos" %></div>
+          <div class = "col-md-2"><%= f.number_field :lon_second, step: "any" , label: "Segundos"%></div>
+          <div class = "col-md-3"><%= f.form_group :lon_type do %><%= f.radio_button :lon_type, "L", label: "Leste" %><%= f.radio_button :lon_type, "O", label: "Oeste" %><% end %></div>
+        </div>
+        <hr>
+      </fieldset>
+
+    <%= f.number_field :total_area, label: "Área total (ha)", step: "any" %>
+    <%= f.number_field :total_organic_area, label: "Área orgânica total (ha)", step: "any" %>
+    <%= f.number_field :total_native_area, label: "Área da mata nativa total (ha)", step: "any" %>
+
+      <h4>Escopos</h4>
+        <% Scope.where(scope_type: 1).each do |scope| %>
+
+        <%= check_box_tag "scopes[#{scope.id}]", "true", false %> - <%= scope.name %><br>
+      <% end %>
+
+  </div>
+
+
+
+  <br>
+
+  <%= f.submit  "Concluir cadastro",  data: {"disable-with" => "Salvando..."} %>
+<% end %>
+
+
+<script type = "text/javascript">
+  $('document').ready(function(){
+
+    $("#production_unity_form_scope_type").change(function(){
+      change_it();
+    });
+
+    change_it();
+
+    function change_it(){
+        if($("#production_unity_form_scope_type").val() == 1){
+          $('#agroindustria').hide();
+          $('#unidade_producao').show();
+
+          $('label[for = production_unity_form_name]').text("Nome da propriedade ou sítio");
+        }else if($("#production_unity_form_scope_type").val() == 2){
+          $('#agroindustria').show();
+          $('#unidade_producao').hide();
+          $('label[for = production_unity_form_name]').text("Razão social");
+        }else{
+          alert("O que você está fazendo amigo?");
+        }
+    }
+  });
+</script>

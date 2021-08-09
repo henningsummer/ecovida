@@ -1,0 +1,16 @@
+<%= link_to 'Pagina Inícial', root_path %> - <%= link_to 'Cadastros', records_path %> - <%= link_to "Listando produtos", records_products_path  %> - <%= @records_product.name %>
+
+
+<p>
+  <strong>Nome:</strong>
+  <%= @records_product.name %>
+</p>
+
+<p>
+  <strong>Categoria:</strong>
+  <%= link_to @records_product.product_category.name, records_product_category_path(@records_product.product_category) %>
+</p>
+
+
+<%= link_to 'Editar', edit_records_product_path(@records_product) %> |
+<%= link_to 'Voltar', records_products_path %>

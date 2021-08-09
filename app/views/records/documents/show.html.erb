@@ -1,0 +1,31 @@
+<p><%= link_to 'Ínicio', root_path %> - 
+<%= link_to 'Cadastros', records_path %> -
+<%= link_to 'Listando Documentos', records_documents_path %> - 
+<%= @document.name %>
+</p>
+
+<p>
+<strong>Nome: </strong>
+<%= @document.name %>
+</p>
+
+<p><strong>Descrição:</strong><%= @document.description || 'Descrição não informada' %></p>
+
+<p><strong>Vinculado (ao / à): </strong><%= @document.subject_humanize %></p>
+<p>
+<strong>Status:</strong>
+<%= @document.status_humanize %>
+</p>
+
+<p>
+<strong>Tipo de Upload:</strong>
+<%= @document.upload_type_humanize %>
+</p>
+
+<p>
+<strong>Necessário para gerar certificado:</strong>
+<%= @document.required_for_certificate_humanize %>
+</p>
+
+<%= link_to 'Editar', edit_records_document_path(@document) %> |
+<%= link_to 'Voltar', records_documents_path %>

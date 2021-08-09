@@ -1,0 +1,26 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - <%= link_to 'Agricultores', group_farmers_path %> - <%= link_to @farmer.name, [@group, @farmer] %> - <%= link_to "Listando membros da familia", group_farmer_farmer_families_path %> - <%= @farmer_family.name %>
+
+<p>
+  <strong>Nome:</strong>
+  <%= @farmer_family.name %>
+</p>
+
+<p>
+  <strong>Cpf:</strong>
+  <%= @farmer_family.cpf %>
+</p>
+
+<p>
+  <strong>Gênero:</strong>
+  <%= @farmer_family.gender.present? ? @farmer_family.gender_humanize : 'Não informado' %>
+</p>
+<% if @farmer_family.birthday %>
+  <p>
+    <strong>Data de nascimento:</strong>
+    <%= l @farmer_family.birthday %>
+  </p>
+
+<% end %>
+
+<%= link_to 'Editar', edit_group_farmer_farmer_family_path(@group, @farmer, @farmer_family) if require_current_or_admin(@group.core.id, true) %> |
+<%= link_to 'Voltar', group_farmer_farmer_families_path %>

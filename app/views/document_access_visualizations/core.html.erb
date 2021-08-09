@@ -1,0 +1,10 @@
+<h1>Todos os núcleos</h1>
+<br>
+<div class="row">
+<% @cores.each do |core| %>
+      <div class="thumbnail col-md-7">
+        <i class="glyphicon glyphicon-folder-close"></i>
+        <%= link_to "#{core.name} - #{core.state.uf}", {controller: 'document_access_visualizations', action: 'group', core_id: core.id} %>
+      </div>
+<% end %>
+</div>

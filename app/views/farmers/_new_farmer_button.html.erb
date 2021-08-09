@@ -1,0 +1,3 @@
+<% if require_current_or_admin @group.core.id, true %>
+  <%= link_to 'Novo agricultor', new_group_farmer_path(@group), {class: 'btn btn-default'} %>
+<% end %>

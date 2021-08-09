@@ -1,0 +1,5 @@
+pt:
+  enumerations:
+    simple_question:
+      yes_answer: "Sim"
+      no_answer: "Não"

@@ -1,0 +1,8 @@
+<ul>
+  <% if production_unity_analysis.suspended %><li>Unidade de Produção suspensa</li> <% end %>
+  <% if production_unity_analysis.in_transaction %><li>Unidade de Produção em transição</li> <% end %>
+  <% if !production_unity_analysis.has_products %><li>Unidade de Produção não possuí produtos</li> <% end %>
+  <% if production_unity_analysis.missing.any? %>
+    <%= render partial: 'application/missing_documents/documents', locals: { documents: production_unity_analysis.missing } %>
+  <% end %>
+</ul>

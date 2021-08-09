@@ -1,0 +1,8 @@
+<%= link_to 'Pagina ínicial', root_path %> - <%= link_to 'Listando núcleos', cores_path %> - <%= link_to @core.name, @core %> - Editando informações
+
+<h1>Editando <%= @core.name %></h1>
+
+<%= render 'form' %>
+<br>
+<%= link_to 'Mostrar', @core %> |
+<%= link_to 'Voltar', cores_path %>

@@ -1,0 +1,11 @@
+<p><%= link_to 'Ínicio', root_path %> - 
+  <%= link_to 'Cadastros', records_path %> -
+  <%= link_to 'Listando tipos de grupos', records_group_types_path %> - 
+  Novo tipo de grupo
+</p>
+
+<h1>Novo tipo de grupo</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar', records_group_types_path %>

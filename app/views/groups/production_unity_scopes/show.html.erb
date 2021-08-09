@@ -1,0 +1,9 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - <%= link_to 'Listando unidades de produção', group_production_unities_path(@group) %> - <%= link_to @production_unity.name, [@group, @production_unity] %> - Escopo <%= @production_unity_scope.scope.acronym %>
+
+
+
+<% if @production_unity.scope_type == 1 %>
+  <%= render 'production_unity_show' %>
+<% else %>
+  <%= render 'agribusiness_show' %>
+<% end %>

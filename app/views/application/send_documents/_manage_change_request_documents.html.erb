@@ -1,0 +1,24 @@
+<p>É necessário o re-envio do documento pois ele foi recusado pelo <strong>OPAC</strong>.</p>
+
+<% if sended.file.file%>
+  <p>Para visualizar o documento, clique aqui: <%= link_to sended.file.file.filename, sended.file.url %></p>
+<% end %>
+
+<% if sended.url.present? %>
+  <p>URL Enviada: <%= link_to sended.url, sended.url, target: :_blank %></p>
+<% end %>
+
+<% if sended.rejection_reason.present? %>
+  <p><strong>Motivo: </strong><%= sended.rejection_reason %></p>
+<% end %>
+<p>Por favor, utilize o formulário abaixo para o re-envio:</p>
+<% if require_current_or_admin(@group.core.id, true, false) %>
+  <% if document.only_video? %>
+    <%= render 'application/send_documents/forms/only_video', id: document.id %>
+  <% elsif document.only_pdf? %>
+    <%= render 'application/send_documents/forms/only_pdf', id: document.id %>
+  <% else %>
+    <%= render 'application/send_documents/forms/pdf_or_video', id: document.id %>
+  <% end %>
+<% end %>
+<%= render 'application/send_documents/forms/show_history', sended: sended %>

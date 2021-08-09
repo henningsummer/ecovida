@@ -1,0 +1,36 @@
+<% @core = Core.find(current_user) %>
+<% if @core.core_coordinators.first.nil? %>
+	<div class = "alert alert-warning">
+	<strong>Atenção!</strong> Este núcleo ainda não tem as informações do coordenador da comissão de Ética do núcleo.  Para adicionar, <%= link_to 'Clique aqui', new_core_core_coordinator_path(@core) %>
+	</div>
+<% end %>
+
+
+		<div class="row">
+			<div class="col-md-4">
+				<h2>Gerenciar Grupos</h2>
+				<p>Nesta sessão, é possível gerenciar os grupos, procurar grupos.  Quando um grupo é selecionado, é possível gerenciar seus agricultores, gerar relatórios, alterar informações, etc. </p>
+				<p><%= link_to "Gerenciar grupos", groups_path, class: "btn btn-default" %></p>
+			</div>
+			<div class="col-md-4">
+				<h2>Gerenciar coordenadores</h2>
+				<p>Nesta sessão, é possível gerenciar os coordenadores do núcleo, adicionar novos, e fazer a listagem dos antigos.</p>
+				<p><%= link_to "Gerenciar coordenadores", core_core_coordinators_path(current_user), class: "btn btn-default"%></p>
+			</div>
+			<div class="col-md-4">
+				<h2>Falar com os desenvolvedores</h2>
+				<p>Nesta sessão, você receberá todas informações para falar direto com os desenvolvedores.  Será apresentado as instruções de como reportar um <strong>erro</strong> ou pedir uma nova funcionalidade.</p>
+				<p><%= link_to "Saiba mais", home_report_path, class: "btn btn-default"%></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-5">
+				<h2>Verificar documentação pendente do núcleo</h2>
+				<p>Neste sessão, conseguiremos analisar a documentação pendente dos grupos, membros, agroindustrias e unidades de produção. </p>
+				<p><%= link_to "Verificar Documentações Pendentes", pending_documents_path, class: "btn btn-default" %></p>
+			</div>
+			<div class ="col-md-5">
+				<h2>Documentos da OPAC da Rede Ecovida de Agroecologia</h2>
+				<p>Estatuto, manual, normas, documentos para adequação e outros documentos de apoio e esclarecimentos necessários para a certificação de orgânicos da Rede</p>
+				<p><%= link_to 'Ir para tela de downloads', 'https://drive.google.com/drive/folders/15NyM-eymC6VbOovvAiPEgXesP0EFTqAM?usp=sharing', class: 'btn btn-default', target: :_blank %>
+		</div>

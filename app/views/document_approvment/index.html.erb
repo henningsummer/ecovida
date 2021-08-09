@@ -1,0 +1,61 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Pagina inicial' },
+    { url: nil, text: 'Aprovação de documentos' }
+  ])
+%>
+
+<% Group.unscoped do %>
+  <% if @dacs.any? %>
+  <h2>D.A.C dos grupos</h2>
+    <% @dacs.order(:created_at).each do |document| %>
+      <%= render 'dac_document_tab', document: document, type: 'grupo',
+                                     referent_link: link_to("Visualizar #{document.group.name}.", group_path(document.group),
+                                     target: :_blank) %>
+    <% end %>
+  <% end %>
+
+  <% group_documents = @documents.where(subject_type: 'Group') %>
+  <% if group_documents.any? %>
+  <h2>Documentos de grupos</h2>
+    <% group_documents.order(:created_at, :subject_id).each do |document| %>
+      <%= render 'document_tab', document: document, type: 'grupo',
+                                 referent_link: link_to("Visualizar #{document.subject.name}.", group_path(document.subject),
+                                 target: :_blank) %>
+    <% end %>
+  <% end %>
+
+  <% Farmer.unscoped do %>
+    <% farmer_documents = @documents.where(subject_type: 'Farmer') %>
+    <% if farmer_documents.any? %>
+      <h2>Documentos de membros</h2>
+      <% farmer_documents.order(:created_at, :subject_id).each do |document| %>
+        <%= render 'document_tab', document: document, type: 'membro',
+                                   referent_link: link_to("Visualizar #{document.subject.name}", group_farmer_path(document.subject.group, document.subject),
+                                   target: :_blank) %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% ProductionUnity.unscoped do %>
+    <% production_unity_documents = @documents.where(subject_type: 'ProductionUnity').order(:created_at).select { |pu| pu.subject.is_production_unity? } %>
+    <% if production_unity_documents.any? %>
+      <h2>Documentos de unidades de produção</h2>
+      <% production_unity_documents.each do |document| %>
+        <%= render 'document_tab', document: document, type: 'unidade de produção',
+                                   referent_link: link_to("Visualizar #{document.subject.name}", group_production_unity_path(document.subject.group, document.subject)),
+                                   target: :_blank %>
+      <% end %>
+    <% end %>
+
+    <% production_unity_documents = @documents.where(subject_type: 'ProductionUnity').order(:created_at).select { |pu| pu.subject.is_agribusiness? } %>
+    <% if production_unity_documents.any? %>
+      <h2>Documentos de agroindustrias</h2>
+      <% production_unity_documents.each do |document| %>
+        <%= render 'document_tab', document: document, type: 'agroindustria',
+                                   referent_link: link_to("Visualizar #{document.subject.name}", group_production_unity_path(document.subject.group, document.subject)),
+                                   target: :_blank %>
+      <% end %>
+    <% end %>
+  <% end  %>
+<% end %>

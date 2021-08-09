@@ -1,0 +1,68 @@
+= link_to 'Pagina ínicial', root_path
+| \- #{link_to 'Listando grupos', groups_path} - #{link_to "Grupo: #{@group.name}", @group} - #{link_to 'Listando unidades de produção', group_production_unities_path(@group)} - #{@production_unity.name}
+- if @production_unity.is_suspended?
+  .alert.alert-danger
+    h5
+      strong Atenção !
+    p
+      | Está unidade está suspensa.  Para conferir os motivos, #{link_to 'Clique aqui', [@group, @production_unity, @production_unity.unity_suspensions.last]}
+    p Cuide, antes de adicionar, editar ou deletar qualquer informação pertencente a está propriedade
+h1= @production_unity.name
+.row
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        h3.panel-title Informações básicas
+      .panel-body
+        - if @production_unity.scope_type == 2
+          = render 'agribusiness_info'
+        - else
+          = render 'production_unity_info'
+        - if require_current_or_admin(@production_unity.group.core.id, true)
+          = link_to "Editar informações", edit_group_production_unity_path(@group, @production_unity), class: "btn btn-default"
+  .col-md-6
+    .panel.panel-primary
+      .panel-heading
+        h3.panel-title Ações
+      = link_to 'Adicionar novo escopo', new_group_production_unity_production_unity_scope_path(@group, @production_unity), class: "list-group-item"
+      = link_to 'Certificados', group_production_unity_certificates_path(@group, @production_unity), class: 'list-group-item'  if @production_unity.scope_type == 2 && require_current_or_admin(@group.core.id, true)
+      = link_to 'Gerenciar suspensões', group_production_unity_unity_suspensions_path(@group, @production_unity), class: 'list-group-item'
+      = link_to 'Visualizar ou enviar documentos', group_production_unity_send_documents_path(@group, @production_unity), class: 'list-group-item'
+      - if user_type == 4
+        - if @production_unity.is_suspended?
+          = link_to 'Remover suspensão', group_production_unity_remove_suspension_path(@group, @production_unity), class: "list-group-item list-group-item-success", method: :post, data: {confirm: "Você realmente deseja remover a suspensão?"}
+        - else
+          = link_to 'Suspender', new_group_production_unity_unity_suspension_path(@group, @production_unity), class: 'list-group-item list-group-item-danger'
+      - if require_current_or_admin(@production_unity.group.core.id, true)
+        = link_to "Excluir", group_production_unity_path(@group, @production_unity), method: :delete, class: 'list-group-item list-group-item-danger', data: { confirm: 'Realmente deseja deletar a unidade de produção?' }
+- if  @production_unity.production_unity_scopes.count != 0
+  h3
+    | Escopos de #{@production_unity.name}
+  table.table
+    tr
+      th Escopo
+      th Sigla
+      th(colspan="2")
+    - @production_unity.production_unity_scopes.each do |puc|
+      tr
+        td= link_to puc.scope.name, [@group, @production_unity, puc]
+        td= puc.scope.acronym
+        td
+          = link_to "Adicionar novo produto para escopo", new_group_production_unity_production_unity_scope_scope_product_path(@group, @production_unity, puc), class: "btn btn-primary btn-xs"
+          = " "
+          = link_to "Deletar Escopo", group_production_unity_production_unity_scope_path(@group, @production_unity, puc), method: :delete, data: { confirm: "Você realmete deseja deletar este escopo?" }, class: 'btn btn-danger btn-xs'
+- else
+  .alert.alert-warning
+    h3 Não há escopos ainda.  Use as ações para adicionar escopo.
+h3 Agricultores vinculados
+table.table
+  tr
+    th Nome
+    th colspan="2"  Ações
+  - @production_unity.production_unity_farmers.each do |production_unity_farmer|
+    tr
+      td= link_to production_unity_farmer.farmer.name, [@group, production_unity_farmer.farmer]
+      td= link_to 'Tornar Responsável', [@group, @production_unity, production_unity_farmer], class: "btn btn-primary btn-sm", method: :post, data:  {confirm: "Realmente deseja tornar #{production_unity_farmer.farmer.name} o responsável pela unidade de produção?"}  if production_unity_farmer.farmer.id != @production_unity.responsible.id
+      td= link_to 'Remover Vinculo' , [@group, @production_unity, production_unity_farmer], class: "btn btn-danger btn-sm", method: :delete, data:  {confirm: "Você realmente deseja desfazer o vinculo?"}  if production_unity_farmer.farmer.id != @production_unity.responsible.id
+br/
+= link_to "Vincular outro agricultor", new_group_production_unity_production_unity_farmer_path(@group, @production_unity), class: "btn btn-default"

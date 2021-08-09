@@ -1,0 +1,8 @@
+
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - <%= link_to "Listando alterações de suplentes e titulares", group_set_suplentes_path(@group) %> - Nova alteração de suplente ou titular
+
+<h1>Nova alteração de suplente ou titular</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar', group_set_suplentes_path %>

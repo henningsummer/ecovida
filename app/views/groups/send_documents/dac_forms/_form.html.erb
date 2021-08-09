@@ -1,0 +1,55 @@
+<div class = "container_dac">
+
+<h3>Por favor, selecione o PDF para envio: </h3>
+
+<% new_document = DacDocument.new %>
+<% new_document.dac_date = @dac_document.try(:dac_date) if @dac_document.try(:dac_date) %>
+<%= simple_form_for new_document, url: 'dac_documents', remote: true, authenticity_token: true,
+                                                           html: { multipart: true, class: "form_dac" } do |f| %>
+  <%= f.file_field :file, required: true, accept: 'application/pdf', class: "document_sended_file_dac" %>
+  <small id="emailHelp" class="form-text text-muted">Aprenda a diminuir seus documentos PDF <%= link_to 'Clicando aqui', help_reduce_pdf_size_path, target: '_blank', class: 'small' %>.</small><br/><br/>
+  <%= f.input :observations, label: 'Observações' %>
+  <%= f.input :id, as: :hidden, input_html: { value: @dac_document.try(:id) } if @need_resend_dac %>
+  <div class = "resend_<%= @dac_document.try(:id) %>"></div>
+  <div class = "resend_<%= @dac_document.try(:id) %>_accepted"></div>
+  <% if user_type >= 3 %>
+    <%= f.input :dac_date, label: 'Data da D.A.C'  %>
+    <p>Informe acima a data da D.A.C</p>
+    <p>
+  <% end%>
+  <div class= "status_dac alert alert-danger"></div>
+  <div class="alert alert-info help_pdf_dac" role="alert">
+    <h3>Você pode estar com problema no envio devido ao tamanho do documento.<h3>
+    <%= link_to 'Aprenda a diminuir o PDF', help_reduce_pdf_size_path, class: 'btn btn-info', target: '_blank' %>
+  </div>
+  <%= f.submit 'Enviar Documento', class: "btn btn-primary submit_button submit_button_dac", data: {"disable-with" => "Enviando...Por favor aguarde."} %>
+<% end %>
+</div>
+
+<script type="text/javascript">
+  var x;
+
+  $('.help_pdf_dac').hide();
+  $('.status_dac').hide();
+  $('.document_sended_file_dac').bind('change', function() {
+    var fileSize = this.files[0].size/1024/1024
+    if(fileSize > 2.3){
+      alert('Seu arquivo tem mais de 2.3 megabytes.  Por favor, veja o guia de como diminuir o tamanho do seu PDF clicando no link abaixo do campo de enviar arquivo.');
+      $('.document_sended_file_dac').val('')
+    }
+  });
+
+  $('.submit_button')
+  $(document).on('ajax:success', '.form_dac', function(e, data, response) {
+    $('.container_dac').html('<h4>Documento enviado com sucesso. Só aguardar a aprovação do administrador :)</h4>');
+    $('.panel_dac').attr('class', 'panel panel-default panel-warning');
+    $('.title_status_dac').html('Documento enviado, porém, aguardando a aprovação de um administrador');
+    $('.resend_<%= @dac_document.try(:id) %>').html('')
+    $('.resend_<%= @dac_document.try(:id) %>_accepted').html('<h3>Documento re-enviado com sucesso!</h3>')
+  });
+  $(document).on('ajax:error', '.form_dac', function(e, data, response) {
+    $('.status_dac').show();
+    $('.help_pdf_dac').show();
+    $('.status_dac').html('Não foi possível criar o documento.  Verifique os dados enviados.');
+  });
+</script>

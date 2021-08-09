@@ -1,0 +1,32 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@farmer.group.name}", @farmer.group %> - <%= link_to 'Agricultores', group_farmers_path(@farmer.group) %> - <%= link_to "#{@farmer.name}", [@farmer.group, @farmer] %> - <%= link_to 'Suspensões', group_farmer_farmer_suspensions_path(@group, @farmer) %> - Mostrando suspensão
+
+<p>
+  <strong>Descrição:</strong>
+  <%= @farmer_suspension.description %>
+</p>
+
+<p>
+  <strong>Data da suspensão:</strong>
+  <%= l @farmer_suspension.suspension_date %>
+</p>
+
+<p>
+  <strong>Tipo:</strong>
+  <%= @farmer_suspension.suspension_type %>
+</p>
+
+<% if @farmer_suspension.suspension_type == 'Suspensão' %>
+  <h4>Motivo(s) da suspensão: </h4>
+  <ul>
+    <% if @farmer_suspension.farmer_suspension_reasons.count != 0 %>
+    <% @farmer_suspension.farmer_suspension_reasons.each do |reason| %>
+      <li><%= reason.suspension_type.name %></li>
+    <% end %>
+    <% else %>
+      <li>Nenhum motivo informado. </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to 'Editar', edit_group_farmer_farmer_suspension_path(@group, @farmer, @farmer_suspension) %> |
+<%= link_to 'Voltar', group_farmer_farmer_suspensions_path(@group, @farmer) %>

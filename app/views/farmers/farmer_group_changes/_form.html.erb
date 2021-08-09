@@ -1,0 +1,9 @@
+<%= bootstrap_form_for([@group, @farmer, @farmer_group_change]) do |f| %>
+  <%= show_errors(@farmer_group_change) %>
+
+
+    <%= f.select :group_id, @group.core.groups.all.collect {|group| [group.name, group.id]}, label: "Novo grupo para o agricultor:" %>
+
+    <%= f.submit %>
+
+<% end %>

@@ -1,0 +1,8 @@
+<%= link_to 'Pagina ínicial', root_path %> - <%= link_to "Núcleo: #{@core.name} - ", @core if user_type == 4%><%= link_to " - Listando coordenadores - ", core_core_coordinators_path(@core) if user_type == 4 %>Novo coordenador
+
+
+<h1>Adicionando novo coordenador da comissão de Ética do núcleo</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Voltar', core_core_coordinators_path %>

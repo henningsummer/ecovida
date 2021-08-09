@@ -1,0 +1,95 @@
+<div class = "row">
+  <div class = "col-md-6">
+    <div class = "panel panel-default">
+      <div class = "panel-heading"><h3 class = "panel-title">Informações básicas</h3></div>
+      <div class = "panel-body">
+        <p>
+          <strong>Razão social:</strong> <%= production_unity.name %>
+        </p>
+        <p>
+          <strong>Nome fantasia:</strong> <%= production_unity.fantasy_name %>
+        </p>
+
+        <p>
+          <strong>Tipo:</strong> <%= production_unity.production_type %>
+        </p>
+        <p>
+          <% if production_unity.number_type == 1 %>
+          <strong>CPF:</strong> <%= production_unity.number %>
+          <% else %>
+          <strong>CNPJ:</strong> <%= production_unity.number %>
+          <% end %>
+        </p>
+        <p>
+          <strong>Tipo de registro:</strong> <%= production_unity.register_type %>
+        </p>
+        <p>
+          <strong>Número do registro:</strong> <%= production_unity.register_number %>
+        </p>
+
+        <p>
+          <strong>Número para contato:</strong> <%= production_unity.phone %>
+        </p>
+
+        <p>
+          <strong>Email:</strong> <%= link_to production_unity.email, "mailto:#{production_unity.email}" %>
+        </p>
+
+        <p>
+          <strong>Endereço:</strong> <%= production_unity.address %>
+        </p>
+        <p>
+          <strong>Bairro:</strong> <%= production_unity.neighborhood %>
+        </p>
+        <p>
+          <strong>Cidade:</strong> <%= production_unity.city.name %>
+        </p>
+        <p>
+          <strong>CEP:</strong> <%= production_unity.cep %>
+        </p>
+        <p>
+          <strong>Responsável:</strong> <%=production_unity.responsible.name%>
+        </p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if production_unity.scope_products.count != 0 %>
+<h3>Produtos de <%= production_unity.name %></h3>
+<table class = "table">
+  <tr>
+    <th>Produto</th>
+    <th>Tamanho da embalagem</th>
+    <th>Volume por ano</th>
+    <th>Com ingredientes orgânicos?</th>
+    <th>Data da ultima modificação</th>
+    <th>Escopo</th>
+    <th>Sigla</th>
+  </tr>
+  <% production_unity.scope_products.each do |scope_product| %>
+    <tr>
+      <td><%= scope_product.product.name %></td>
+      <td>
+      <% if scope_product.package_size.present? %><%= scope_product.package_size %> <%= scope_product.package_size_unity %>(s)
+      <% else %>
+        Não informado
+      <% end %></td>
+      <td>
+      <% if scope_product.amount_per_year.present? %>
+      <%= rounded_formated_value(scope_product.amount_per_year) %> <%= scope_product.amount_per_year_unity %>(s)
+      <% else %>
+        Não informado
+      <% end %>
+      </td>
+      <td><%= scope_product.is_processor ? "Sim" : "Não" %></td>
+      <td><%= l(scope_product.updated_at) %></td>
+      <td><%= scope_product.production_unity_scope.scope.name %></td>
+      <td><%= scope_product.production_unity_scope.scope.acronym %></td>
+    </tr>
+  <% end %>
+</table>
+<% else %>
+  <h3>Não existem produtos vinculados a propriedade</h3>
+<% end %>

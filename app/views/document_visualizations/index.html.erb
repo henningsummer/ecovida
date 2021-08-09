@@ -1,0 +1,47 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Pagina inicial' },
+    { url: nil, text: 'Listando acessos' }
+  ])
+%>
+
+<% if @document_visualizations.count > 0 %>
+
+<h1>Listando acessos</h1>
+
+  <br>
+
+  <table class = "table ">
+    <thead>
+      <tr>
+        <th>Data de validade</th>
+        <th>Chave de acesso</th>
+        <th>Ativo</th>
+        <th colspan="3">Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @document_visualizations.each do |document_visualization| %>
+        <tr>
+          <td><%= link_to "#{document_visualization.formated_date}", document_visualization %></td>
+          <td><%= document_visualization.access_key %></td>
+          <td><%= document_visualization.active? %></td>
+          <td><%= link_to 'Ver mais', document_visualization, class: "btn btn-default btn-sm" %></td>
+          <td><%= link_to 'Editar', edit_document_visualization_path(document_visualization), class: "btn btn-default btn-sm" %></td>
+          <td><%= link_to 'Excluir', document_visualization, data: { confirm: 'Tem certeza?' }, method: :delete, class: "btn btn-default btn-sm" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <br>
+
+  <%= paginate @document_visualizations %>
+
+<% else %>
+  <h3>Não há acessos cadastrados ainda.</h3>
+<% end %>
+
+<br>
+<%= link_to 'Novo acesso', new_document_visualization_path, class: 'btn btn-default new_core' %>

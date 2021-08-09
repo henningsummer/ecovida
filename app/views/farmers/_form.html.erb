@@ -1,0 +1,212 @@
+
+<%= simple_form_for([@group, @farmer]) do |f| %>
+  <%= show_errors(@farmer) %>
+
+  <div class = "alert alert-info info">
+    <strong>Observação:</strong> Você está cadastrnado uma pessoa jurídica a este grupo.
+  </div>
+  <% unless @farmer.persisted? %>
+    <div id="invalid-username" class= "alert alert-warning warning">
+    </div>
+  <% end %>
+
+  <%= f.input :number_type, as: :radio_buttons, collection: [['1', 'CPF'], ['2', 'CNPJ']], label_method: :second, value_method: :first %>
+
+  <fieldset>
+    <legend>Informações Básicas</legend>
+    <div class = "panel panel-default">
+      <div class = "panel panel-body"%>
+        <div class = "row">
+          <div class = "col-md-4">
+            <%= f.input :name %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :number %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :rg %>
+          </div>
+        </div>
+
+        <div id = "person_selects">
+          <div class = "row">
+            <div class = "col-md-6">
+              <%= f.input :gender, collection: Genders.to_a, include_blank: false %>
+            </div>
+            <div class = "col-md-6">
+              <%= f.input :birthday, as: :date_picker, input_html: {value: f.object.birthday.try(:strftime, '%d/%m/%Y')} %>
+            </div>
+          </div>
+        </div>
+
+        <% if is_admin? %>
+          <%= f.input :contract_of_adhesion, as: :boolean %>
+        <% end %>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <br/ >
+
+  <fieldset>
+    <legend>Endereço</legend>
+    <div class = "panel panel-default">
+      <div class = "panel panel-body"%>
+
+        <div class = "row">
+          <div class = "col-md-4">
+            <%= f.input :address %>
+          </div>
+          <div class = "col-md-4">
+            <%= f.input :neighborhood %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :city_id, collection: City.get_cities_from_state(@group.core.state_id) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <br />
+  <fieldset>
+    <legend>Contato e outros.</legend>
+    <div class = "panel panel-default">
+      <div class = "panel panel-body"%>
+
+        <div class="row">
+          <div class="col-md-4">
+            <%= f.input :phone_number %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :cell_phone %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :email, as: :email, html5: true %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <%= f.input :lembrete, as: :text %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class = "spouse_form">
+    <br />
+    <fieldset>
+      <legend>Informações do Cônjuge ou 2º membro titular.</legend>
+      <small class="text-muted">Deixe em branco caso não tenha.</small>
+      <div class = "panel panel-default">
+        <div class = "panel panel-body"%>
+
+          <div class="row">
+            <div class = "col-md-6">
+              <%= f.input :spouse, label: 'Nome do Cônjuge ou 2º membro titular' %>
+            </div>
+            <div class = "col-md-6">
+              <%= f.input :spouse_cpf, label: 'Cpf' %>
+            </div>
+          </div>
+          <div class="row">
+            <div class = "col-md-6">
+              <%= f.input :spouse_gender, collection: Genders.to_a, include_blank: true, label: 'Gênero' %>
+            </div>
+            <div class = "col-md-6">
+              <%= f.input :spouse_birthday, as: :date_picker, label: 'Data de nascimento', input_html: {value: f.object.spouse_birthday.try(:strftime, '%d/%m/%Y')} %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <br />
+
+  <%= f.submit  data: {"disable-with" => "Salvando..."}, class: 'btn btn-primary' %>
+
+<% end %>
+
+<script type = "text/javascript">
+ $('document').ready(function(){
+
+     $('.info').hide();
+
+     $(".radio").change(function(){
+         change_it();
+     });
+
+     change_it();
+
+     function change_it(){
+         if($("#farmer_number_type_1").is(':checked')){
+             $('label[for = farmer_name]').text("Nome do titular*");
+
+             $('label[for = farmer_number]').text("CPF");
+
+             $('.spouse_form').show();
+             $('#person_selects').show();
+
+             $('#farmer_rg').show();
+             $('label[for = farmer_rg]').show();
+
+             $('.info').hide();
+         }else if($("#farmer_number_type_2").is(':checked')){
+             $('label[for = farmer_name]').text("Razão social*");
+
+             $('.spouse_form').hide();
+
+             $('#farmer_spouse').val('');
+             $('#farmer_spouse_cpf').val('');
+	     $('#farmer_spouse_gender').val('');
+	     $('#farmer_spouse_birthday').val('');
+
+             $('#farmer_rg').val('');
+             $('#farmer_rg').hide();
+
+             $('#farmer_birthday').val('');
+             $('#farmer_gender').val('');
+
+             $('#person_selects').hide();
+
+             $('label[for = farmer_rg]').hide();
+
+             $('label[for = farmer_number]').text("CNPJ");
+
+             $('.info').show();
+         }
+     }
+
+     // Name Validation
+
+     <% unless @farmer.persisted? %>
+     $('#invalid-username').hide();
+     $('#farmer_name').on('keyup', function(event) {
+         $.ajax({
+             url: '/groups/<%= @group.id %>/farmers/validate_name?name=' + $('#farmer_name').val(),
+             type: 'GET',
+             dataType: 'json',
+             error: function(jqXHR, textStatus, errorThrown) {},
+             success: function(data, textStatus, jqXHR) {
+                 console.log(data)
+                 if (data.valid === true) {
+                     return $('#invalid-username').hide();
+                 } else if (data.valid === false) {
+                     console.log(textStatus)
+                     $('#invalid-username').html("Alerta! Existe alguém chamado <strong>" + data.name + "</strong> que pertence ao grupo <strong>" + data.group + "</strong> no qual pertence ao núcleo <strong>" + data.core + "</strong> cadastrado no sistema.  Cuide para não cadastrar um usuário repetido.");
+                     return $('#invalid-username').show();
+                 }
+             }
+         });
+         event.stopImmediatePropagation();
+         return false;
+     });
+     <% end %>
+
+     return false;
+ });
+</script>

@@ -1,0 +1,78 @@
+<div class = "row">
+  <div class = "col-md-6">
+    <div class = "panel panel-default">
+      <div class = "panel-heading"><h3 class = "panel-title">Informações básicas</h3></div>
+      <div class = "panel-body">
+          <p>
+            <strong>Nome da propriedade ou sítio:</strong> <%= production_unity.name %>
+          </p>
+
+          <p>
+            <strong>Área total:</strong> <%= rounded_formated_value(production_unity.total_area) %>
+          </p>
+          <p>
+            <strong>Área orgânica total:</strong> <%= production_unity.total_organic_area %>
+          </p>
+          <p>
+            <strong>Área da mata nativa:</strong> <%= production_unity.total_native_area %>
+          </p>
+          <p>
+            <% p = production_unity %>
+            <strong>Coordenadas geográficas</strong>
+            <% if p.lat_hour.present? %>
+              <%= "Latitude: #{p.lat_hour}º #{p.lat_minute}' #{p.lat_second}'' #{p.lat_type}.  Longitude: #{p.lon_hour}º #{p.lon_minute}' #{p.lon_second}'' #{p.lon_type}" %>
+            <% else %>
+              Não informado.
+            <% end %>
+          </p>
+          <p>
+            <strong>Tipo:</strong> <%= production_unity.production_type %>
+          </p>
+          <p>
+            <strong>Endereço:</strong> <%= production_unity.address %>
+          </p>
+          <p>
+            <strong>Bairro:</strong> <%= production_unity.neighborhood %>
+          </p>
+          <p>
+            <strong>Cidade:</strong> <%= production_unity.city.name %>
+          </p>
+
+          <p>
+            <strong>CEP:</strong> <%= production_unity.cep %>
+          </p>
+
+          <p>
+            <strong>Responsável:</strong> <%= production_unity.responsible.name %>
+          </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if production_unity.scope_products.count != 0 %>
+<h3>Produtos de <%= @production_unity.name %></h3>
+<table class = "table">
+  <tr>
+    <th>Produto</th>
+    <th>Quantidade</th>
+    <th>Area (ha)</th>
+    <th>Data da ultima modificação</th>
+    <th>Escopo</th>
+    <th>Sigla</th>
+  </tr>
+  <% production_unity.scope_products.each do |scope_product| %>
+    <tr>
+      <td><%= scope_product.product.name %></td>
+
+      <td><%= scope_product.amount.present? ? "#{rounded_formated_value(scope_product.amount)} #{scope_product.unity} (s)" : "Não informado" %> </td>
+      <td><%= scope_product.area.present? ? rounded_formated_value(scope_product.area) : "Não informado" %></td>
+      <td><%= l(scope_product.updated_at) %></td>
+      <td><%= scope_product.production_unity_scope.scope.name %></td>
+      <td><%= scope_product.production_unity_scope.scope.acronym %></td>
+    </tr>
+  <% end %>
+</table>
+<% else %>
+  <h3>Não existem produtos vinculados a propriedade</h3>
+<% end %>

@@ -1,0 +1,25 @@
+<p><%= link_to 'Ínicio', root_path %> -
+  <%= link_to 'Cadastros', records_path %> -
+  <%= link_to 'Listando escopos', records_scopes_path %> -
+  <%= @scope.name %>
+</p>
+
+<p>
+  <strong>Nome:</strong>
+  <%= @scope.name %>
+</p>
+
+<p>
+  <strong>Sigla:</strong>
+  <%= @scope.acronym %>
+</p>
+
+<%= link_to 'Editar', edit_records_scope_path(@scope) %> |
+<%= link_to 'voltar', records_scopes_path %>
+
+<h3>Categorias deste escopo</h3>
+<ul>
+  <% @scope.product_categories.each do |category| %>
+    <li><%= link_to category.name, [:records, category] %></li>
+  <% end %>
+</ul>

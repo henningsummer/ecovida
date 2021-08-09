@@ -1,0 +1,15 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Pagina inicial' },
+    { url: core_path(@farmer.group.core), text: @farmer.group.core.name, hide: !is_admin? },
+    { url: groups_path, text: 'Listando grupos' },
+    { url: group_path(@farmer.group), text: @farmer.group.name },
+    { url: group_farmers_path(@farmer.group), text: 'Listando agricultores' },
+    { url: group_farmer_path(@group, @farmer), text: @farmer.name },
+    { url: nil, text: 'Visualizar ou enviar documentos' }
+  ])
+%>
+
+<h2>Enviar Documentos para o membro <%= @farmer.name %></h2>
+
+<%= render 'application/send_documents/index' %>

@@ -1,0 +1,5 @@
+<%= render 'css' %>
+<% @certificates.each do |certificate| %>
+  <% partial = Certificate::CERTIFICATE_TYPES.key(certificate.certificate_type.to_i) %>
+  <%= render partial: partial, locals: { certificate: certificate } %>
+<% end %>

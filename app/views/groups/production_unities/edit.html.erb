@@ -1,0 +1,9 @@
+<%= link_to 'Pagina ínicial', root_path %> - <%= link_to 'Listando grupos',
+  groups_path %> - <%= link_to "Grupo: #{@group.name}", @group %> - Editando <%= @production_unity.name %>
+<h2>Editando <%= @production_unity.name %></h2>
+
+<% if @production_unity.scope_type == 2  %>
+  <%= render 'agribusiness_edit_form' %>
+<% else %>
+  <%= render 'production_unity_edit_form' %>
+<% end %>

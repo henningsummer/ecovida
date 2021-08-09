@@ -1,0 +1,30 @@
+<p><%= link_to 'Ínicio', root_path %> -
+  <%= link_to 'Cadastros', records_path %> -
+  Listando tipos de suspensão
+</p>
+
+<h1>Listando tipos de suspensão para unidade de produção</h1>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Nome</th
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @unity_suspension_types.each do |unity_suspension_type| %>
+      <tr>
+        <td><%= unity_suspension_type.name %></td>
+        <td><%= link_to 'Mostrar', [:records, unity_suspension_type], class: 'btn btn-default btn-sm' %></td>
+        <td><%= link_to 'Editar', edit_records_unity_suspension_type_path(unity_suspension_type), class: 'btn btn-default btn-sm' %></td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Novo tipo de suspensão para unidade de produção', new_records_unity_suspension_type_path, class: 'btn btn-default' %>

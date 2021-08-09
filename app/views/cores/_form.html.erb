@@ -1,0 +1,38 @@
+<div class = "row">
+  <div class = "col-md-4">
+  <fieldset>
+    <%= simple_form_for(@core) do |f| %>
+      <%= show_errors(@core) %>
+
+        <%= f.input :name %>
+
+        <%= f.input :state_id, collection: State.all %>
+
+        <%= f.input :login %>
+
+
+        <%= f.input :password %>
+
+        <%= f.input :password_confirmation %>
+
+        <%= f.input :email %>
+
+
+
+        <%= f.input :phone %>
+
+        <%= f.input :total_power %>
+
+        <%= f.input :sig_org_access %>
+
+        <%= f.input :inactive_certificate %>
+
+        <br>
+
+        <%= f.submit 'Salvar núcleo',  class: 'btn btn-default', data: {"disable-with" => "Salvando..."} %>
+
+    <% end %>
+  </fieldset>
+
+  </div>
+</div>

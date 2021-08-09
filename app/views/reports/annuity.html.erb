@@ -1,0 +1,18 @@
+<%= link_to "ìnicio", root_path %> - <%= link_to "Relatórios", reports_index_path %> - Relatório das anuidades
+
+<table class="table">
+  <tr>
+    <th>Núcleo</th>
+    <th>Total á pagar</th>
+    <th>Pago</th>
+    <th>À pagar</th>
+  </tr>
+  <% @cores.each do |core| %>
+  <tr>
+    <td><%= link_to core[:core_name], core_path(core[:core_id]) %></td>
+    <td><%= number_to_currency core[:total] %></td>
+    <td><%= number_to_currency core[:to_pay] %></td>
+    <td><%= number_to_currency core[:payed] %></td>
+  </tr>
+  <% end %>
+</table>

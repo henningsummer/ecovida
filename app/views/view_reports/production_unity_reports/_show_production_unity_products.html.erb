@@ -1,0 +1,8 @@
+<script>
+$('#<%= escape_javascript(button_name) %>').click(function(){
+
+  $('.modal').html("<%= escape_javascript(render partial: 'products_modal', locals: {production_unity: production_unity}) %>"); //inserts content into your empty div, be aware that the parameter needed to be quoted.
+  $('.modal').modal(); //jquery ui will open it as a modal popup
+});
+
+</script>

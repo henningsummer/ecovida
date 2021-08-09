@@ -1,0 +1,36 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Página inicial' },
+    { url: nil, text: 'Relatórios Dinâmicos' }
+  ])
+%>
+
+<h1>Relatórios do Sistema</h1>
+
+<p>Nesta sessão é possível selecionar um tipo de busca para gerar relatórios avançados</p>
+
+<div class = "row">
+  <div class = 'col-md-4'>
+    <h2>Relatório dos Membros</h2>
+    <p>Neste relatório você pode buscar membros por estado, cidade, situação atual, etc.</p>
+    <p><%= link_to 'Relatório de Membros', view_reports_farmer_reports_path, class: 'btn btn-default' %></p>
+  </div>
+  <div class = 'col-md-4'>
+    <h2>Relatório de Produtos</h2>
+    <p>Busca de produtos por estado, cidade, tipo, etc.</p>
+    <p><%= link_to 'Relatório de produtos', view_reports_product_reports_path, class: 'btn btn-default' %></p>
+  </div>
+  <div class = 'col-md-4'>
+    <h2>Relatório de Propriedades</h2>
+    <p>Busca de propriedades com diversas opções de filtro</p>
+    <p><%= link_to 'Relatório de propriedades', view_reports_production_unity_reports_path, class: 'btn btn-default' %></p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+    <h2>Relatório de cidades</h2>
+    <p>Neste relatório são apresentadas as cidades e quantos membros possui, além de pesquisar por estado ou uma cidade específica</p>
+    <p><%= link_to 'Relatório de cidades', view_reports_city_reports_path, class: 'btn btn-default' %></p>
+  </div>
+</div>

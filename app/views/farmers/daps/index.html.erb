@@ -1,0 +1,42 @@
+<%= link_to 'Pagina ínicial', root_path %> -<%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %> <%= link_to 'Listando grupos', groups_path %> - <%= link_to "Grupo: #{@farmer.group.name}", @farmer.group %> - <%= link_to 'Agricultores', group_farmers_path(@farmer.group) %> - <%= link_to "#{@farmer.name}", [@farmer.group, @farmer] %> - D.A.P's
+
+
+<% if @daps.count != 0 %>
+
+<h1>Listando D.A.P's</h1>
+
+<table class = "table">
+  <thead>
+    <tr>
+      <th>Numero do DAP</th>
+      <th>Data de emissão</th>
+      <th>Validade</th>
+      <th>Adicionado por</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @daps.each do |dap| %>
+      <tr>
+        <td><%= dap.dap_number %></td>
+        <td><%= l dap.emission_date %></td>
+        <td><%= l dap.validity %></td>
+        <td><%= dap.added_by %></td>
+        <td><%= link_to 'Mostrar', [@farmer.group, @farmer, dap] %></td>
+        <td><%= link_to 'Deletar', [@farmer.group, @farmer, dap], method: :delete, data: { confirm: 'Você tem certeza disso? Não há como voltar atrás.' } if require_current_or_admin(@farmer.group.core.id, true) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<% else %>
+  <h3>Não há daps para <%= @farmer.name %></h3>
+<% end %>
+
+<%= paginate @daps %>
+
+<% if require_current_or_admin(@farmer.group.core.id, true) and user_type >= 2 #Admin, dono e poder total %>
+<%= link_to "Novo D.A.P para #{@farmer.name}", new_group_farmer_dap_path(@farmer.group, @farmer), class: 'btn btn-default' %>
+<% end %>

@@ -1,0 +1,2 @@
+module Records::ProductsHelper
+end

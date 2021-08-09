@@ -1,0 +1,34 @@
+<div class = "report_content">
+  <p>Para gerar o relatório, você precisa fornecer um e-mail.</p>
+  <p>O relatório será enviado para o e-mail fornecido</p>
+
+<%= bootstrap_form_for model, remote: true, url: path, method: :get do |f| %>
+  <%= f.hidden_field :id, value: model.id %>
+  <%= f.email_field :email %>
+  <% if need_year %>
+    <div class="form-group">
+      <label for="year">Ano: </label>
+      <%= text_field_tag :year, Time.zone.now.year, class: 'form-control' %>
+    </div>
+  <% end %>
+  <%= f.submit "Enviar Relatório", class: 'btn btn-default send_button' %>
+<% end %>
+</div>
+
+<div class = "success">
+  <p>O e-mail será enviado em alguns instantes.  Pode demorar alguns minutos. </p>
+  <button class = "ok_button btn btn-success">Entendido</button>
+</div>
+
+<script>
+  $('.success').hide();
+
+  $('.send_button').click(function(){
+    $('.report_content').hide();
+    $('.success').show();
+  });
+
+  $('.ok_button').click(function(){
+    $(".ui-dialog-titlebar-close").click();
+  })
+</script>

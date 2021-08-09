@@ -1,0 +1,7 @@
+pt:
+  enumerations:
+    document_subjects:
+      farmer: "Membro"
+      core_group: "Grupo"
+      production_unity: "Unidade de Produção"
+      agribusiness: "Agroindústria"

@@ -1,0 +1,10 @@
+
+
+<%= bootstrap_form_for([@group, @production_unity, @production_unity_scope]) do |f| %>
+  <% if @production_unity_scope.id.nil? %>
+	  <%= f.select :scope_id, Scope.where(scope_type: 1).collect {|c| [c.name, c.id]}, label: "Escopo" %>
+  <% end %>
+  <%= f.number_field :total_area, label: "Àrea total (Deixe em branco para calcular automaticamente)" %>
+
+  <%= f.submit "Adicionar escopo",  data: {"disable-with" => "Salvando..."} %>
+<% end %>

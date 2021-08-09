@@ -1,0 +1,89 @@
+= link_to 'Pagina ínicial ', root_path
+| -
+= link_to ' Listando núcleos ', cores_path
+|-
+=< @core.name
+
+h1 = @core.name
+
+br
+
+.row
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        h3.panel-title Informações básicas
+      .panel-body
+        p
+          strong Login:
+          =< @core.login
+
+        p
+          strong Poder total:
+          =< @core.total_power ? 'Sim' : 'Não'
+
+        p
+          strong Pode atualizar Sig.Org:
+          =< @core.sig_org_access ? 'Sim' : 'Não'
+
+        p
+          strong Quantidade de agricultores:
+          =< @core.active_farmer_count
+        p
+          strong Quantidade de grupos:
+          =< @core.group_count
+
+        p
+          strong E-mail para contato:
+          =< link_to "#{@core.email}", "mailto:#{@core.email}"
+
+        p
+          strong Telefone para contato:
+          =< @core.phone
+
+        - if @core.coordinator.present?
+          p
+            strong Coordenador:
+            =< "#{@core.coordinator.name} - #{@core.coordinator.phone} -"
+            = link_to @core.coordinator.email, "mailto:#{@core.coordinator.email}"
+
+        = link_to 'Editar informações', edit_core_path(@core), class: 'btn btn-default'
+
+
+  .col-md-6
+    .panel.panel-primary
+      .panel-heading
+        h3.panel-title Ações
+      .panel-content
+
+        = link_to 'Gerenciar coordenadores', core_core_coordinators_path(@core), class: "list-group-item"
+        = link_to 'Relatório de situação atual dos cadastros', '#', class: 'list-group-item actual_situation_button'
+        = link_to 'Relatório de produtos', '#', class: 'list-group-item products_report'
+        = link_to 'Gerenciar pagamentos', core_payments_path(@core.id), class: 'list-group-item'
+
+br
+
+- if @core.groups.count != 0
+
+  h2 = "Grupos de #{@core.name}"
+
+  table.table
+    tr
+      th Nome do Grupo
+      th Qtd de agricultores
+      th Ações
+    - @core_groups.each do |group|
+      tr
+        td = link_to group.name, group
+        td = group.farmers.count
+        td = link_to 'Mostrar', group, {class: 'btn btn-default'}
+    tr
+      td colspan="3" = paginate @core_groups
+
+- else
+  h3 = "Não há grupos cadastrados para #{@core.name} ainda."
+= link_to 'Adicionar novo grupo', new_group_path(core: @core.id), {class: 'btn btn-default'}
+= link_to 'Voltar', cores_path, {class: 'btn btn-default'}
+
+= render partial: 'show_report', locals: {button_name: 'products_report', model: @core, path: reports_core_reports_products_path }
+= render partial: 'show_report', locals: {button_name: 'actual_situation_button', model: @core, path: reports_core_reports_actual_situation_path }

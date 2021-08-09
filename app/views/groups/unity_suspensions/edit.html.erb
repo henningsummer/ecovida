@@ -1,0 +1,10 @@
+<%= link_to 'Pagina ínicial', root_path %> - <%= link_to " #{@group.core.name} -", @group.core if user_type == 4 %><%= link_to 'Listando grupos', groups_path %>
+ - <%= link_to "Grupo: #{@group.name}", @group %>
+  - <%= link_to 'Listando unidades de produção', group_production_unities_path(@group) %> - <%= link_to @production_unity.name, [@group, @production_unity] %> - <%= link_to 'Listando suspensões', group_production_unity_unity_suspensions_path(@group, @production_unity) %> - Editando suspensão
+
+<h1>Editando suspensão de <%=@production_unity.name %></h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Mostrar', [@group, @production_unity, @unity_suspension] %> |
+<%= link_to 'Voltar', group_production_unity_unity_suspensions_path(@group, @production_unity) %>

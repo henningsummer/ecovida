@@ -1,0 +1,14 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Página inicial' },
+    { url: document_visualizations_path, text: 'Listando acessos' },
+    { url: nil, text: 'Editando informações' }
+  ])
+%>
+
+<h1>Editando acesso</h1>
+
+<%= render 'form' %>
+<br>
+<%= link_to 'Mostrar', @document_visualization %> |
+<%= link_to 'Voltar', document_visualizations_path %>

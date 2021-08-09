@@ -1,0 +1,17 @@
+<div class = "row">
+  <div class = "col-md-4">
+  <fieldset>
+    <%= simple_form_for(@document_visualization) do |f| %>
+      <%= show_errors(@document_visualization) %>
+
+        <%= f.input :expire_at, as: :date_time_picker, input_html: {value: f.object.expire_at.try(:strftime, '%d/%m/%Y %H:%M')} %>
+
+        <br>
+
+        <%= f.submit 'Salvar acesso',  class: 'btn btn-default', data: {"disable-with" => "Salvando..."} %>
+
+    <% end %>
+  </fieldset>
+
+  </div>
+</div>

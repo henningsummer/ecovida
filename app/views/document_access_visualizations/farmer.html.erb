@@ -1,0 +1,193 @@
+<%=
+  create_breadcumbs([
+    { url: document_access_visualizations_core_url, text: 'Núcleos' },
+    { url: document_access_visualizations_group_url(core_id: @farmer.group.core_id), text: "Grupos do núcleo #{@farmer.group.core.name} - #{@farmer.group.core.state.uf}" },
+    { url: document_access_visualizations_documents_farmers_and_production_unities_url(group_id: @farmer.group_id), text: "Grupo #{@farmer.group.name}" },
+    { ulr: nil, text: @farmer.name}
+  ])
+%>
+
+<h2><%= @farmer.name %></h2>
+<div class = "row">
+  <div class = "col-md-6">
+    <div class = "panel panel-default">
+      <div class = "panel-heading"><h3 class = "panel-title">Informações básicas</h3></div>
+     <div class = "panel-body">
+       <p>
+         <strong>Código do agricultor:</strong>
+         <%= @farmer.farmer_code %>
+       </p>
+         <% if @farmer.spouse.present? %>
+          <p>
+            <strong>Cônjuge \ 2º titular:</strong><%= @farmer.spouse %> - <strong>CPF:</strong> <%= @farmer.spouse_cpf %>
+          </p>
+         <% end %>
+         <p>
+           <strong>RG:</strong>
+           <%= @farmer.rg %>
+         </p>
+         <p>
+           <strong><%= @farmer.number_type == 1 ? "CPF" : "CNPJ" %>:</strong>
+           <%= @farmer.number %>
+         </p>
+
+         <p>
+           <strong>Endereço:</strong>
+           <%= @farmer.address %>
+         </p>
+
+         <p>
+           <strong>Bairro:</strong>
+           <%= @farmer.neighborhood %>
+         </p>
+
+         <p>
+           <strong>Município:</strong>
+           <%= @farmer.city.name %>
+         </p>
+
+         <p>
+           <strong>Telefone:</strong>
+           <%= @farmer.phone_number %>
+         </p>
+
+         <p>
+           <strong>Celular:</strong>
+           <%= @farmer.cell_phone %>
+         </p>
+
+         <p>
+           <strong>Email:</strong>
+           <%= link_to @farmer.email, "mailto:#{@farmer.email}" %>
+         </p>
+     </div>
+   </div>
+  </div> <!-- fim col-->
+</div> <!-- row -->
+
+<br>
+
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-folder-close"></span> Documentos</a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse">
+      <div class="panel-body">
+        <% if @documents.empty? %>
+          Não existem documentos a serem apresentados
+        <% else %>
+        <table class = "table ">
+          <thead>
+            <tr>
+              <th>Nome do documento</th>
+              <th>Arquivo ou url</th>
+              <th>Data de criação</th>
+              <th>Data de aprovação</th>
+              <th>Possui versões anteriores?</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @documents.each do |document| %>
+            <tr>
+              <% if document.accepted? %>
+                <td><%= document.document.name %></td>
+                <td><%= document.file.file ? link_to(document.file.filename, document.file.url, target: :_blank) : link_to(document.url, document.url, target: :_blank) %></td>
+                <td><%= formated_datetime(document.created_at) %></td>
+                <td><%= formated_datetime(document&.approved_at) %></td>
+                <% else %>
+                <td><%= document.document.name %></td>
+                <td> - </td>
+                <td><%= formated_datetime(document.created_at) %></td>
+                <td>Não foi aprovado</td>
+              <% end %>
+              <% if document.has_document_history? %>
+                <td><%= link_to 'Sim, clique aqui', '#', id: "document#{document.id}"%></td>
+                <% else %>
+                <td>Não</td>
+              <% end %>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel-group" id="accordion1">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo"><span class="glyphicon glyphicon-folder-close"></span> Certificados</a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse">
+      <div class="panel-body">
+        <% if @certificates.empty? %>
+          Não existem certificados a serem apresentados
+        <%else%>
+        <table class = "table">
+          <tr>
+            <th>
+              Data de emissão
+            </th>
+            <th>
+              Data da reunião
+            </th>
+            <th>
+              Data da D.A.C
+            </th>
+            <th>
+              Tipo
+            </th>
+            <th colspan="2">
+              Ações
+            </th>
+          </tr>
+          <% @certificates.each do |certificate_name| %>
+            <tr>
+              <td>
+                <%= l certificate_name.certificate.certificate_group.created_at %>
+              </td>
+              <td>
+                <%= l certificate_name.certificate.certificate_group.meeting_date %>
+              </td>
+              <td>
+                <%= l certificate_name.certificate.dac_date %>
+              </td>
+              <td>
+                <% if certificate_name.name_type == "1" %>
+                  Certificado do Titular
+                <% elsif certificate_name.name_type == "2" %>
+                  Certificado do segundo titular
+                <% elsif certificate_name.name_type == "4" %>
+                  Certificado do membro para agroindustria
+                <% end %>
+              </td>
+              <td>
+                <%= link_to "Gerar PDF", { controller: 'document_access_visualizations',
+                                           action: 'certificate',
+                                           certificate_id: certificate_name.certificate,
+                                           format: :pdf },
+                                           target: :blank, class: "btn btn-success btn-xs" %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<%= link_to 'Voltar', {controller: 'document_access_visualizations', action: 'documents_farmers_and_production_unities', group_id: @farmer.group_id} %>
+
+<% @documents.select { |d| d.has_document_history? }.each do |document| %>
+  <%= render partial: 'show_document_history', locals: {button_name: "document#{document.id}", document: document } %>
+<% end%>

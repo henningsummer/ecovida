@@ -1,0 +1,76 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Página inicial' },
+    { url: view_reports_view_reports_path, text: 'Relatórios Dinâmicos' },
+    { url: nil, text: 'Relatórios de propriedades' }
+  ])
+%>
+
+<div class="row">
+  <div class="col-md-3">
+    <%= simple_form_for @q, url: view_reports_production_unity_reports_path, html: {method: :get} do |f| %>
+    <%= f.input :name_cont, label: 'Nome' %>
+    <%= f.input :scope_type_eq, collection: @scope_types, label: 'Tipo' %>
+    <div class = 'form-group'>
+      <%= f.label :state_id_eq, 'Estado' %>
+      <%= f.select :state_id_eq, @states, { include_blank: 'Todos os estados', selected: params[:q].try(:[], :state_id_eq) }, class: 'chosen-select form-control'%>
+    </div>
+    <div class = 'form-group'>
+      <%= f.label :city_id_eq, 'Cidade' %>
+      <%= f.select :city_id_eq, @cities, { include_blank: 'Todas as cidades', selected: params[:q].try(:[], :city_id_eq) }, class: 'chosen-select' %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.label :core_id_eq, 'Núcleo' %>
+      <%= f.select :core_id_eq, @cores, { include_blank: 'Todos os núcleos', selected: params[:q].try(:[], :core_id_eq) }, class: 'chosen-select' %>
+    </div>
+    <div class = 'form-group'>
+      <%= f.label :group_id_eq, 'Grupo' %>
+      <%= f.select :group_id_eq, @groups, { include_blank: 'Todos os grupos', selected: params[:q].try(:[], :group_id_eq) }, class: 'chosen-select' %>
+    </div>
+    <%= f.input :created_at_gteq, as: :date_picker, label: 'Criado a partir de', input_html: { value: params[:q].try(:[], :created_at_gteq) } %>
+    <%= f.input :created_at_lteq, as: :date_picker, label: 'Criado até', input_html: { value: params[:q].try(:[], :created_at_lteq) } %>
+    <%= f.input :product_id_eq, collection: @products, label: 'Produtos', include_blank: true, input_html: { class: 'chosen-select', multiple: true } %>
+
+    <%= f.submit 'Buscar', class: 'btn btn-default' %>
+    <% end %>
+  </div>
+</div>
+
+<br>
+
+<% if @production_unities.empty? %>
+  <h2>Nenhum resultado encontrado</h2>
+  <% else %>
+  <h2>Número de itens encontrados na busca: <%= @count %></h2>
+  <br>
+  <table class = "table">
+    <tr>
+      <th>Nome</th>
+      <th>Tipo</th>
+      <th>Estado</th>
+      <th>Cidade</th>
+      <th>Núcleo</th>
+      <th>Grupo</th>
+      <th>Data de criação</th>
+      <th>Todos os produtos</th>
+    </tr>
+    <% @production_unities.each do |production_unity| %>
+      <tr id = "production_unity_#{production_unity.id}">
+      <td><%= link_to production_unity.name, [production_unity.group, production_unity] %></td>
+      <td><%= production_unity.scope_name %></td>
+      <td><%= production_unity.city.state.name %></td>
+      <td><%= production_unity.city.name %></td>
+      <td><%= link_to production_unity.group.core.name, production_unity.group.core %></td>
+      <td><%= link_to production_unity.group.name, production_unity.group %></td>
+      <td><%= formated_date(production_unity.created_at) %></td>
+      <td><%= link_to 'Ver', "#production_unity_#{production_unity.id}", id: "production_unity#{production_unity.id}"%></td>
+    </tr>
+    <% end %>
+  </table>
+
+  <% @production_unities.each do |production_unity| %>
+    <%= render partial: 'show_production_unity_products', locals: {button_name: "production_unity#{production_unity.id}", production_unity: production_unity } %>
+  <% end%>
+
+  <%= paginate @production_unities %>
+<% end %>

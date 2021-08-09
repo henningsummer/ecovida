@@ -1,0 +1,20 @@
+<%= bootstrap_form_for(@group) do |f| %>
+    <%= show_errors(@group) %>
+
+    <%= f.text_field :name %>
+
+    <%= f.text_field :login %>
+
+    <%= f.select :group_type_id, GroupType.all.collect {|c| [c.description, c.id]} %>
+
+    <%= f.password_field :password %>
+
+    <%= f.password_field :password_confirmation %>
+
+    <%= f.email_field :email %>
+
+    <%= f.text_field :phone %>
+
+    <%= f.submit 'Salvar grupo',  data: {"disable-with" => "Salvando..."} %>
+
+<% end %>

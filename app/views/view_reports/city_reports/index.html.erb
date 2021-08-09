@@ -1,0 +1,41 @@
+<%=
+  create_breadcumbs([
+    { url: root_path, text: 'Página inicial' },
+    { url: view_reports_view_reports_path, text: 'Relatórios Dinâmicos' },
+    { url: nil, text: 'Relatórios de cidades' }
+  ])
+%>
+
+<div class="row">
+  <div class="col-md-3">
+    <%= simple_form_for @q, url: view_reports_city_reports_path, html: {method: :get} do |f| %>
+    <%= f.input :name_cont, label: 'Nome' %>
+    <%= f.input :state_id_eq, collection: @states, label: 'Estado' %>
+
+    <%= f.submit 'Buscar', class: 'btn btn-default' %>
+    <% end %>
+  </div>
+</div>
+
+<br>
+
+<% if @cities.empty? %>
+  <h2>Nenhum resultado encontrado</h2>
+  <% else %>
+  <table class = "table">
+    <tr>
+      <th>Nome</th>
+      <th>Estado</th>
+      <th>Quantidade de membros</th>
+    </tr>
+    <% @cities.each do |city| %>
+    <tr>
+      <td><%= city.name %></td>
+      <td><%= city.state.name %></td>
+      <td><%= city.farmers.count %></td>
+    </tr>
+    <% end %>
+  </table>
+
+  <%= paginate @cities %>
+<% end %>

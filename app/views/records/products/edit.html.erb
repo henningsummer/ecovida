@@ -1,0 +1,8 @@
+<%= link_to 'Pagina Inícial', root_path %> - <%= link_to 'Cadastros', records_path %> - <%= link_to "Listando produtos", records_product_path  %> - Editando <%= @records_product.name %>
+
+<h1>Editando produto</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Mostrar', [:records, @records_product] %> |
+<%= link_to 'Voltar', records_products_path %>
